@@ -1,5 +1,5 @@
 #ifndef PARTICLE_H
-#DEFINE PARTICLE_H
+#define PARTICLE_H
 
 class Particle{
     public:
@@ -7,12 +7,13 @@ class Particle{
         int pdgid;
         float threshold;
         float eff;
-        float px;
-        float py;
-        float pz;
-        float energy;
-        //Particle();
-        Particle(int pdg, float px, float py, float pz, float energy);
+        float Px;
+        float Py;
+        float Pz;
+        float Energy;
+	int Id;
+        Particle();  
+        Particle(int pdg, float px, float py, float pz, float energy, int id); 
 };
 
 #endif
