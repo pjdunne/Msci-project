@@ -1,27 +1,34 @@
 #include "Particle.h"
 #include "Particle.C"
+#include "Linkdef.h"
 #include "TTree.h"
 #include "TFile.h"
 #include "TBrowser.h"
 #include "TROOT.h"
 #include "TSystem.h"
+#include <vector>
 
 int main(){
-  
-  TFile* file = new TFile("Eshita2.root");
-  TTree* tree = (TTree*)file->Get("FlatTree_VARS");
 
-  int nfsp; //number of final state particles
-  int pdg[24];
-  float px[24];
-  float py[24];
-  float pz[24];
-  float energy[24];
+  vector<Particle> *fsp;   //vector of final state particles. Will only hold final state particles of one event at a time.
+  int particleID = 0;      //Unique for each particle.
+ 
+  //Variables from tree
+  int nfsp;                //number of final state particles
+  int pdg[240];
+  float px[240];
+  float py[240];
+  float pz[240];
+  float energy[240];
   int mode;
   float Enu_t;
   float coslep;
   float Enu_r;
   float E_diff;
+
+  //Read in tree
+  TFile* file = new TFile("Eshita2.root");
+  TTree* tree = (TTree*)file->Get("FlatTree_VARS");
 
   tree->SetBranchAddress("nfsp",&nfsp);
   tree->SetBranchAddress("pdg",&pdg);
@@ -30,34 +37,23 @@ int main(){
   tree->SetBranchAddress("pz",&pz);
   tree->SetBranchAddress("E",&energy);
   tree->SetBranchAddress("Mode",&mode);
-//tree->SetBranchAddress("",&Enu_t);  Edit when new tree given
+  //tree->SetBranchAddress("",&Enu_t);  Edit when new tree given
   tree->SetBranchAddress("CosLep",&coslep);
 
-  vector<Particle> *a; //vector
-  //Particle *a;
-  gInterpreter->GenerateDictionary("vector<Particle>","Particle.h;vector");
-
-  //Creating new tree
+  //Create new tree 
   TFile newfile("newfile.root","RECREATE","A new file to store the particle tree");
   TTree* newtree;
   newtree = new TTree("newtree","A tree to store all particles");
-  newtree->Branch("particles","vector<Particle>",&a);
+  newtree->Branch("particles","vector<Particle>",&fsp);
 
-  int particleID = 0;
-  for(unsigned int iEntry=0;iEntry<200000;iEntry++){
+  for(unsigned int iEntry=0;iEntry<tree->GetEntries();iEntry++){
     tree->GetEntry(iEntry);
     for(int iVecEntry=0;iVecEntry<nfsp;iVecEntry++){
       particleID++;
-      a->push_back(Particle(pdg[iVecEntry],px[iVecEntry],py[iVecEntry],pz[iVecEntry],energy[iVecEntry],particleID));   //vectors
-      //a->pdgid = pdg[iVecEntry];
-      //a->Px = px[iVecEntry];
-      //a->Py = py[iVecEntry];
-      //a->Pz = pz[iVecEntry];
-      //a->Energy = energy[iVecEntry];
-      //a->Id = particleID;
+      fsp->push_back(Particle(pdg[iVecEntry],px[iVecEntry],py[iVecEntry],pz[iVecEntry],energy[iVecEntry],particleID));
       newtree->Fill();
     }
-    a->clear();   //vector
+    fsp->clear();
   }
   newfile.Write();
   return 0;

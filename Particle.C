@@ -1,6 +1,7 @@
 #include "Particle.h"
 
-Particle::Particle(){
+Particle::Particle()
+{
   pdgid = 0;
   threshold = 0.7;
   eff = 0.7;
@@ -11,7 +12,8 @@ Particle::Particle(){
   Id = 0;
 }
 
-Particle::Particle(int pdg, float px, float py, float pz, float energy, int id){
+Particle::Particle(int pdg, float px, float py, float pz, float energy, int id)
+{
     pdgid = pdg;
     threshold = 0.7;
     eff = 0.7;
@@ -21,3 +23,5 @@ Particle::Particle(int pdg, float px, float py, float pz, float energy, int id){
     Energy = energy;
     Id = id;
 }
+
+Particle::~Particle(){}
