@@ -1,5 +1,10 @@
 #include "Particle.h"
 #include "Particle.C"
+#include "TTree.h"
+#include "TFile.h"
+#include "TBrowser.h"
+#include "TROOT.h"
+#include "TSystem.h"
 
 int main(){
   
@@ -28,30 +33,31 @@ int main(){
 //tree->SetBranchAddress("",&Enu_t);  Edit when new tree given
   tree->SetBranchAddress("CosLep",&coslep);
 
-  //vector<Particle> *a; //vector
-  Particle *a;
- 
-//Creating new tree
+  vector<Particle> *a; //vector
+  //Particle *a;
+  gInterpreter->GenerateDictionary("vector<Particle>","Particle.h;vector");
+
+  //Creating new tree
   TFile newfile("newfile.root","RECREATE","A new file to store the particle tree");
   TTree* newtree;
   newtree = new TTree("newtree","A tree to store all particles");
-  newtree->Branch("particles","Particle",&a);
+  newtree->Branch("particles","vector<Particle>",&a);
 
   int particleID = 0;
   for(unsigned int iEntry=0;iEntry<200000;iEntry++){
     tree->GetEntry(iEntry);
     for(int iVecEntry=0;iVecEntry<nfsp;iVecEntry++){
       particleID++;
-      //a->push_back(Particle(pdg[iVecEntry],px[iVecEntry],py[iVecEntry],pz[iVecEntry],energy[iVecEntry],particleID));   //vectors
-      a->pdgid = pdg[iVecEntry];
-      a->Px = px[iVecEntry];
-      a->Py = py[iVecEntry];
-      a->Pz = pz[iVecEntry];
-      a->Energy = energy[iVecEntry];
-      a->Id = particleID;
+      a->push_back(Particle(pdg[iVecEntry],px[iVecEntry],py[iVecEntry],pz[iVecEntry],energy[iVecEntry],particleID));   //vectors
+      //a->pdgid = pdg[iVecEntry];
+      //a->Px = px[iVecEntry];
+      //a->Py = py[iVecEntry];
+      //a->Pz = pz[iVecEntry];
+      //a->Energy = energy[iVecEntry];
+      //a->Id = particleID;
       newtree->Fill();
     }
-    //a->clear();   //vector
+    a->clear();   //vector
   }
   newfile.Write();
   return 0;
