@@ -18,7 +18,7 @@ vector<Particle> Threshold::ThreshFunc(vector<Particle> PartVec){
         float En;
 	vector<Particle> PartVecAbove;
 	PartVecAbove.clear();
-	for(unsigned int i=0;i < PartVec.size();i++){
+	for( int i=0;i < PartVec.size();i++){
 		Particle Part = PartVec[i];
 	
 		En=Part.GetEnergy();	
