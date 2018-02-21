@@ -36,8 +36,10 @@ int readenergy(){
   for(unsigned int iEntry=0;iEntry< nentries;iEntry++){
 	tree->GetEntry(iEntry);
         PartVec.clear();
-        Threshold Thresh;
+        PartVecAbove.clear();
+	Threshold Thresh;
 	for (int i = 0; i < nfsp; ++i)  {
+			
 	          int id = 0;
 		  id++;
               

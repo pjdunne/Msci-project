@@ -11,7 +11,7 @@ int backupreadenergy(){
   //vector<Particle> *DetectedParticles = part.Threshold(PartVec, 0.5);
  
  
-  TH1D* hE = new TH1D("hE", "Energyplot", 400, 0, 5);
+  TH1D* hE = new TH1D("hE", "Energyplot", 400, 0, 10);
 
  
  	float energy[240];
@@ -44,7 +44,7 @@ int backupreadenergy(){
 			//EVec.push_back(PartVec[i].GetEnergy());
  				
 				float r = ((double) rand() / (RAND_MAX));
-				if (En>Thresh| r<Eff){
+				if (En>Thresh && r<Eff){
 					//PartVecAbove->push_back(PartVec[iEntry]);
 					EVec.push_back(En);
 					}}}
