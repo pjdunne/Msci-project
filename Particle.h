@@ -10,7 +10,8 @@
 #include "TH2.h"
 #include "TStyle.h"
 #include "TCanvas.h"
-
+#include <vector>
+using namespace std;
 class Particle: public TObject
 {
     public:
@@ -22,8 +23,10 @@ class Particle: public TObject
         float Py;
         float Pz;
         float Energy;
-	int Id;
+		int Id;
         Particle();  
         Particle(int pdg, float px, float py, float pz, float energy, int id);
-	~Particle();
+		~Particle();
+		float GetEnergy();
+		int GetPDG();
 };

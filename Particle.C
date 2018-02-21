@@ -10,6 +10,7 @@ Particle::Particle()
   Pz = 0;
   Energy = 0;
   Id = 0;
+  //Nfsp=0;
 }
 
 Particle::Particle(int pdg, float px, float py, float pz, float energy, int id)
@@ -22,6 +23,14 @@ Particle::Particle(int pdg, float px, float py, float pz, float energy, int id)
     Pz = pz;
     Energy = energy;
     Id = id;
+   // Nfsp=nfsp;
 }
 
 Particle::~Particle(){}
+
+
+float Particle::GetEnergy(){
+return (Energy);}
+
+int Particle::GetPDG(){
+return (pdgid);}

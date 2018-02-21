@@ -8,6 +8,9 @@
 #include "TSystem.h"
 #include <vector>
 
+using namespace std;
+
+
 int main(){
 
   vector<Particle> *fsp;   //vector of final state particles. Will only hold final state particles of one event at a time.
@@ -27,7 +30,7 @@ int main(){
   float E_diff;
 
   //Read in tree
-  TFile* file = new TFile("Eshita2.root");
+  TFile* file = new TFile("/home/hep/pjd12/public_html/teaching/mastersproject17-18/T2K_Ar_numu_fhc_trunk07_Eshita_merge_flat_v3.root");
   TTree* tree = (TTree*)file->Get("FlatTree_VARS");
 
   tree->SetBranchAddress("nfsp",&nfsp);
@@ -51,10 +54,14 @@ int main(){
     for(int iVecEntry=0;iVecEntry<nfsp;iVecEntry++){
       particleID++;
       fsp->push_back(Particle(pdg[iVecEntry],px[iVecEntry],py[iVecEntry],pz[iVecEntry],energy[iVecEntry],particleID));
+      	
       newtree->Fill();
     }
     fsp->clear();
   }
   newfile.Write();
+
+
+ // 
   return 0;
 }
