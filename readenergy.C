@@ -46,7 +46,7 @@ int readenergy(){
                   Particle Part = Particle(pdg[i], px[i], py[i],pz[i], energy[i], id);
 
 		  PartVec.push_back(Part);}
-       		  PartVecAbove=Thresh.ThreshFunc(PartVec);
+        PartVecAbove=Thresh.ThreshFunc(PartVec);
 		  for (unsigned int j=0; j<PartVecAbove.size(); ++j){
 			float Energy=PartVecAbove[j].GetEnergy();
 			hE->Fill(Energy);}					  
