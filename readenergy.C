@@ -1,25 +1,11 @@
-
+#include "Particle.C"
+#include "Threshold.C"
 #include "Linkdef.h"
 
-#include <iostream>
-#include "TBranch.h" 
-#include "TTree.h"
-#include "TFile.h"
-#include "TBrowser.h"
-#include "TROOT.h"
-#include "TSystem.h"
-#include <vector>
-#include <TH2.h>
-#include <TStyle.h>
-#include <TCanvas.h>
-#include "Threshold.C"
-
-using namespace std;
-
 int readenergy(){
-  TFile* file = new TFile("/home/hep/al3614/neutrinoproject3/newfile2.root");
-  TTree* tree = (TTree*)file->Get("newtree");
- // TH1D* hE = new TH1D("hE", "Energyplot", 100, 0, 10);
+  TFile* file = new TFile("/home/hep/al3614/neutrinoproject/T2K_Ar_numu_fhc_trunk07_Eshita_merge_flat_v3.root");
+  TTree* tree = (TTree*)file->Get("FlatTree_VARS");
+  TH1D* hE = new TH1D("hE", "Energyplot", 100, 0, 10);
  
   vector<Particle> PartVecAbove;
   vector<Particle> PartVec;
@@ -58,11 +44,14 @@ int readenergy(){
                   Particle Part = Particle(pdg[i], px[i], py[i],pz[i], energy[i], id);
 
 		  PartVec.push_back(Part);}
-       		  PartVecAbove=Thresh.ThreshFunc(PartVec);  
+       		  PartVecAbove=Thresh.ThreshFunc(PartVec);
+		  for (unsigned int j=0; j<PartVecAbove.size(); ++j){
+			float Energy=PartVecAbove[j].GetEnergy();
+			hE->Fill(Energy);}					  
 
 	}
 
-   //TCanvas *c = new TCanvas("c", "Energy Plot");
- // hE->Draw();
-  return (0);
+  TCanvas *c = new TCanvas("c", "Energy Plot");
+  hE->Draw();
+  return 0;
 }

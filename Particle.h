@@ -11,9 +11,8 @@
 #include "TStyle.h"
 #include "TCanvas.h"
 
-#ifndef __Particle__
-#define __Particle__
-
+//#ifndef __Particle__
+//#define __Particle__
 class Particle: public TObject
 {
     public:
@@ -34,4 +33,4 @@ class Particle: public TObject
 	int GetPDG();
 };
 
-#endif
+//#endif

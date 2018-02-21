@@ -4,7 +4,7 @@
 
 #include "TBranch.h" 
 
-int OLDreadenergy(){
+int backupreadenergy(){
   //Particle part;
   TFile* file = new TFile("/home/hep/al3614/neutrinoproject3/newfile.root");
   TTree* tree = (TTree*)file->Get("newtree");
