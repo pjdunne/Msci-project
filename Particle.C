@@ -32,6 +32,27 @@ Particle::~Particle(){}
 float Particle::GetEnergy(){
 return (Energy);}
 
+float Particle::GetPx(){
+return (Px);}
+
+float Particle::GetPy(){
+return (Py);}
+
+float Particle::GetPz(){
+return (Pz);}
+
+void Particle::SetEnergy(float E){
+	Energy = E;}
+
+void Particle::SetPx(float x){
+	Px = x;}
+void Particle::SetPy(float y){
+	Py = y;}
+void Particle::SetPz(float z){
+	Pz = z;}
+
 int Particle::GetPDG(){
 return (pdgid);}
 
+float Particle::GetMomentum(){
+return (sqrt(pow(Px,2)+pow(Py,2)+pow(Pz,2)));}

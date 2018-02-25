@@ -6,13 +6,13 @@ Threshold::Threshold()
 
 }
 
-vector<Particle> Threshold::ThreshFunc(vector<Particle> PartVec){
+vector<Particle> Threshold::ThreshFunc(vector<Particle> PartVec, float th){
 	
- 	float prot_thresh = .05; //2212
+ 	float prot_thresh = th; //2212
  	float pi_minus_thresh = 0.05; // -211
-  	float pi0_thresh = .1; //111
+  	float pi0_thresh = th; //111
   	float pi_plus_thresh= 0.05; //211
-  	float Eff = 1.5; //Efficiency
+  	float Eff = 1.1; //Efficiency
         float En;
 	vector<Particle> PartVecAbove;
 	PartVecAbove.clear();
@@ -20,13 +20,13 @@ vector<Particle> Threshold::ThreshFunc(vector<Particle> PartVec){
 		Particle Part = PartVec[i];
 	
 		En=Part.GetEnergy();	
-	
+	        float Mom=Part.GetMomentum();
 
  	        float r = ((double) rand() / (RAND_MAX));
-		if (Part.GetPDG() == 111 && En > pi0_thresh && r <Eff){
+		if (Part.GetPDG() == 111 && Mom > pi0_thresh && r <Eff){
 		  	PartVecAbove.push_back(Part);			
  			}
-		else if (En > prot_thresh && r <Eff){
+		else if (Mom > prot_thresh && r <Eff){
 			PartVecAbove.push_back(Part);
                         }
 					}

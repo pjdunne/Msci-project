@@ -11,7 +11,7 @@ float Calorimetric::CalFunc(vector<Particle> PartVec){
         vector<float> Evec;
         Evec.clear();
         float En;
-	float E_cal;
+	float E_cal = 0.;
 	vector<Particle> PartVecAbove;
 	PartVecAbove.clear();
 	for(unsigned int i=0;i < PartVec.size();i++){

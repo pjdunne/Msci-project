@@ -6,6 +6,6 @@ class Threshold: public TObject
        
 
         Threshold();  
-        vector<Particle> ThreshFunc(vector<Particle> PartVec);
+        vector<Particle> ThreshFunc(vector<Particle> PartVec, float th);
 	~Threshold();
 };

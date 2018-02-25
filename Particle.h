@@ -20,6 +20,17 @@ class Particle: public TObject
         Particle(int pdg, float px, float py, float pz, float energy, int id);
 	~Particle();
 	float GetEnergy();
+	float GetPx();
+	float GetPy();
+	float GetPz();
+	float GetMomentum();
+
+	void SetEnergy(float E);
+        void SetPx(float x);
+	void SetPy(float y);
+        void SetPz(float z);
+
+
 	int GetPDG();
 };
 
