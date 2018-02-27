@@ -1,5 +1,4 @@
 #include "Threshold.h"
-
 Threshold::Threshold()
 {
  
@@ -8,13 +7,12 @@ Threshold::Threshold()
 }
 
 vector<Particle> Threshold::ThreshFunc(vector<Particle> PartVec){
-	TH1D* hE = new TH1D("hE", "Energyplot", 100, 0, 10);
 	
- 	float prot_thresh = 0.0; //2212
+ 	float prot_thresh = .05; //2212
  	float pi_minus_thresh = 0.05; // -211
-  	float pi0_thresh = 0.; //111
+  	float pi0_thresh = .1; //111
   	float pi_plus_thresh= 0.05; //211
-  	float Eff = 1.; //Efficiency
+  	float Eff = .99; //Efficiency
         float En;
 	vector<Particle> PartVecAbove;
 	PartVecAbove.clear();
@@ -22,20 +20,17 @@ vector<Particle> Threshold::ThreshFunc(vector<Particle> PartVec){
 		Particle Part = PartVec[i];
 	
 		En=Part.GetEnergy();	
-		//En=0.9;	
-		//EVec.push_back(PartVec[i].GetEnergy());
+	
+
  	        float r = ((double) rand() / (RAND_MAX));
-		if ((Part.GetPDG() == 111) | (En > pi0_thresh) | (r <Eff)){
-		  	PartVecAbove.push_back(Part);
-			hE->Fill(En);
+		if (Part.GetPDG() == 111 && En > pi0_thresh && r <Eff){
+		  	PartVecAbove.push_back(Part);			
  			}
-		else if (En > prot_thresh | r <Eff){
+		else if (En > prot_thresh && r <Eff){
 			PartVecAbove.push_back(Part);
-			hE->Fill(En);
-                       }
+                        }
 					}
-TCanvas *c = new TCanvas("c", "Energy Plot");
-hE->Draw();
+
 return (PartVecAbove);}
 
 Threshold::~Threshold(){}
