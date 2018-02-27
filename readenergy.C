@@ -26,19 +26,19 @@ int readenergy(){
   hE->GetYaxis()->SetTitle("Number of events");
   hE->SetFillColor(kYellow-7);
   hE->SetLineColor(kBlack);
-  //hE->SetStats(kFALSE);
+  hE->SetStats(kFALSE);
   TH1D* hC = new TH1D("hC"," ", 100, 0, 10);
   hC->GetXaxis()->SetTitle("Energy (Gev)");
   hC->GetYaxis()->SetTitle("Number of events");
   hC->SetFillColor(kYellow-7);
   hC->SetLineColor(kBlack);
-  //hC->SetStats(kFALSE);
+  hC->SetStats(kFALSE);
   TH1D* hK = new TH1D("hK"," ",100,-5,10);
   hK->GetXaxis()->SetTitle("Energy (Gev)");
   hK->GetYaxis()->SetTitle("Number of events");
   hK->SetFillColor(kYellow-7);
   hK->SetLineColor(kBlack);
-  //hK->SetStats(kFALSE);
+  hK->SetStats(kFALSE);
   TGaxis::SetMaxDigits(4);
 
 
@@ -57,6 +57,7 @@ int readenergy(){
   float Enu_t;
   float coslep;
   vector<float> Ecal;
+  
   tree->SetBranchAddress("nfsp",&nfsp);
   tree->SetBranchAddress("pdg",&pdg);
   tree->SetBranchAddress("px",&px);
@@ -66,9 +67,8 @@ int readenergy(){
   tree->SetBranchAddress("Mode",&mode);
   tree->SetBranchAddress("Enu_true",&Enu_t);
   tree->SetBranchAddress("CosLep",&coslep);
-  
 
-
+  int id = 0;
   Long64_t nentries = tree->GetEntries();
   for(unsigned int iEntry=0;iEntry< nentries;iEntry++){
 
@@ -80,7 +80,7 @@ int readenergy(){
     Kinematic Kin;
 
     for (int i = 0; i < nfsp; ++i)  {
-      int id = 0;
+      
       id++;
               
       Particle Part = Particle(pdg[i], px[i], py[i],pz[i], energy[i], id);
@@ -89,18 +89,16 @@ int readenergy(){
     }
 
     PartVecAbove=Thresh.ThreshFunc(PartVec);
-    float Ec = Cal.CalFunc(PartVec);
+    float Ec = Cal.CalFunc(PartVecAbove);
     Ecal.push_back(Ec);
     float Ec_diff = Ec-Enu_t;
     hC->Fill(Ec);
     if(mode==1){
       float Ek = Kin.KinFunc(PartVecAbove,coslep);
-      //cout<<Ek<<endl;
       float Ek_diff = Ek - Enu_t;
       hK->Fill(Ek);
     }
-    hE->Fill(Enu_t);
-    
+    hE->Fill(Enu_t);   
   }
 
   
