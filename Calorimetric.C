@@ -1,3 +1,4 @@
+#include "constants.h"
 
 float calorimetric(vector<Particle> PartVec){
 	
@@ -11,7 +12,7 @@ float calorimetric(vector<Particle> PartVec){
     int pdg = Part.GetPDG();		
     
     if(pdg == 2212 || pdg == 2112){
-      E_cal += (En - 0.9382);
+      E_cal += (En - mproton);
     }
     
     else{

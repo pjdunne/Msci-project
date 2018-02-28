@@ -1,5 +1,5 @@
 
-vector<Particle> threshold(vector<Particle> PartVec, float prot_thresh, float pi_pm_thresh, float pi0_thresh, float Eff){
+vector<Particle> threshold(vector<Particle> PartVec, float prot_thresh, float neutron_thresh, float pi_pm_thresh, float pi0_thresh, float Eff){
 
   vector<Particle> PartVecAbove;
   PartVecAbove.clear();
@@ -20,6 +20,9 @@ vector<Particle> threshold(vector<Particle> PartVec, float prot_thresh, float pi
     else if (Part.GetPDG() == 2212 && pz > prot_thresh && r <Eff){
       PartVecAbove.push_back(Part);
     }
+    else if (Part.GetPDG() == 2112 && pz > neutron_thresh && r<Eff){
+      PartVecAbove.push_back(Part);
+    }
     else if (r<Eff){
       PartVecAbove.push_back(Part);
     }
@@ -30,24 +33,25 @@ vector<Particle> threshold(vector<Particle> PartVec, float prot_thresh, float pi
 
 vector<Particle> liquidMomThresh(vector<Particle> PartVec){
 	
-  float prot_thresh = .9; //2212
+  float prot_thresh = .2; //2212
+  float neutron_thresh = 1.; //2112
   float pi_pm_thresh = 0.059; // +/-211
   float pi0_thresh = .059; //111
   float Eff = .99; //Efficiency
   
-  return threshold(PartVec, prot_thresh, pi_pm_thresh, pi0_thresh, Eff);
+  return threshold(PartVec, prot_thresh, neutron_thresh, pi_pm_thresh, pi0_thresh, Eff);
   
 }
-
 
 vector<Particle> gasMomThresh(vector<Particle> PartVec){
 	
   float prot_thresh = .059; //2212
+  float neutron_thresh = 1.; //2112
   float pi_pm_thresh = 0.016; // +/-211
   float pi0_thresh = .016; //111
   float Eff = .99; //Efficiency
 
-  return threshold(PartVec, prot_thresh, pi_pm_thresh, pi0_thresh, Eff);
+  return threshold(PartVec, prot_thresh, neutron_thresh, pi_pm_thresh, pi0_thresh, Eff);
 }
 
  

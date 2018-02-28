@@ -75,7 +75,7 @@ int readenergy(){
   hKG_diff->GetYaxis()->SetTitle("Number of events");
   hKG_diff->SetFillColor(kYellow-7);
   hKG_diff->SetLineColor(kBlack);
-  
+
   TGaxis::SetMaxDigits(4);
   //gStyle->SetOptStat(0);     //Stats box
 
@@ -125,7 +125,7 @@ int readenergy(){
 
     PartVecAboveLiquid = liquidMomThresh(PartVec);
     PartVecAboveGas = gasMomThresh(PartVec);
-    
+
     float ECL = calorimetric(PartVecAboveLiquid);
     float ECL_diff = ECL-Enu_t;
     hCL->Fill(ECL);
@@ -149,8 +149,7 @@ int readenergy(){
     }
     hE->Fill(Enu_t);   
   }
-
-  
+  /*
   TCanvas *c = new TCanvas("c", "Energy Plot");
   hE->Draw();
   
@@ -166,7 +165,7 @@ int readenergy(){
   TCanvas *c4 = new TCanvas("c4", "Calorimetric Gas Difference");
   hCG_diff->Draw();
 
-  TCanvas *c5 = new TCanvas("c5","Kinetic Liquid");
+  TCanvas *c5 = new TCanvas("c5", "Kinetic Liquid");
   hKL->Draw();
 
   TCanvas *c6 = new TCanvas("c6", "Kinematic Liquid Difference");
@@ -177,6 +176,6 @@ int readenergy(){
 
   TCanvas *c8 = new TCanvas("c8", "Kinematic Gas Difference");
   hKG_diff->Draw();
-
+  */
   return (0);
 }
