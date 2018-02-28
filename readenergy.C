@@ -17,7 +17,6 @@
 #include "TGaxis.h"
 #include "TStyle.h"
 
-
 int readenergy(){
   TFile* file = new TFile("/home/priyanka/Documents/project/Alastairs code/Msci-project-Alastair/Eshita4.root");
   TTree* tree = (TTree*)file->Get("FlatTree_VARS");
@@ -75,9 +74,6 @@ int readenergy(){
     tree->GetEntry(iEntry);
     PartVec.clear();
     PartVecAbove.clear();
-    Threshold Thresh;
-    Calorimetric Cal;
-    Kinematic Kin;
 
     for (int i = 0; i < nfsp; ++i)  {
       
@@ -88,13 +84,13 @@ int readenergy(){
       PartVec.push_back(Part);
     }
 
-    PartVecAbove=Thresh.ThreshFunc(PartVec);
-    float Ec = Cal.CalFunc(PartVecAbove);
+    PartVecAbove=threshold(PartVec);
+    float Ec = calorimetric(PartVecAbove);
     Ecal.push_back(Ec);
     float Ec_diff = Ec-Enu_t;
     hC->Fill(Ec);
     if(mode==1){
-      float Ek = Kin.KinFunc(PartVecAbove,coslep);
+      float Ek = kinematic(PartVecAbove,coslep);
       float Ek_diff = Ek - Enu_t;
       hK->Fill(Ek);
     }
