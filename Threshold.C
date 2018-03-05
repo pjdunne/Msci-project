@@ -15,7 +15,6 @@ vector<Particle> threshold(vector<Particle> PartVec, float prot_thresh, float ne
     pmag=Part.GetMomMag();
     float r = ((double) rand() / (RAND_MAX));
 
-    //cout<<"Random number:  "<<r<<endl;
     if (Part.GetPDG() == 111 && r < Sigmoid(pmag,pi0_thresh,Eff)){
       PartVecAbove.push_back(Part);
     }
@@ -27,9 +26,6 @@ vector<Particle> threshold(vector<Particle> PartVec, float prot_thresh, float ne
     }
     else if (Part.GetPDG() == 2112 && r< Sigmoid(pmag, neutron_thresh, Eff)){
       PartVecAbove.push_back(Part);
-    }
-    else if (Part.GetPDG() == 12 && Part.GetPDG() == 14 && r < Sigmoid(pmag, 10, Eff)){
-	PartVecAbove.push_back(Part);
     }
     else if (Part.GetPDG() != 111 && Part.GetPDG() != 211 && Part.GetPDG() != -211 && Part.GetPDG() != 2212 && Part.GetPDG() != 2112 && Part.GetPDG() != 12 && Part.GetPDG() != 14 && r < Sigmoid(pmag, 0, Eff)) {
       PartVecAbove.push_back(Part);     
