@@ -1,6 +1,5 @@
 #pragma once
 
-
 #ifndef Particle_H
 #define Particle_H
 
@@ -25,6 +24,7 @@ class Particle: public TObject
 	float GetXMom();
 	float GetYMom();
 	float GetZMom();
+	float GetMomMag();
 };
 
 #endif

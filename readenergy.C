@@ -28,25 +28,25 @@ int readenergy(){
   hE->SetFillColor(kYellow-7);
   hE->SetLineColor(kBlack);
   
-  TH1D* hCL = new TH1D("hCL","Liquid TPC - Calorimetric", 100, 0, 10);
+  TH1D* hCL = new TH1D("hCL","Liquid TPC - Calorimetric", 100, -1, 15);
   hCL->GetXaxis()->SetTitle("Energy (Gev)");
   hCL->GetYaxis()->SetTitle("Number of events");
   hCL->SetFillColor(kYellow-7);
   hCL->SetLineColor(kBlack);
 
-  TH1D* hCL_diff = new TH1D("hCL_diff","Liquid TPC - Calorimetric difference", 100, -1, 1);
+  TH1D* hCL_diff = new TH1D("hCL_diff","Liquid TPC - Calorimetric difference", 100, -10, 2);
   hCL_diff->GetXaxis()->SetTitle("Energy (Gev)");
   hCL_diff->GetYaxis()->SetTitle("Number of events");
   hCL_diff->SetFillColor(kYellow-7);
   hCL_diff->SetLineColor(kBlack);
   
-  TH1D* hCG = new TH1D("hCG","Gas TCP - Calorimetric ",100,0,10);
+  TH1D* hCG = new TH1D("hCG","Gas TCP - Calorimetric ",100,-1,15);
   hCG->GetXaxis()->SetTitle("Energy (Gev)");
   hCG->GetYaxis()->SetTitle("Number of events");
   hCG->SetFillColor(kYellow-7);
   hCG->SetLineColor(kBlack);
   
-  TH1D* hCG_diff = new TH1D("hCG_diff","Gas TPC - Calorimetric difference",100,-1,1);
+  TH1D* hCG_diff = new TH1D("hCG_diff","Gas TPC - Calorimetric difference",100,-10,2);
   hCG_diff->GetXaxis()->SetTitle("Energy (Gev)");
   hCG_diff->GetYaxis()->SetTitle("Number of events");
   hCG_diff->SetFillColor(kYellow-7);
@@ -58,7 +58,7 @@ int readenergy(){
   hKL->SetFillColor(kYellow-7);
   hKL->SetLineColor(kBlack);
 
-  TH1D* hKL_diff = new TH1D("hKL_diff","Liquid TPC - Kinematic difference",100,-1,1);
+  TH1D* hKL_diff = new TH1D("hKL_diff","Liquid TPC - Kinematic difference",100,-2,2);
   hKL_diff->GetXaxis()->SetTitle("Energy (Gev)");
   hKL_diff->GetYaxis()->SetTitle("Number of events");
   hKL_diff->SetFillColor(kYellow-7);
@@ -70,7 +70,7 @@ int readenergy(){
   hKG->SetFillColor(kYellow-7);
   hKG->SetLineColor(kBlack);
   
-  TH1D* hKG_diff = new TH1D("hKG_diff","Gas TPC - Kinematic difference",100,-1,1);
+  TH1D* hKG_diff = new TH1D("hKG_diff","Gas TPC - Kinematic difference",100,-2,2);
   hKG_diff->GetXaxis()->SetTitle("Energy (Gev)");
   hKG_diff->GetYaxis()->SetTitle("Number of events");
   hKG_diff->SetFillColor(kYellow-7);
@@ -109,7 +109,7 @@ int readenergy(){
   int id = 0;
   Long64_t nentries = tree->GetEntries();
   
-  for(unsigned int iEntry=0;iEntry< nentries;iEntry++){
+  for(unsigned int iEntry=0;iEntry<nentries;iEntry++){
 
     tree->GetEntry(iEntry);
     PartVec.clear();
@@ -125,7 +125,13 @@ int readenergy(){
 
     PartVecAboveLiquid = liquidMomThresh(PartVec);
     PartVecAboveGas = gasMomThresh(PartVec);
+    //std:: cout<<"Partvec: "<< PartVec.size()<<"  Partvecaboveliquid: "<<PartVecAboveLiquid.size()<< "   Partvecabovegas: "<< PartVecAboveGas.size()<<"   mode: "<<mode<<endl;
 
+    /*for (int j=0; j<PartVec.size();j++){
+      Particle part = PartVec[j];
+      cout<<part.GetPDG()<<"    "<<part.GetMomMag()<<endl;
+      }*/
+    
     float ECL = calorimetric(PartVecAboveLiquid);
     float ECL_diff = ECL-Enu_t;
     hCL->Fill(ECL);
@@ -136,19 +142,25 @@ int readenergy(){
     hCG->Fill(ECG);
     hCG_diff->Fill(ECG_diff);
 
-    if(mode==1){
+    //if(mode==1){
       float EKL = kinematic(PartVecAboveLiquid,coslep);
-      float EKL_diff = EKL - Enu_t;
-      hKL->Fill(EKL);
-      hKL_diff->Fill(EKL_diff);
+      if (EKL != 0){
+	float EKL_diff = EKL - Enu_t;
+	hKL->Fill(EKL);
+	hKL_diff->Fill(EKL_diff);
+      }
+    
 
       float EKG = kinematic(PartVecAboveGas,coslep);
-      float EKG_diff = EKG-Enu_t;
-      hKG->Fill(EKG);
-      hKG_diff->Fill(EKG_diff);
-    }
+      if (EKG != 0){
+	float EKG_diff = EKG-Enu_t;
+	hKG->Fill(EKG);
+	hKG_diff->Fill(EKG_diff);
+      }
+      // }
     hE->Fill(Enu_t);   
   }
+
   /*
   TCanvas *c = new TCanvas("c", "Energy Plot");
   hE->Draw();

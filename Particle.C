@@ -1,6 +1,5 @@
 #include "Particle.h"
 
-
 Particle::Particle()
 {
   pdgid = 0;
@@ -29,10 +28,12 @@ Particle::~Particle(){}
 
 
 float Particle::GetEnergy(){
-return (Energy);}
+  return (Energy);
+}
 
 int Particle::GetPDG(){
-return (pdgid);}
+  return (pdgid);
+}
 
 float Particle::GetXMom(){
   return Px;
@@ -44,4 +45,8 @@ float Particle::GetYMom(){
 
 float Particle::GetZMom(){
   return Pz;
+}
+
+float Particle::GetMomMag(){
+  return sqrt(pow(Px,2.0)+pow(Py,2.0)+pow(Pz,2.0));
 }
