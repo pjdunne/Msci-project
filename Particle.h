@@ -1,18 +1,8 @@
 #pragma once
-#include "TObject.h"
-#include <iostream>
-#include <string>
-#include "TROOT.h"
-#include "TChain.h"
-#include "TFile.h"
-#include "TLorentzVector.h"
-#include "TVector2.h"
-#include "TH2.h"
-#include "TStyle.h"
-#include "TCanvas.h"
 
-#ifndef __Particle__
-#define __Particle__
+
+#ifndef Particle_H
+#define Particle_H
 
 class Particle: public TObject
 {
@@ -32,6 +22,10 @@ class Particle: public TObject
 	~Particle();
 	float GetEnergy();
 	int GetPDG();
+    int GetID();
+	float GetXMom();
+	float GetYMom();
+	float GetZMom();
 };
 
 #endif

@@ -1,44 +1,63 @@
-#include "Threshold.h"
 
-Threshold::Threshold()
-{
- 
-  float threshold = 0.05;
+vector<Particle> threshold(vector<Particle> PartVec, float prot_thresh, float neutron_thresh, float pi_pm_thresh, float pi0_thresh, float Eff){
 
+  vector<Particle> PartVecAbove;
+  PartVecAbove.clear();
+  float pz;
+
+  for(unsigned int i=0;i < PartVec.size();i++){
+
+    Particle Part = PartVec[i];
+    pz=Part.GetZMom();
+    float r = ((double) rand() / (RAND_MAX));
+
+    if (Part.GetPDG() == 111 && pz > pi0_thresh && r <Eff){
+      PartVecAbove.push_back(Part);
+    }
+    else if ((Part.GetPDG() == 211 || Part.GetPDG() == -211) && pz > pi_pm_thresh && r <Eff){
+      PartVecAbove.push_back(Part);
+    }
+    else if (Part.GetPDG() == 2212 && pz > prot_thresh && r <Eff){
+      PartVecAbove.push_back(Part);
+    }
+    else if (Part.GetPDG() == 2112 && pz > neutron_thresh && r<Eff){
+      PartVecAbove.push_back(Part);
+    }
+    else if (Part.GetPDG() != 111 && Part.GetPDG() != 211 && Part.GetPDG() != 2212 && Part.GetPDG() != 2112 && r<Eff) {
+      PartVecAbove.push_back(Part);
+    
+     
+    }
+  }
+
+  return (PartVecAbove);
+} 
+
+vector<Particle> liquidMomThresh(vector<Particle> PartVec){
+	
+  float prot_thresh = 0.2; //2212
+  float neutron_thresh = 4.; //2112
+  float pi_pm_thresh = 0.059; // +/-211
+  float pi0_thresh = 0.059; //111
+  float Eff = .99; //Efficiency
+  
+  return threshold(PartVec, prot_thresh, neutron_thresh, pi_pm_thresh, pi0_thresh, Eff);
+  
 }
 
-vector<Particle> Threshold::ThreshFunc(vector<Particle> PartVec){
-	TH1D* hE = new TH1D("hE", "Energyplot", 100, 0, 10);
+vector<Particle> gasMomThresh(vector<Particle> PartVec){
 	
- 	float prot_thresh = 0.0; //2212
- 	float pi_minus_thresh = 0.05; // -211
-  	float pi0_thresh = 0.; //111
-  	float pi_plus_thresh= 0.05; //211
-  	float Eff = 1.; //Efficiency
-        float En;
-	vector<Particle> PartVecAbove;
-	PartVecAbove.clear();
-	for(unsigned int i=0;i < PartVec.size();i++){
-		Particle Part = PartVec[i];
-	
-		En=Part.GetEnergy();	
-		//En=0.9;	
-		//EVec.push_back(PartVec[i].GetEnergy());
- 	        float r = ((double) rand() / (RAND_MAX));
-		if ((Part.GetPDG() == 111) | (En > pi0_thresh) | (r <Eff)){
-		  	PartVecAbove.push_back(Part);
-			hE->Fill(En);
- 			}
-		else if (En > prot_thresh | r <Eff){
-			PartVecAbove.push_back(Part);
-			hE->Fill(En);
-                       }
-					}
-TCanvas *c = new TCanvas("c", "Energy Plot");
-hE->Draw();
-return (PartVecAbove);}
+  float prot_thresh = 0.058; //2212
+  float neutron_thresh = 4.; //2112
+  float pi_pm_thresh = 0.016; // +/-211
+  float pi0_thresh = 0.016; //111
+  float Eff = .99; //Efficiency
 
-Threshold::~Threshold(){}
+  return threshold(PartVec, prot_thresh, neutron_thresh, pi_pm_thresh, pi0_thresh, Eff);
+}
+
+ 
+
 
 
 
