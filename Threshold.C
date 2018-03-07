@@ -8,26 +8,28 @@ vector<Particle> threshold(vector<Particle> PartVec, float prot_thresh, float ne
   vector<Particle> PartVecAbove;
   PartVecAbove.clear();
   float pmag;
-
+  int pdg;
+  
   for(unsigned int i=0;i < PartVec.size();i++){
 
     Particle Part = PartVec[i];
     pmag=Part.GetMomMag();
+    pdg = Part.GetPDG();
     float r = ((double) rand() / (RAND_MAX));
 
-    if (Part.GetPDG() == 111 && r < Sigmoid(pmag,pi0_thresh,Eff)){
+    if (pdg == 111 && r < Sigmoid(pmag,pi0_thresh,Eff)){
       PartVecAbove.push_back(Part);
     }
-    else if (abs(Part.GetPDG()) == 211 && r < Sigmoid(pmag,pi_pm_thresh,Eff)){
+    else if (abs(pdg) == 211 && r < Sigmoid(pmag,pi_pm_thresh,Eff)){
       PartVecAbove.push_back(Part);
     }
-    else if (abs(Part.GetPDG()) == 2212 && r < Sigmoid(pmag, prot_thresh,Eff)){
+    else if (abs(pdg) == 2212 && r < Sigmoid(pmag, prot_thresh,Eff)){
       PartVecAbove.push_back(Part);
     }
-    else if (abs(Part.GetPDG()) == 2112 && r< Sigmoid(pmag, neutron_thresh, Eff)){
+    else if (abs(pdg) == 2112 && r< Sigmoid(pmag, neutron_thresh, Eff)){
       PartVecAbove.push_back(Part);
     }
-    else if (abs(Part.GetPDG()) != 111 && abs(Part.GetPDG()) != 211 && abs(Part.GetPDG()) != 2212 && abs(Part.GetPDG()) != 2112 && abs(Part.GetPDG()) != 12 && abs(Part.GetPDG()) != 14 && r < Sigmoid(pmag, 0, Eff)) {
+    else if (abs(pdg) != 111 && abs(pdg) != 211 && abs(pdg) != 2212 && abs(pdg) != 2112 && abs(pdg) != 12 && abs(pdg) != 14 && r < Sigmoid(pmag, 0, Eff)) {
       PartVecAbove.push_back(Part);     
     }
   }

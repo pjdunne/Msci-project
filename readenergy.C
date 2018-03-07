@@ -18,7 +18,7 @@
 #include "TStyle.h"
 
 int readenergy(){
-  TFile* file = new TFile("/home/priyanka/Documents/project/Alastairs code/Msci-project-Alastair/Eshita4.root");
+  TFile* file = new TFile("/home/priyanka/Documents/project/Msci-project/Eshita4.root");
   TTree* tree = (TTree*)file->Get("FlatTree_VARS");
 
   //Historgram set-up
@@ -39,6 +39,10 @@ int readenergy(){
   hCL_diff->GetYaxis()->SetTitle("Number of events");
   hCL_diff->SetFillColor(kYellow-7);
   hCL_diff->SetLineColor(kBlack);
+
+  TH2D* hCL_diff_true = new TH2D("hCL_diff_true","Liquid TPC - Calorimetric difference as function of true energy",100,0,12,100,-10,2);
+  hCL_diff_true->GetXaxis()->SetTitle("True Energy (GeV)");
+  hCL_diff_true->GetYaxis()->SetTitle("Calorimetric reconstructed energy difference (GeV)");
   
   TH1D* hCG = new TH1D("hCG","Gas TCP - Calorimetric ",100,-1,15);
   hCG->GetXaxis()->SetTitle("Energy (Gev)");
@@ -51,31 +55,43 @@ int readenergy(){
   hCG_diff->GetYaxis()->SetTitle("Number of events");
   hCG_diff->SetFillColor(kYellow-7);
   hCG_diff->SetLineColor(kBlack);
-  
+
+  TH2D* hCG_diff_true = new TH2D("hCG_diff_true","Gas TPC - Calorimetric difference as function of true energy",100,0,12,100,-10,2);
+  hCG_diff_true->GetXaxis()->SetTitle("True Energy (GeV)");
+  hCG_diff_true->GetYaxis()->SetTitle("Calorimetric reconstructed energy difference (GeV)");
+    
   TH1D* hKL = new TH1D("hKL","Liquid TPC - Kinematic",100,-1,10);
   hKL->GetXaxis()->SetTitle("Energy (Gev)");
   hKL->GetYaxis()->SetTitle("Number of events");
   hKL->SetFillColor(kYellow-7);
   hKL->SetLineColor(kBlack);
 
-  TH1D* hKL_diff = new TH1D("hKL_diff","Liquid TPC - Kinematic difference",100,-2,2);
+  TH1D* hKL_diff = new TH1D("hKL_diff","Liquid TPC - Kinematic difference",100,-5,5);
   hKL_diff->GetXaxis()->SetTitle("Energy (Gev)");
   hKL_diff->GetYaxis()->SetTitle("Number of events");
   hKL_diff->SetFillColor(kYellow-7);
   hKL_diff->SetLineColor(kBlack);
 
+  TH2D* hKL_diff_true = new TH2D("hKL_diff_true","Liquid TPC - Kinematic difference as function of true energy",100,0,12,100,-5,10);
+  hKL_diff_true->GetXaxis()->SetTitle("True Energy (GeV)");
+  hKL_diff_true->GetYaxis()->SetTitle("Kinematic reconstructed energy difference (GeV)");
+  
   TH1D* hKG = new TH1D("hKG","Gas TPC - Kinematic",100,-1,10);
   hKG->GetXaxis()->SetTitle("Energy (Gev)");
   hKG->GetYaxis()->SetTitle("Number of events");
   hKG->SetFillColor(kYellow-7);
   hKG->SetLineColor(kBlack);
   
-  TH1D* hKG_diff = new TH1D("hKG_diff","Gas TPC - Kinematic difference",100,-2,2);
+  TH1D* hKG_diff = new TH1D("hKG_diff","Gas TPC - Kinematic difference",100,-5,5);
   hKG_diff->GetXaxis()->SetTitle("Energy (Gev)");
   hKG_diff->GetYaxis()->SetTitle("Number of events");
   hKG_diff->SetFillColor(kYellow-7);
   hKG_diff->SetLineColor(kBlack);
 
+  TH2D* hKG_diff_true = new TH2D("hKG_diff_true","Gas TPC - Kinematic difference as function of true energy",100,0,12,100,-10,5);
+  hKG_diff_true->GetXaxis()->SetTitle("True Energy (GeV)");
+  hKG_diff_true->GetYaxis()->SetTitle("Kinematic reconstructed energy difference (GeV)");
+  
   TGaxis::SetMaxDigits(4);
   //gStyle->SetOptStat(0);     //Stats box
 
@@ -116,49 +132,52 @@ int readenergy(){
     PartVecAboveLiquid.clear();
     PartVecAboveGas.clear();
 
-    for (int i = 0; i < nfsp; ++i)  {
-      
-      id++;    
-      Particle Part = Particle(pdg[i], px[i], py[i],pz[i], energy[i], id);
-      PartVec.push_back(Part);
-    }
+    if(mode==1){          //select mode/topology
+      for (int i = 0; i < nfsp; ++i)  {
+	
+	id++;    
+	Particle Part = Particle(pdg[i], px[i], py[i],pz[i], energy[i], id);
+	PartVec.push_back(Part);
+      }
 
-    PartVecAboveLiquid = liquidMomThresh(PartVec);
-    PartVecAboveGas = gasMomThresh(PartVec);
-    //std:: cout<<"Partvec: "<< PartVec.size()<<"  Partvecaboveliquid: "<<PartVecAboveLiquid.size()<< "   Partvecabovegas: "<< PartVecAboveGas.size()<<"   mode: "<<mode<<endl;
-
-    /*for (int j=0; j<PartVec.size();j++){
-      Particle part = PartVec[j];
-      cout<<part.GetPDG()<<"    "<<part.GetMomMag()<<endl;
-      }*/
+      PartVecAboveLiquid = liquidMomThresh(PartVec);
+      PartVecAboveGas = gasMomThresh(PartVec);
+      //std:: cout<<"Partvec: "<< PartVec.size()<<"  Partvecaboveliquid: "<<PartVecAboveLiquid.size()<< "   Partvecabovegas: "<< PartVecAboveGas.size()<<"   mode: "<<mode<<endl;
+      //cout<<"NFSP: "<<nfsp<<"    MODE: "<<mode<<endl;
+      /*for (int j=0; j<PartVec.size();j++){
+	Particle part = PartVec[j];
+	cout<<part.GetPDG()<<endl;
+	}*/
     
-    float ECL = calorimetric(PartVecAboveLiquid);
-    float ECL_diff = ECL-Enu_t;
-    hCL->Fill(ECL);
-    hCL_diff->Fill(ECL_diff);
-
-    float ECG = calorimetric(PartVecAboveGas);
-    float ECG_diff = ECG-Enu_t;
-    hCG->Fill(ECG);
-    hCG_diff->Fill(ECG_diff);
-
-    //if(mode==1){
+      float ECL = calorimetric(PartVecAboveLiquid);
+      float ECL_diff = ECL-Enu_t;
+      hCL->Fill(ECL);
+      hCL_diff->Fill(ECL_diff);
+      hCL_diff_true->Fill(Enu_t,ECL_diff);
+      
+      float ECG = calorimetric(PartVecAboveGas);
+      float ECG_diff = ECG-Enu_t;
+      hCG->Fill(ECG);
+      hCG_diff->Fill(ECG_diff);
+      hCG_diff_true->Fill(Enu_t,ECG_diff);
+    
       float EKL = kinematic(PartVecAboveLiquid,coslep);
       if (EKL != 0){
 	float EKL_diff = EKL - Enu_t;
 	hKL->Fill(EKL);
 	hKL_diff->Fill(EKL_diff);
+	hKL_diff_true->Fill(Enu_t,EKL_diff);
       }
-    
-
+            
       float EKG = kinematic(PartVecAboveGas,coslep);
       if (EKG != 0){
 	float EKG_diff = EKG-Enu_t;
 	hKG->Fill(EKG);
 	hKG_diff->Fill(EKG_diff);
+	hKG_diff_true->Fill(Enu_t,EKG_diff);
       }
-      // }
-    hE->Fill(Enu_t);   
+      hE->Fill(Enu_t);
+    }    
   }
 
   /*

@@ -14,7 +14,7 @@ float kinematic(vector<Particle> PartVec, float coslep)
 
     if(pdg==11||pdg==13){
       Elep = Part.GetEnergy();
-      Plep = sqrt(pow(Part.GetXMom(),2)+pow(Part.GetYMom(),2)+pow(Part.GetZMom(),2)); 
+      Plep = Part.GetMomMag(); 
     }
   }    
   if(Elep != 0 && Plep !=0){
