@@ -30,7 +30,6 @@ class Particle: public TObject
 	void SetPy(float y);
         void SetPz(float z);
 
-
 	int GetPDG();
 };
 
