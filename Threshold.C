@@ -42,8 +42,7 @@ vector<Particle> Threshold::ThreshFunc(vector<Particle> PartVec, float prot_thre
    		   PartVecAbove.push_back(Part);
    		 }
    		 if (pdg != 111 && abs(pdg) != 211 && pdg != 2212 && pdg != 2112){
-   		   PartVecAbove.push_back(Part);
-  		  }
+   		   PartVecAbove.push_back(Part);}
 		}
 
 		else{
