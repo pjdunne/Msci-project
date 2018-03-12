@@ -20,8 +20,11 @@ vector<Particle> Resolution::ResFunc(vector<Particle> PartVec, float w){
 		float py=Part.GetPy();
          	float pz=Part.GetPz();
 
-                Part.SetEnergy(En*r0->Gaus(1,w));
-		
+                Part.SetEnergy(En+(r0->Gaus(0,w*En)));
+		Part.SetPx(px+(r0->Gaus(0,w*px)));
+		Part.SetPx(py+(r0->Gaus(0,w*py)));
+		Part.SetPz(pz+(r0->Gaus(0,w*pz)));
+
 		
 		
 		PartDet.push_back(Part);}			
@@ -31,6 +34,7 @@ vector<Particle> Resolution::ResFunc(vector<Particle> PartVec, float w){
 return (PartDet);}
 
 Resolution::~Resolution(){}
+
 
 
 
