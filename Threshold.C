@@ -40,10 +40,10 @@ vector<Particle> threshold(vector<Particle> PartVec, float prot_thresh, float ne
 vector<Particle> liquidMomThresh(vector<Particle> PartVec){
 	
   float prot_thresh = 0.2; //2212
-  float neutron_thresh = 4.; //2112
+  float neutron_thresh = 4.0; //2112
   float pi_pm_thresh = 0.059; // +/-211
   float pi0_thresh = 0.059; //111
-  float Eff = .90; //Efficiency
+  float Eff = 0.90; //Efficiency
   
   return threshold(PartVec, prot_thresh, neutron_thresh, pi_pm_thresh, pi0_thresh, Eff);
   

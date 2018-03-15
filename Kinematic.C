@@ -18,7 +18,7 @@ float kinematic(vector<Particle> PartVec, float coslep)
     }
   }    
   if(Elep != 0 && Plep !=0){
-    E_kin = (pow(mproton,2.0)-pow(mneutron,2.0)-pow(mmuon,2.0)+(2.0*Elep*mneutron))/(2.0*(mneutron-Elep+(Plep*coslep)));
+    E_kin = (pow(mproton,2.0)-pow(eff_mass_neutron,2.0)-pow(mmuon,2.0)+(2.0*Elep*eff_mass_neutron))/(2.0*(eff_mass_neutron-Elep+(Plep*coslep)));
   }
   
   return E_kin; 
