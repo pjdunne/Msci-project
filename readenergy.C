@@ -47,6 +47,10 @@ int readenergy(){
   TH2D* hCL_diff_true_frac = new TH2D("hCL_diff_true_frac","Liquid TPC - Fractional calorimetric difference as function of true energy",100,0,12,100,-1,0.2);
   hCL_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
   hCL_diff_true_frac->GetYaxis()->SetTitle("Fractional calorimetric reconstructed energy difference");
+
+  TH1D* hCL_diff_frac = new TH1D("hCL_diff_frac","Liquid TPC - Fractional calorimetric difference",100,-0.8,0.2);
+  hCL_diff_frac->GetXaxis()->SetTitle("(E_cal - E_true)/E_true");
+  hCL_diff_frac->GetYaxis()->SetTitle("No. of events");
   
   TH1D* hCG = new TH1D("hCG","Gas TCP - Calorimetric ",100,-1,15);
   hCG->GetXaxis()->SetTitle("Energy (Gev)");
@@ -67,7 +71,11 @@ int readenergy(){
   TH2D* hCG_diff_true_frac = new TH2D("hCG_diff_true_frac","Gas TPC - Fractional calorimetric difference as function of true energy",100,0,12,100,-1,0.2);
   hCG_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
   hCG_diff_true_frac->GetYaxis()->SetTitle("Fractional calorimetric reconstructed energy difference");
-  
+
+  TH1D* hCG_diff_frac = new TH1D("hCG_diff_frac","Gas TPC - Fractional calorimetric difference",100,-0.8,0.2);
+  hCG_diff_frac->GetXaxis()->SetTitle("(E_cal - E_true)/E_true");
+  hCG_diff_frac->GetYaxis()->SetTitle("No. of events");
+
   TH1D* hKL = new TH1D("hKL","Liquid TPC - Kinematic",100,-1,10);
   hKL->GetXaxis()->SetTitle("Energy (Gev)");
   hKL->GetYaxis()->SetTitle("Number of events");
@@ -88,6 +96,10 @@ int readenergy(){
   hKL_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
   hKL_diff_true_frac->GetYaxis()->SetTitle("Fractional kinematic reconstructed energy difference");
   
+  TH1D* hKL_diff_frac = new TH1D("hKL_diff_frac","Liquid TPC - Fractional kinematic difference",100,-0.6,1);
+  hKL_diff_frac->GetXaxis()->SetTitle("(E_kin - E_true)/E_true");
+  hKL_diff_frac->GetYaxis()->SetTitle("No. of events");
+
   TH1D* hKG = new TH1D("hKG","Gas TPC - Kinematic",100,-1,10);
   hKG->GetXaxis()->SetTitle("Energy (Gev)");
   hKG->GetYaxis()->SetTitle("Number of events");
@@ -108,14 +120,26 @@ int readenergy(){
   hKG_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
   hKG_diff_true_frac->GetYaxis()->SetTitle("Fractional kinematic reconstructed energy difference");
 
+  TH1D* hKG_diff_frac = new TH1D("hKG_diff_frac","Gas TPC - Fractional kinematic difference",100,-0.6,1);
+  hKG_diff_frac->GetXaxis()->SetTitle("(E_kin - E_true)/E_true");
+  hKG_diff_frac->GetYaxis()->SetTitle("No. of events");
+  
   TH2D* hCKL_diff = new TH2D("hCKL_diff","Liquid TPC - Cal - kin energy as a function of true energy",100,0,12,100,-10,10);
   hCKL_diff->GetXaxis()->SetTitle("True Energy (GeV)");
   hCKL_diff->GetYaxis()->SetTitle("E_cal - E_kin (GeV)");
+
+  TH2D* hCKL_diff_frac = new TH2D("hCKL_diff_frac","Liquid TPC - Fractional Cal - kin energy as a function of true energy",100,0,12,100,-10,10);
+  hCKL_diff_frac->GetXaxis()->SetTitle("True Energy (GeV)");
+  hCKL_diff_frac->GetYaxis()->SetTitle("(E_cal - E_kin)/E_true");
 
   TH2D* hCKG_diff = new TH2D("hCKG_diff","Gas TPC - Cal - kin energy as a function of true energy",100,0,12,100,-10,10);
   hCKG_diff->GetXaxis()->SetTitle("True Energy (GeV)");
   hCKG_diff->GetYaxis()->SetTitle("E_cal - E_kin (GeV)");
  
+  TH2D* hCKG_diff_frac = new TH2D("hCKG_diff_frac","Gas TPC - Fractional Cal - kin energy as a function of true energy",100,0,12,100,-10,10);
+  hCKG_diff_frac->GetXaxis()->SetTitle("True Energy (GeV)");
+  hCKG_diff_frac->GetYaxis()->SetTitle("(E_cal - E_kin)/E_true");
+  
   TH3D* hL_cal_kin_true = new TH3D("hL_cal_kin_true","Liquid TPC - Calorimetric and kinematic as a function of true",100,-1,12,100,-1,12,100,0,12);
   hL_cal_kin_true->GetXaxis()->SetTitle("Calorimetirc Energy (GeV)");
   hL_cal_kin_true->GetYaxis()->SetTitle("Kinematic energy (GeV)");
@@ -191,6 +215,7 @@ int readenergy(){
 	hCL_diff->Fill(ECL_diff);
 	hCL_diff_true->Fill(Enu_t,ECL_diff);
 	hCL_diff_true_frac->Fill(Enu_t,ECL_diff_frac);
+	hCL_diff_frac->Fill(ECL_diff_frac);
       }
       
       float ECG = calorimetric(PartVecAboveGas);
@@ -202,6 +227,7 @@ int readenergy(){
 	hCG_diff->Fill(ECG_diff);
 	hCG_diff_true->Fill(Enu_t,ECG_diff);
 	hCG_diff_true_frac->Fill(Enu_t,ECG_diff_frac);
+	hCG_diff_frac->Fill(ECG_diff_frac);
       }
       
       float EKL = kinematic(PartVecAboveLiquid,coslep);
@@ -212,6 +238,7 @@ int readenergy(){
 	hKL_diff->Fill(EKL_diff);
 	hKL_diff_true->Fill(Enu_t,EKL_diff);
 	hKL_diff_true_frac->Fill(Enu_t,EKL_diff_frac);
+	hKL_diff_frac->Fill(EKL_diff_frac);
 	if (ECL_diff != 0) hL_cal_kin_diff_true->Fill(ECL_diff, EKL_diff, Enu_t);
       }
             
@@ -223,16 +250,24 @@ int readenergy(){
 	hKG_diff->Fill(EKG_diff);
 	hKG_diff_true->Fill(Enu_t,EKG_diff);
 	hKG_diff_true_frac->Fill(Enu_t,EKG_diff_frac);
+	hKG_diff_frac->Fill(EKG_diff_frac);
       }
+      
       if (ECL != 0 && EKL != 0){
 	float ECKL_diff = ECL - EKL;
+	float ECKL_diff_frac = ECKL_diff / Enu_t;
 	hCKL_diff->Fill(Enu_t,ECKL_diff);
+	hCKL_diff_frac->Fill(Enu_t,ECKL_diff_frac);
 	hL_cal_kin_true->Fill(ECL,EKL,Enu_t);
       }
+      
       if (ECG != 0 && EKG != 0){
 	float ECKG_diff = ECG - EKG;
+	float ECKG_diff_frac = ECKG_diff / Enu_t;
 	hCKG_diff->Fill(Enu_t,ECKG_diff);
+	hCKG_diff_frac->Fill(Enu_t,ECKG_diff_frac);
       }
+      
       hE->Fill(Enu_t);
     }    
   }
