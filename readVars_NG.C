@@ -32,13 +32,13 @@ int readVars_NG(){
   TH1D* N_Pmu = new TH1D("N_Pmu", "NEUT and GENIE muon momentum magnitude (no threshold)", 100, 0, 4);
   TH1D* G_Pmu = new TH1D("G_Pmu", "NEUT and GENIE muon momentum magnitude (no threshold)", 100, 0, 4);
 
-  TH1D* nPrG = new TH1D("nPrG", "NEUT and GENIE proton number (no threshold)", 1000, 0, 10);
-  TH1D* nPrN = new TH1D("nPrN", "NEUT and GENIE proton number (no threshold)", 1000, 0, 10);
+  TH1D* nPrG = new TH1D("nPrG", "NEUT and GENIE proton number (no threshold)", 10, 0, 10);
+  TH1D* nPrN = new TH1D("nPrN", "NEUT and GENIE proton number (no threshold)", 10, 0, 10);
 
-  TH1D* nPrG_L = new TH1D("nPrG_L", "NEUT and GENIE proton number (liquid)", 1000, 0, 10);
-  TH1D* nPrG_G = new TH1D("nPrG_G", "NEUT and GENIE proton number (gas)", 1000, 0, 10);
+  TH1D* nPrG_L = new TH1D("nPrG_L", "NEUT and GENIE proton number (liquid)", 10, 0, 10);
+  TH1D* nPrG_G = new TH1D("nPrG_G", "NEUT and GENIE proton number (gas)", 10, 0, 10);
 
-  TH1D* nPrN_L = new TH1D("nPrN_L", "NEUT and GENIE proton number (liquid)", 1000, 0, 10);
+  TH1D* nPrN_L = new TH1D("nPrN_L", "NEUT and GENIE proton number (liquid)", 10, 0, 10);
   TH1D* nPrN_G = new TH1D("nPrN_G", "NEUT and GENIE proton number (gas)", 1000, 0, 10);
 
   TH1D* N_PmuG = new TH1D("N_PmuG", "NEUT and GENIE muon momentum magnitude (gas)", 100, 0, 4);
@@ -58,17 +58,12 @@ int readVars_NG(){
   TH1D* N_HEpiG= new TH1D("N_HEpiG", "NEUT and GENIE highest pion energy (gas)", 100, 0, 4);
   TH1D* G_HEpiG= new TH1D("G_HEpiG", "NEUT and GENIE highest pion energy (gas)", 100, 0, 4);
 
- //hCL->SetFillColor(kYellow-7);
-  //hKL->SetFillColor(kYellow-7);
- // hKL_diff->SetFillColor(kYellow-7);
- // hCL_diff->SetFillColor(kYellow-7);
-  //hCG->SetFillColor(kYellow-7);
- // hCG_diff->SetFillColor(kYellow-7);
- // hKG_diff->SetFillColor(kYellow-7);
-//  hKG->SetFillColor(kYellow-7);
-
-   N_EpiL->GetXaxis()->SetTitle("Energy (Gev)");
-   N_EpiG->GetXaxis()->SetTitle("Energy (Gev)");
+ //nPrG_L ->SetFillColor(kYellow-7);
+// nPrG_G->SetFillColor(kYellow-7);
+// nPrG->SetFillColor(kYellow-7);
+ 
+   N_PmuG->GetXaxis()->SetTitle("Momentum (Gev)");
+   G_PmuG->GetXaxis()->SetTitle("Momentum(Gev)");
    G_EpiL->GetXaxis()->SetTitle("Energy (Gev)");
    G_EpiG->GetXaxis()->SetTitle("Energy (Gev)");
   TGaxis::SetMaxDigits(4);
@@ -140,7 +135,7 @@ int readVars_NG(){
 
         h->Fill(Enu_t);
         
-	if (mode==1){
+	if (mode==11 | mode==12 | mode==13){
 	for (int i = 0; i < nfsp; ++i)  {
 			
 	          int id = 0;
@@ -209,9 +204,8 @@ int readVars_NG(){
         Calorimetric Cal;
 	Resolution Res;
 
-        //h->Fill(Enu_tG);
 	        
-        if (modeG==1){
+        if (modeG==11 | modeG==12 | modeG==13){
 	for (int i = 0; i < nfspG; ++i)  {
 	          int id = 0;
 		  
@@ -256,7 +250,8 @@ int readVars_NG(){
 	if (EPiVec.size()>0){
 	G_HEpiG->Fill(*max(EPiVec.begin(),EPiVec.end()));} 
 	nPrG_G->Fill(nPr);      
-	}}
+	}
+	}
 
 //NEW GRAPH________________________________________________________________
 double chi_squared_total=0;
@@ -369,7 +364,7 @@ for (int i = 0; i < nPrN_L->GetXaxis()->GetNbins()+1; ++i) {
 }
 
   TCanvas *hnPr_L = new TCanvas("hnPr_L", "NEUT and GENIE proton number comparison (liquid)");
-  nPrN_L->Draw();
+  nPrN_L->Draw("*H");
   hnPr_L->Update();
   nPrG_L->SetLineColor(kRed);
   nPrG_L->Draw("same");
@@ -399,7 +394,7 @@ for (int i = 0; i < nPrN_G->GetXaxis()->GetNbins()+1; ++i) {
 }
 
   TCanvas *hnPr_G = new TCanvas("hnPr_G", "NEUT and GENIE proton number comparison (gas)");
-  nPrN_G->Draw();
+  nPrN_G->Draw("*H");
   hnPr_G->Update();
   nPrG_G->SetLineColor(kRed);
   nPrG_G->Draw("same");
@@ -430,7 +425,7 @@ for (int i = 0; i < nPrN->GetXaxis()->GetNbins()+1; ++i) {
     chi_squared_total = chi_squared_total + chi2;}
 }
   TCanvas *hnPr = new TCanvas("hnPr", "NEUT and GENIE proton number comparison (no threshold)");
-  nPrN->Draw();
+  nPrN->Draw("*H");
   hnPr->Update();
   nPrG->SetLineColor(kRed);
   nPrG->Draw("same");
