@@ -15,7 +15,7 @@ class Particle: public TObject
         float Pz;
         float Energy;
         int Id;
-	   //int Nfsp;
+	   
         Particle();  
         Particle(int pdg, float px, float py, float pz, float energy, int id);
 	~Particle();

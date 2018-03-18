@@ -158,12 +158,12 @@ int readenergy(){
       //DEBUGGING STATEMENTS
       //std:: cout<<"Partvec: "<< PartVec.size()<<"  Partvecaboveliquid: "<<PartVecAboveLiquid.size()<< "   Partvecabovegas: "<< PartVecAboveGas.size()<<"   mode: "<<mode<<endl;
       //cout<<"NFSP: "<<nfsp<<"    MODE: "<<mode<<endl;
-        for (int j=0; j<PartVec.size();j++){
+        /*for (int j=0; j<PartVec.size();j++){
           Particle part = PartVec[j];
           if (abs(part.GetPDG())==11){ //(abs(part.GetPDG()) != 211 && abs(part.GetPDG()) != 2112 && abs(part.GetPDG()) != 111 && abs(part.GetPDG()) != 2212 && abs(part.GetPDG()) != 13 && abs(part.GetPDG()) != 14){
             cout<<part.GetPDG()<<endl;
           }
-        }
+        }*/
 
     
         float ECL = calorimetric(PartVecAboveLiquid);
