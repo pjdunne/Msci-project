@@ -125,7 +125,7 @@ int readHPr(){
                   Particle Part = Particle(pdg[i], px[i], py[i],pz[i], energy[i], id);
 		  PartVec.push_back(Part);
 		  if(Part.GetPDG() == 2212){  
-		  N_HEpr->Fill(Part.GetEnergy());}
+		  N_HEpr->Fill(Part.GetMomentum());}
 			}	
 		  			
         PartRes=Res.ResFunc(PartVec,.05);
@@ -135,7 +135,7 @@ int readHPr(){
 		int pd= P.GetPDG();
 
 		if(pd == 2212){   
-		EPrVec.push_back(P.GetEnergy());}
+		EPrVec.push_back(P.GetMomentum());}
 		}
 	if (EPrVec.size()>0){
         N_HEprL->Fill(*max(EPrVec.begin(),EPrVec.end()));}  //highest energy proton liquid
@@ -145,8 +145,8 @@ int readHPr(){
 	for (int i =0; i<PartVecGas.size(); i++){
 		Particle Pa = PartVecGas[i];
 		int pdgn= Pa.GetPDG();
-		if(pdgn == 2212){   //Pion energy gas
-		EPrVec.push_back(Pa.GetEnergy());}
+		if(pdgn == 2212){   
+		EPrVec.push_back(Pa.GetMomentum());}
 		}	
 	if (EPrVec.size()>0){
 	N_HEprG->Fill(*max(EPrVec.begin(),EPrVec.end()));} //highest proton energy gas
@@ -174,7 +174,7 @@ int readHPr(){
                   Particle Part = Particle(pdgG[i], pxG[i], pyG[i],pzG[i], energyG[i], id);
 		  PartVec.push_back(Part);
 		  if(Part.GetPDG() == 2212){  
-		  G_HEpr->Fill(Part.GetEnergy());}
+		  G_HEpr->Fill(Part.GetMomentum());}
 		  }	
 								
         PartRes=Res.ResFunc(PartVec,.05);
@@ -183,7 +183,7 @@ int readHPr(){
 		Particle P = PartVecLiquid[i];
 		int pd= P.GetPDG();
 		if(pd == 2212){   //Pion energy liquid
-		EPrVec.push_back(P.GetEnergy());}
+		EPrVec.push_back(P.GetMomentum());}
 							//highest energy proton liquid
 		}
 	if (EPrVec.size()>0){
@@ -195,7 +195,7 @@ int readHPr(){
 		Particle Pa = PartVecGas[j];
 		int pdgn= Pa.GetPDG();
 		if(pdgn == 2212){   //Pion energy gas
-		EPrVec.push_back(Pa.GetEnergy());
+		EPrVec.push_back(Pa.GetMomentum());
 		}
 		}
 	if (EPrVec.size()>0){
