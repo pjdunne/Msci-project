@@ -14,26 +14,32 @@
 #include "Threshold.C"
 #include "Calorimetric.C"
 #include "Kinematic.C"
+#include "Identify.C"
 #include "Resolution.C"
 #include "Linkdef.h"
 #include "TAxis.h"
 #include "TGaxis.h"
 
 int readHPr(){
+  int bin = 100;
   TFile* fileNEUT = new TFile("T2K_Ar_numu_fhc_trunk07_Eshita_merge_flat_v4.root");
   TTree* tree = (TTree*)fileNEUT->Get("FlatTree_VARS");
   
-  TFile* fileGENIE = new TFile("genie_argon_fnalsmall_run1_flat_v2.root");
+  //TFile* fileGENIE = new TFile("genie_argon_fnalsmall_run1_flat_v2.root");
+  TFile* fileGENIE = new TFile("genie_argon_fnalsmall_MecwithNC_proc_flat.root");
+  //TFile* fileGENIE = new TFile("genie_argon_fnalsmall_Effsftem_proc_flat.root");
+
   TTree* treeG = (TTree*)fileGENIE->Get("FlatTree_VARS");
 
-  TH1D* N_HEpr= new TH1D("N_HEpr", "NEUT and GENIE highest proton energy (no threshold)", 100, .85, 2.5);
-  TH1D* G_HEpr= new TH1D("G_HEpr", "NEUT and GENIE highest proton energy (no threshold))", 100, .85, 2.5);
 
-  TH1D* N_HEprL= new TH1D("N_HEprL", "NEUT and GENIE highest proton energy (liquid)", 100, .85, 2.5);
-  TH1D* G_HEprL= new TH1D("G_HEprL", "NEUT and GENIE highest proton energy (liquid)", 100, .85, 2.5);
+  TH1D* N_HEpr= new TH1D("N_HEpr", "NEUT and GENIE highest proton momentum (no threshold)", bin, 0, 2);
+  TH1D* G_HEpr= new TH1D("G_HEpr", "NEUT and GENIE highest proton momentum (no threshold))", bin, 0, 2);
 
-  TH1D* N_HEprG= new TH1D("N_HEprG", "NEUT and GENIE highest proton energy (gas)", 100, .85, 2.5);
-  TH1D* G_HEprG= new TH1D("G_HEprG", "NEUT and GENIE highest proton energy (gas)", 100, .85, 2.5);
+  TH1D* N_HEprL= new TH1D("N_HEprL", "NEUT and GENIE highest proton momentum (liquid)", bin, 0, 2);
+  TH1D* G_HEprL= new TH1D("G_HEprL", "NEUT and GENIE highest proton momentum (liquid)", bin, 0, 2);
+
+  TH1D* N_HEprG= new TH1D("N_HEprG", "NEUT and GENIE highest proton momentum (gas)", bin, 0, 2);
+  TH1D* G_HEprG= new TH1D("G_HEprG", "NEUT and GENIE highest proton momentum (gas)", bin, 0, 2);
 
  //hCL->SetFillColor(kYellow-7);
   //hKL->SetFillColor(kYellow-7);
@@ -102,8 +108,12 @@ int readHPr(){
   treeG->SetBranchAddress("Mode",&modeG);
   treeG->SetBranchAddress("CosLep",&coslepG);
 
+//float wG = 20000/2084384; 
+//float wL = 100.2*20000./2084384;
 //Read NEUT
   Long64_t nentries = tree->GetEntries();
+  double wG = 20000./nentries;
+  double wL = 100.2*wG;
   for(unsigned int iEntry=0;iEntry< nentries;iEntry++){
 	tree->GetEntry(iEntry);
 	int nPr = 0;
@@ -111,34 +121,39 @@ int readHPr(){
 	EPrVec.clear();
         PartVecLiquid.clear();
 	PartVecGas.clear();
-	Threshold Thresh;
-        Calorimetric Cal;
 	Resolution Res;
 
-        
-	if (mode==11 | mode==12 | mode==13){
+
 	for (int i = 0; i < nfsp; ++i)  {
-			
 	          int id = 0;
 		  id++;
-    
                   Particle Part = Particle(pdg[i], px[i], py[i],pz[i], energy[i], id);
 		  PartVec.push_back(Part);
 		  if(Part.GetPDG() == 2212){  
 		  N_HEpr->Fill(Part.GetMomentum());}
 			}	
-		  			
-        PartRes=Res.ResFunc(PartVec,.05);
+		  	
+	//MODE SELECTION
+        //if (id_0pi(PartVec) == 1){   // use this to choose 0 pi modes
+        //if (id_1pi(PartVec) == 1){   // use this to choose 1 pi modes
+        if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes  
+
+		
+        PartRes=Res.ResFunc(PartVec,.01);
         PartVecLiquid=liquidMomThresh(PartRes);
 	for (int i =0; i<PartVecLiquid.size(); i++){
 		Particle P = PartVecLiquid[i];
 		int pd= P.GetPDG();
 
-		if(pd == 2212){   
+		if(pd == 2212){ 
+		//N_HEprL->Fill(P.GetMomentum(),wL);
 		EPrVec.push_back(P.GetMomentum());}
 		}
 	if (EPrVec.size()>0){
-        N_HEprL->Fill(*max(EPrVec.begin(),EPrVec.end()));}  //highest energy proton liquid
+        N_HEprL->Fill(maxi(EPrVec),wL);}  //highest energy proton liquid
+
+
+
         EPrVec.clear();
 
 	PartVecGas=gasMomThresh(PartRes);
@@ -146,10 +161,11 @@ int readHPr(){
 		Particle Pa = PartVecGas[i];
 		int pdgn= Pa.GetPDG();
 		if(pdgn == 2212){   
+		//N_HEprG->Fill(Pa.GetMomentum(),wG);
 		EPrVec.push_back(Pa.GetMomentum());}
 		}	
 	if (EPrVec.size()>0){
-	N_HEprG->Fill(*max(EPrVec.begin(),EPrVec.end()));} //highest proton energy gas
+	N_HEprG->Fill(maxi(EPrVec),wG);} //highest proton energy gas	
 	}
 	}
 
@@ -162,12 +178,10 @@ int readHPr(){
         PartVec.clear();
         PartVecLiquid.clear();
 	PartVecGas.clear();
-	Threshold Thresh;
-        Calorimetric Cal;
-	Resolution Res;
+	Resolution Res2;
 
-	        
-        if (modeG==1){
+
+ 
 	for (int i = 0; i < nfspG; ++i)  {
 	          int id = 0;
 		  id++;
@@ -176,30 +190,37 @@ int readHPr(){
 		  if(Part.GetPDG() == 2212){  
 		  G_HEpr->Fill(Part.GetMomentum());}
 		  }	
-								
-        PartRes=Res.ResFunc(PartVec,.05);
+		
+
+	//MODE SELECTION
+        //if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
+        //if (id_1pi(PartVec) == 1){ // use this to choose 1 pi modes
+        if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes        
+
+						
+        PartRes=Res2.ResFunc(PartVec,.01);
         PartVecLiquid=liquidMomThresh(PartRes);
 	for (int i =0; i<PartVecLiquid.size(); i++){
 		Particle P = PartVecLiquid[i];
 		int pd= P.GetPDG();
-		if(pd == 2212){   //Pion energy liquid
-		EPrVec.push_back(P.GetMomentum());}
-							//highest energy proton liquid
+		if(pd == 2212){  EPrVec.push_back(P.GetMomentum());}	
+		 //G_HEprL->Fill(P.GetMomentum(),wL);
+				
 		}
 	if (EPrVec.size()>0){
-        G_HEprL->Fill(*max(EPrVec.begin(),EPrVec.end()));} //Highest E pion
+        G_HEprL->Fill(maxi(EPrVec),wL);} //highest energy proton liquid
 	EPrVec.clear();
 
 	PartVecGas=gasMomThresh(PartRes);
-	for (int j =0; j<PartVecGas.size(); j++){
+	for (unsigned int j =0; j<PartVecGas.size(); j++){
 		Particle Pa = PartVecGas[j];
-		int pdgn= Pa.GetPDG();
-		if(pdgn == 2212){   //Pion energy gas
-		EPrVec.push_back(Pa.GetMomentum());
-		}
+		int pdgn = Pa.GetPDG();
+		if(pdgn == 2212){  
+		//G_HEprG->Fill(Pa.GetMomentum(),wG); 		
+		EPrVec.push_back(Pa.GetMomentum());}
 		}
 	if (EPrVec.size()>0){
-	G_HEprG->Fill(*max(EPrVec.begin(),EPrVec.end()));} 
+	G_HEprG->Fill(maxi(EPrVec),wG);}	 
 	}
 	}
 
@@ -224,15 +245,15 @@ for (int i = 0; i < N_HEprL->GetXaxis()->GetNbins()+1; ++i) {
 }
 
 
-  TCanvas *h_HEprL = new TCanvas("h_HEprL", "NEUT and GENIE pion energy comparison (liquid)");
-  N_HEprL->Draw();
+  TCanvas *h_HEprL = new TCanvas("h_HEprL", "NEUT and GENIE proton momentum comparison (liquid)");
+  G_HEprL->Draw();
   h_HEprL->Update();
-  G_HEprL->SetLineColor(kRed);
-  G_HEprL->Draw("same");
+  N_HEprL->SetLineColor(kRed);
+  N_HEprL->Draw("same");
   auto legend7 = new TLegend(0.3,0.7,0.5,0.9);
   legend7->AddEntry(N_HEprL,"NEUT","f");
   legend7->AddEntry(G_HEprL,"GENIE","f");
-  legend7->SetHeader(Form("#chi^{2}=%f", chi_squared_total));
+  legend7->SetHeader(Form("#chi^{2}=%f", chi_squared_total/bin));
   legend7->Draw();
 //
 //NEW GRAPH________________________________________________________________
@@ -249,15 +270,15 @@ for (int i = 0; i < N_HEprG->GetXaxis()->GetNbins()+1; ++i) {
     double chi2 = mc_content-data_content+data_content*log(data_content/mc_content);
     chi_squared_total = chi_squared_total + chi2;}
 }
-  TCanvas *h_HEprG = new TCanvas("h_HEprG", "NEUT and GENIE pion energy comparison (gas)");
-  N_HEprG->Draw();
+  TCanvas *h_HEprG = new TCanvas("h_HEprG", "NEUT and GENIE proton momentum comparison (gas)");
+  G_HEprG->Draw();
   h_HEprG->Update();
-  G_HEprG->SetLineColor(kRed);
-  G_HEprG->Draw("same");
+  N_HEprG->SetLineColor(kRed);
+  N_HEprG->Draw("same");
   auto legend6 = new TLegend(0.3,0.7,0.5,0.9);
   legend6->AddEntry(N_HEprG,"NEUT","f");
   legend6->AddEntry(G_HEprG,"GENIE","f");
-  legend6->SetHeader(Form("#chi^{2}=%f", chi_squared_total));
+  legend6->SetHeader(Form("#chi^{2}=%f", chi_squared_total/bin));
   legend6->Draw();
 
 
@@ -275,15 +296,15 @@ for (int i = 0; i < N_HEpr->GetXaxis()->GetNbins()+1; ++i) {
     double chi2 = mc_content-data_content+data_content*log(data_content/mc_content);
     chi_squared_total = chi_squared_total + chi2;}
 }
-  TCanvas *h_HEpr = new TCanvas("h_HEpr", "NEUT and GENIE pion energy comparison (no threshold)");
-  N_HEpr->Draw();
+  TCanvas *h_HEpr = new TCanvas("h_HEpr", "NEUT and GENIE proton momentum comparison (no threshold)");
+  G_HEpr->Draw();
   h_HEpr->Update();
-  G_HEpr->SetLineColor(kRed);
-  G_HEpr->Draw("same");
+  N_HEpr->SetLineColor(kRed);
+  N_HEpr->Draw("same");
   auto legend = new TLegend(0.3,0.7,0.5,0.9);
   legend->AddEntry(N_HEpr,"NEUT","f");
   legend->AddEntry(G_HEpr,"GENIE","f");
-  legend->SetHeader(Form("#chi^{2}=%f", chi_squared_total));
+  legend->SetHeader(Form("#chi^{2}=%f", chi_squared_total/bin));
   legend->Draw();
 
   return (0);}

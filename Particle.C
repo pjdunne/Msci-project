@@ -1,4 +1,6 @@
+
 #include "Particle.h"
+
 
 Particle::Particle()
 {
@@ -54,3 +56,16 @@ return (pdgid);}
 
 float Particle::GetMomentum(){
 return (sqrt(pow(Px,2)+pow(Py,2)+pow(Pz,2)));}
+
+int Particle::GetID(){
+  return Id;
+  
+}
+
+float maxi(vector<float> Vec){
+float Max=0;
+for (unsigned int i = 0; i < Vec.size(); i++)
+  if (Vec[i] > Max)
+    Max = Vec[i];
+
+return Max;}
