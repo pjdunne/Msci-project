@@ -10,6 +10,7 @@
 #include "TStyle.h"
 #include "TCanvas.h"
 #include "Particle.C"
+//#include "Resolution.C"
 #include "Threshold.C"
 #include "Calorimetric.C"
 #include "Kinematic.C"
@@ -181,6 +182,7 @@ int readenergy(){
 
   int id = 0;
   Long64_t nentries = tree->GetEntries();
+  //TRandom3 ranobj;
   
   for(unsigned int iEntry=0;iEntry<nentries;iEntry++){
 
@@ -197,15 +199,18 @@ int readenergy(){
 	PartVec.push_back(Part);
       }
 
-      PartVecAboveLiquid = liquidMomThresh(PartVec);
-      PartVecAboveGas = gasMomThresh(PartVec);
+      //PartVec = resolution(PartVec, 5); // percentage, 1,2,5%
+
+      PartVecAboveLiquid = liquidMomThresh(PartVec);//, ranobj);
+      PartVecAboveGas = gasMomThresh(PartVec);//, ranobj);
+
       //std:: cout<<"Partvec: "<< PartVec.size()<<"  Partvecaboveliquid: "<<PartVecAboveLiquid.size()<< "   Partvecabovegas: "<< PartVecAboveGas.size()<<"   mode: "<<mode<<endl;
       //cout<<"NFSP: "<<nfsp<<"    MODE: "<<mode<<endl;
       /*for (int j=0; j<PartVec.size();j++){
 	Particle part = PartVec[j];
 	cout<<part.GetPDG()<<endl;
 	}*/
-    
+      
       float ECL = calorimetric(PartVecAboveLiquid);
       float ECL_diff = 0;
       if (ECL != 0){

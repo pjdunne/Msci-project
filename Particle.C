@@ -50,3 +50,7 @@ float Particle::GetZMom(){
 float Particle::GetMomMag(){
   return sqrt(pow(Px,2.0)+pow(Py,2.0)+pow(Pz,2.0));
 }
+
+int Particle::GetID(){
+  return Id;
+}

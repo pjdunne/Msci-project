@@ -25,6 +25,7 @@ class Particle: public TObject
 	float GetYMom();
 	float GetZMom();
 	float GetMomMag();
+	int GetID();
 };
 
 #endif
