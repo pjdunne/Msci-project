@@ -13,6 +13,7 @@
 #include "TCanvas.h"
 #include "Particle.C"
 #include "Resolution.C"
+#include "Identify.C"
 #include "Threshold.C"
 #include "Calorimetric.C"
 #include "Kinematic.C"
@@ -237,27 +238,48 @@ int readenergy(){
     PartVecAboveLiquid.clear();
     PartVecAboveGas.clear();
     PartVecRes.clear();
-
-    if(mode==1){          //select mode/topology
-      for (int i = 0; i < nfsp; ++i)  {
+    
+    for (int i = 0; i < nfsp; ++i)  {
 	
 	id++;    
 	Particle Part = Particle(pdg[i], px[i], py[i],pz[i], energy[i], id);
 	PartVec.push_back(Part);
       }
-      vector<Particle> PartVec1;
-      PartVec1 = PartVec;
-      PartVec = resolution(PartVec,0.01); //1,2 or 5%
+    
+    vector<Particle> PartVec1;
+    PartVec1 = PartVec;
+    PartVec = resolution(PartVec,0.01); //1,2 or 5%
 
-      //PartVecAboveLiquid = PartVec;
-      //PartVecAboveGas = PartVec;
+    //PartVecAboveLiquid = PartVec;
+    //PartVecAboveGas = PartVec;
+    
+    PartVecAboveLiquid = liquidMomThresh(PartVec);
+    PartVecAboveGas = gasMomThresh(PartVec);
 
-      PartVecAboveLiquid = liquidMomThresh(PartVec);
-      PartVecAboveGas = gasMomThresh(PartVec);
-
-      //std:: cout<<"Partvec: "<< PartVec.size()<<"  Partvecaboveliquid: "<<PartVecAboveLiquid.size()<< "   Partvecabovegas: "<< PartVecAboveGas.size()<<"   mode: "<<mode<<endl;
-      //cout<<"NFSP: "<<nfsp<<"    MODE: "<<mode<<endl;
-          
+    
+    float ECL=0;
+    float ECL_diff=0;
+    float ECL_diff_frac=0;
+    float EKL=0;
+    float EKL_diff=0;
+    float EKL_diff_frac=0;
+    float ECKL_diff=0;
+    float ECKL_diff_frac=0;
+    float ECG=0;
+    float ECG_diff=0;
+    float ECG_diff_frac=0;
+    float EKG=0;
+    float EKG_diff=0;
+    float EKG_diff_frac=0;
+    float ECKG_diff=0;
+    float ECKG_diff_frac=0;
+    /////select mode/topology - liquid
+    
+    //if(mode==1){                                             //individual true modes
+    if (id_0pi(PartVecAboveLiquid)==1){                      //0pi from detected particles 
+    //if (id_1pi(PartVec) ==1){                                //1pi from detected particles
+    //if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0) {      //other
+    
       float ECL = calorimetric(PartVecAboveLiquid);
       float ECL_diff=0;
       if (ECL != 0){
@@ -269,7 +291,7 @@ int readenergy(){
 	hCL_diff_true_frac->Fill(Enu_t,ECL_diff_frac);
 	hCL_diff_frac->Fill(ECL_diff_frac);
 	//if (Enu_t > 0.1 && Enu_t < 0.2) hFrac_slice->Fill(ECL_diff_frac);
-
+	
 	if (Enu_t < 0.1) hFrac_slice_0001->Fill(ECL_diff_frac);
 	else if (Enu_t > 0.1 && Enu_t < 0.2) hFrac_slice_0102->Fill(ECL_diff_frac);
 	else if (Enu_t > 0.2 && Enu_t < 0.3) hFrac_slice_0203->Fill(ECL_diff_frac);
@@ -308,22 +330,11 @@ int readenergy(){
 	else hFrac_slice_115120->Fill(ECL_diff_frac);
       }
       
-      float ECG = calorimetric(PartVecAboveGas);
-      float ECG_diff=0;
-      if (ECG != 0) {
-	ECG_diff = ECG-Enu_t;
-	float ECG_diff_frac = ECG_diff/Enu_t;
-	hCG->Fill(ECG);
-	hCG_diff->Fill(ECG_diff);
-	hCG_diff_true->Fill(Enu_t,ECG_diff);
-	hCG_diff_true_frac->Fill(Enu_t,ECG_diff_frac);
-	hCG_diff_frac->Fill(ECG_diff_frac);
-      }
       
-      float EKL = kinematic(PartVecAboveLiquid,coslep);
+      EKL = kinematic(PartVecAboveLiquid,coslep);
       if (EKL != 0){
-	float EKL_diff = EKL - Enu_t;
-	float EKL_diff_frac = EKL_diff/Enu_t;
+	EKL_diff = EKL - Enu_t;
+	EKL_diff_frac = EKL_diff/Enu_t;
 	hKL->Fill(EKL);
 	hKL_diff->Fill(EKL_diff);
 	hKL_diff_true->Fill(Enu_t,EKL_diff);
@@ -334,33 +345,52 @@ int readenergy(){
 	  hcal_kin->Fill(ECL_diff,EKL_diff);
 	}
       }
-            
-      float EKG = kinematic(PartVecAboveGas,coslep);
+      
+      if (ECL != 0 && EKL != 0){
+	ECKL_diff = ECL - EKL;
+	ECKL_diff_frac = ECKL_diff / Enu_t;
+	hCKL_diff->Fill(Enu_t,ECKL_diff);
+	hCKL_diff_frac->Fill(Enu_t,ECKL_diff_frac);
+	hL_cal_kin_true->Fill(ECL,EKL,Enu_t);
+      }
+    }
+
+    /////select mode/topology - gas
+    
+    //if(mode==1){                                             //individual true modes
+    if (id_0pi(PartVecAboveGas)==1){                      //0pi from detected particles 
+    //if (id_1pi(PartVecAboveGas) ==1){                                //1pi from detected particles
+    //if (id_0pi(PartVecAboveGas) == 0 && id_1pi(PartVecAboveGas) == 0) {      //other
+
+      ECG = calorimetric(PartVecAboveGas);
+      if (ECG != 0) {
+	ECG_diff = ECG-Enu_t;
+	ECG_diff_frac = ECG_diff/Enu_t;
+	hCG->Fill(ECG);
+	hCG_diff->Fill(ECG_diff);
+	hCG_diff_true->Fill(Enu_t,ECG_diff);
+	hCG_diff_true_frac->Fill(Enu_t,ECG_diff_frac);
+	hCG_diff_frac->Fill(ECG_diff_frac);
+      }
+	
+      EKG = kinematic(PartVecAboveGas,coslep);
       if (EKG != 0){
-	float EKG_diff = EKG-Enu_t;
-	float EKG_diff_frac = EKG_diff/Enu_t;
+	EKG_diff = EKG-Enu_t;
+	EKG_diff_frac = EKG_diff/Enu_t;
 	hKG->Fill(EKG);
 	hKG_diff->Fill(EKG_diff);
 	hKG_diff_true->Fill(Enu_t,EKG_diff);
 	hKG_diff_true_frac->Fill(Enu_t,EKG_diff_frac);
 	hKG_diff_frac->Fill(EKG_diff_frac);
       }
-      
-      if (ECL != 0 && EKL != 0){
-	float ECKL_diff = ECL - EKL;
-	float ECKL_diff_frac = ECKL_diff / Enu_t;
-	hCKL_diff->Fill(Enu_t,ECKL_diff);
-	hCKL_diff_frac->Fill(Enu_t,ECKL_diff_frac);
-	hL_cal_kin_true->Fill(ECL,EKL,Enu_t);
-      }
-      
+      	
       if (ECG != 0 && EKG != 0){
-	float ECKG_diff = ECG - EKG;
-	float ECKG_diff_frac = ECKG_diff / Enu_t;
+	ECKG_diff = ECG - EKG;
+	ECKG_diff_frac = ECKG_diff / Enu_t;
 	hCKG_diff->Fill(Enu_t,ECKG_diff);
 	hCKG_diff_frac->Fill(Enu_t,ECKG_diff_frac);
       }
-
+	
       hE->Fill(Enu_t);
     }    
   }

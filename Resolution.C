@@ -35,11 +35,11 @@ vector<Particle> resolution(vector<Particle> PartVec, float w){
     
     //muon neutrino
     else if (abs(Part.GetPDG())== 14){ 
-      cout<<"This is a muon neutrino"<<endl;
+      //cout<<"This is a muon neutrino"<<endl;
     }
     //electron neutrino
     else if (abs(Part.GetPDG()) == 12){ 
-      cout<<"This is an electron neutrino"<<endl;
+      //cout<<"This is an electron neutrino"<<endl;
     }
     //proton
     else if (abs(Part.GetPDG()) == 2212){
