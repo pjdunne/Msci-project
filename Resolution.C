@@ -1,8 +1,10 @@
 #include "TRandom3.h"
 #include <cmath> 
+#include <random>
+#include <chrono>
 
 vector<Particle> resolution(vector<Particle> PartVec, float w){
-  TRandom3 *r0 = new TRandom3();
+  //TRandom3 *r0 = new TRandom3();
   vector<Particle> PartDet;
   PartDet.clear();
   for(unsigned int i=0;i < PartVec.size();i++){
@@ -87,7 +89,16 @@ vector<Particle> resolution(vector<Particle> PartVec, float w){
     //float sig = w; //this makes 1std dev = w
     float sig = w* En; //or 1std dev = w fraction of the original energy
     
-    float En2 = (r0->Gaus(En,sig));
+
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine generator (seed);
+    std::normal_distribution<double> distribution (En,w);
+    float En2 =  distribution(generator);
+
+    //double diff = (r0->Gaus(0.0,sig));
+    //float En2 = En + diff;
+    //cout<<"En:  "<<En<<"   En2:  "<<En2<<endl;
+    //hEn_En2->Fill(En,En2);
     float pmag2 = sqrt( pow(En,2) - pow(mass,2)); //assuming c= 1
     float px2 = unitx * pmag2;
     float py2 = unity * pmag2;
