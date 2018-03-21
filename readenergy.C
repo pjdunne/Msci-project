@@ -4,20 +4,20 @@
 #include "TROOT.h"
 #include "TChain.h"
 #include "TFile.h"
-#include "TLorentzVector.h"
+#include "TLorentzVector.h" //remove
 #include "TVector2.h"
 #include "TH2.h"
 #include "TStyle.h"
 #include "TCanvas.h"
 #include "Particle.C"
-#include "Threshold.C"
+//#include "Threshold.C"
 #include "Calorimetric.C"
 #include "Kinematic.C"
 #include "TAxis.h"
 #include "TGaxis.h"
 #include "TStyle.h"
 #include "Identify.C"
-// #include "Resolution.C"
+//#include "Resolution.C"
 
 int readenergy(){
   TFile* file = new TFile("/Users/AnishaKadri/Desktop/Final/Eshita4.root");
@@ -112,7 +112,7 @@ int readenergy(){
   int mode;
   float Enu_t;
   float coslep;
-  vector<float> Ecal;
+  //vector<float> Ecal;
   
   tree->SetBranchAddress("nfsp",&nfsp);
   tree->SetBranchAddress("pdg",&pdg);
@@ -126,31 +126,36 @@ int readenergy(){
 
   int id = 0;
   Long64_t nentries = tree->GetEntries();
+
+  //int counter = 0;
   
   for(unsigned int iEntry=0;iEntry<nentries;iEntry++){
+    //for(unsigned int iEntry=0;iEntry<5;iEntry++){
 
     tree->GetEntry(iEntry);
     PartVec.clear();
     PartVecAboveLiquid.clear();
     PartVecAboveGas.clear();
 
-
-
     for (int i = 0; i < nfsp; ++i)  {
-	
-	   id++;    
-	   Particle Part = Particle(pdg[i], px[i], py[i],pz[i], energy[i], id);
-	   PartVec.push_back(Part);
+      id++;   
+      Particle Part = Particle(pdg[i], px[i], py[i],pz[i], energy[i], id);
+      PartVec.push_back(Part);
       }
 
     //THRESHOLD:
-    PartVecAboveLiquid = liquidMomThresh(PartVec);
-    PartVecAboveGas = gasMomThresh(PartVec);
+    PartVecAboveLiquid = PartVec;
+    PartVecAboveGas = PartVec;
+    //PartVecAboveLiquid = liquidMomThresh(PartVec);
+    //PartVecAboveGas = gasMomThresh(PartVec);
 
     //SMEARING:
+    //PartVecAboveLiquid = resolution(PartVecAboveLiquid, 5); // percentage, 1,2,5%
+    //PartVecAboveGas = resolution(PartVecAboveGas, 5);
 
     //MODE SELECTION
-    if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
+    if (mode == 1){
+    //if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
      //if (id_1pi(PartVec) == 1){ // use this to choose 1 pi modes
      //if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes
 
@@ -160,23 +165,29 @@ int readenergy(){
       //cout<<"NFSP: "<<nfsp<<"    MODE: "<<mode<<endl;
         /*for (int j=0; j<PartVec.size();j++){
           Particle part = PartVec[j];
-          if (abs(part.GetPDG())==11){ //(abs(part.GetPDG()) != 211 && abs(part.GetPDG()) != 2112 && abs(part.GetPDG()) != 111 && abs(part.GetPDG()) != 2212 && abs(part.GetPDG()) != 13 && abs(part.GetPDG()) != 14){
-            cout<<part.GetPDG()<<endl;
+          if (abs(part.GetPDG())==2224){ //(abs(part.GetPDG()) != 211 && abs(part.GetPDG()) != 2112 && abs(part.GetPDG()) != 111 && abs(part.GetPDG()) != 2212 && abs(part.GetPDG()) != 13 && abs(part.GetPDG()) != 14){
+            counter++;
           }
         }*/
 
     
         float ECL = calorimetric(PartVecAboveLiquid);
+        float ECL_diff = 0.0;
+        if (ECL != 0){
         float ECL_diff = ECL-Enu_t;
         hCL->Fill(ECL);
         hCL_diff->Fill(ECL_diff);
         hCL_diff_true->Fill(Enu_t,ECL_diff);
+        }
       
         float ECG = calorimetric(PartVecAboveGas);
-        float ECG_diff = ECG-Enu_t;
-        hCG->Fill(ECG);
-        hCG_diff->Fill(ECG_diff);
-        hCG_diff_true->Fill(Enu_t,ECG_diff);
+        float ECG_diff = 0.0;
+        if (ECG != 0){
+          float ECG_diff = ECG-Enu_t;
+          hCG->Fill(ECG);
+          hCG_diff->Fill(ECG_diff);
+          hCG_diff_true->Fill(Enu_t,ECG_diff);
+          }
     
         float EKL = kinematic(PartVecAboveLiquid,coslep);
         if (EKL != 0){
@@ -197,7 +208,7 @@ int readenergy(){
         hE->Fill(Enu_t);
     }
   }
-
+  //cout<<counter<<endl;
   /*
   TCanvas *c = new TCanvas("c", "Energy Plot");
   hE->Draw();
