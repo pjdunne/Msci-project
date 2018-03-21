@@ -194,7 +194,7 @@ int readenergy(){
   //hFrac_slice->GetXaxis()->SetTitle("Fractional energy difference");
   //hFrac_slice->GetYaxis()->SetTitle("No. of events");
 
-  TH2D* hEn_En2 = new TH2D("hEn_En2"," ", 100,0,10,100,-5,5);
+  TH2D* hcal_kin = new TH2D("hcal_kin"," ", 100,-5,10,100,-10,10);
 
 
   TH1D* hdiff = new TH1D("hdiff"," ",100,-5,5);
@@ -257,15 +257,7 @@ int readenergy(){
 
       //std:: cout<<"Partvec: "<< PartVec.size()<<"  Partvecaboveliquid: "<<PartVecAboveLiquid.size()<< "   Partvecabovegas: "<< PartVecAboveGas.size()<<"   mode: "<<mode<<endl;
       //cout<<"NFSP: "<<nfsp<<"    MODE: "<<mode<<endl;
-      for (int j=0; j<PartVec.size();j++){
-        Particle Part = PartVec[j];
-	Particle Part1 = PartVec1[j];
-	float En2 = Part.GetEnergy();
-	float En = Part1.GetEnergy();
-	hEn_En2->Fill(En,En2-En);
-	hdiff->Fill(En2-En);
-      }
-    
+          
       float ECL = calorimetric(PartVecAboveLiquid);
       float ECL_diff=0;
       if (ECL != 0){
@@ -337,7 +329,10 @@ int readenergy(){
 	hKL_diff_true->Fill(Enu_t,EKL_diff);
 	hKL_diff_true_frac->Fill(Enu_t,EKL_diff_frac);
 	hKL_diff_frac->Fill(EKL_diff_frac);
-	if (ECL_diff != 0) hL_cal_kin_diff_true->Fill(ECL_diff, EKL_diff, Enu_t);
+	if (ECL_diff != 0) {
+	  hL_cal_kin_diff_true->Fill(ECL_diff, EKL_diff, Enu_t);
+	  hcal_kin->Fill(ECL_diff,EKL_diff);
+	}
       }
             
       float EKG = kinematic(PartVecAboveGas,coslep);
@@ -408,10 +403,12 @@ int readenergy(){
   hFrac_slice_115120->Fit("gaus");
   */
   //plotting two 1D histograms on same canvas
-  
-  /*TCanvas *c1 = new TCanvas("c1","cal and kin energy difference",200,10,700,500);
+  /*
+  TCanvas *c1 = new TCanvas("c1","cal and kin energy difference",200,10,700,500);
   TPad *pad1 = new TPad("pad1","",0,0,1,1);
   TPad *pad2 = new TPad("pad2","",0,0,1,1);
+  TPad *pad3 = new TPad("pad3","",0,0,1,1);
+
   pad2->SetFillStyle(4000);
   pad1->Draw();
   pad1->cd();
@@ -441,6 +438,7 @@ int readenergy(){
   ps2->SetX2NDC(0.85);
   ps2->SetTextColor(kRed);
   */
+  
 
   //Drawing out histograms on canvases - don't have to go into TBrowser
   
