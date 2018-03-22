@@ -12,8 +12,11 @@ float calorimetric(vector<Particle> PartVec){
     En=Part.GetEnergy();	
     int pdg = Part.GetPDG();		
     
-    if(pdg == 2212 || pdg == 2112){
+    if(pdg == 2212){
       E_cal += (En - mproton);
+    }
+    else if(pdg == 2112){
+      E_cal += (En - mneutron);
     }
     
     else{
