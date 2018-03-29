@@ -11,6 +11,9 @@
 #include "TH2.h"
 #include "TStyle.h"
 #include "TCanvas.h"
+#inlcude "TRandom3.h"
+#include <random>
+#include <cmath>
 #include "Particle.C"
 #include "Resolution.C"
 #include "Identify.C"
@@ -155,42 +158,42 @@ int readenergy(){
   hL_cal_kin_diff_true->GetYaxis()->SetTitle("Kinematic energy difference (GeV)");
   hL_cal_kin_diff_true->GetZaxis()->SetTitle("True (GeV)");
 
-  TH1D* hFrac_slice_0001 = new TH1D("hFrac_Slice_0001"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_0102 = new TH1D("hFrac_Slice_0102"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_0203 = new TH1D("hFrac_Slice_0203"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_0304 = new TH1D("hFrac_Slice_0304"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_0405 = new TH1D("hFrac_Slice_0405"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_0506 = new TH1D("hFrac_Slice_0506"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_0607 = new TH1D("hFrac_Slice_0607"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_0708 = new TH1D("hFrac_Slice_0708"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_0809 = new TH1D("hFrac_Slice_0809"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_0910 = new TH1D("hFrac_Slice_0910"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_1011 = new TH1D("hFrac_Slice_1011"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_1112 = new TH1D("hFrac_Slice_1112"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_1213 = new TH1D("hFrac_Slice_1213"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_1314 = new TH1D("hFrac_Slice_1314"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_1415 = new TH1D("hFrac_Slice_1415"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_1520 = new TH1D("hFrac_Slice_1520"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_2025 = new TH1D("hFrac_Slice_2025"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_2530 = new TH1D("hFrac_Slice_2530"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_3035 = new TH1D("hFrac_Slice_3035"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_3540 = new TH1D("hFrac_Slice_3540"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_4045 = new TH1D("hFrac_Slice_4045"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_4550 = new TH1D("hFrac_Slice_4550"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_5055 = new TH1D("hFrac_Slice_5055"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_5560 = new TH1D("hFrac_Slice_5560"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_6065 = new TH1D("hFrac_Slice_6065"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_6570 = new TH1D("hFrac_Slice_6570"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_7075 = new TH1D("hFrac_Slice_7075"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_7580 = new TH1D("hFrac_Slice_7580"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_8085 = new TH1D("hFrac_Slice_8085"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_8590 = new TH1D("hFrac_Slice_8590"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_9095 = new TH1D("hFrac_Slice_9095"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_95100 = new TH1D("hFrac_Slice_90100"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_100105 = new TH1D("hFrac_Slice_100105"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_105110 = new TH1D("hFrac_Slice_105110"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_110115 = new TH1D("hFrac_Slice_110115"," ",100,-0.8,0.2);
-  TH1D* hFrac_slice_115120 = new TH1D("hFrac_Slice_115120"," ",100,-0.8,0.2);
+  TH1D* hFrac_slice_0001 = new TH1D("hFrac_Slice_0001"," ",100,-0.8,1);
+  TH1D* hFrac_slice_0102 = new TH1D("hFrac_Slice_0102"," ",100,-0.8,1);
+  TH1D* hFrac_slice_0203 = new TH1D("hFrac_Slice_0203"," ",100,-0.8,1);
+  TH1D* hFrac_slice_0304 = new TH1D("hFrac_Slice_0304"," ",100,-0.8,1);
+  TH1D* hFrac_slice_0405 = new TH1D("hFrac_Slice_0405"," ",100,-0.8,1);
+  TH1D* hFrac_slice_0506 = new TH1D("hFrac_Slice_0506"," ",100,-0.8,1);
+  TH1D* hFrac_slice_0607 = new TH1D("hFrac_Slice_0607"," ",100,-0.8,1);
+  TH1D* hFrac_slice_0708 = new TH1D("hFrac_Slice_0708"," ",100,-0.8,1);
+  TH1D* hFrac_slice_0809 = new TH1D("hFrac_Slice_0809"," ",100,-0.8,1);
+  TH1D* hFrac_slice_0910 = new TH1D("hFrac_Slice_0910"," ",100,-0.8,1);
+  TH1D* hFrac_slice_1011 = new TH1D("hFrac_Slice_1011"," ",100,-0.8,1);
+  TH1D* hFrac_slice_1112 = new TH1D("hFrac_Slice_1112"," ",100,-0.8,1);
+  TH1D* hFrac_slice_1213 = new TH1D("hFrac_Slice_1213"," ",100,-0.8,1);
+  TH1D* hFrac_slice_1314 = new TH1D("hFrac_Slice_1314"," ",100,-0.8,1);
+  TH1D* hFrac_slice_1415 = new TH1D("hFrac_Slice_1415"," ",100,-0.8,1);
+  TH1D* hFrac_slice_1520 = new TH1D("hFrac_Slice_1520"," ",100,-0.8,1);
+  TH1D* hFrac_slice_2025 = new TH1D("hFrac_Slice_2025"," ",100,-0.8,1);
+  TH1D* hFrac_slice_2530 = new TH1D("hFrac_Slice_2530"," ",100,-0.8,1);
+  TH1D* hFrac_slice_3035 = new TH1D("hFrac_Slice_3035"," ",100,-0.8,1);
+  TH1D* hFrac_slice_3540 = new TH1D("hFrac_Slice_3540"," ",100,-0.8,1);
+  TH1D* hFrac_slice_4045 = new TH1D("hFrac_Slice_4045"," ",100,-0.8,1);
+  TH1D* hFrac_slice_4550 = new TH1D("hFrac_Slice_4550"," ",100,-0.8,1);
+  TH1D* hFrac_slice_5055 = new TH1D("hFrac_Slice_5055"," ",100,-0.8,1);
+  TH1D* hFrac_slice_5560 = new TH1D("hFrac_Slice_5560"," ",100,-0.8,1);
+  TH1D* hFrac_slice_6065 = new TH1D("hFrac_Slice_6065"," ",100,-0.8,1);
+  TH1D* hFrac_slice_6570 = new TH1D("hFrac_Slice_6570"," ",100,-0.8,1);
+  TH1D* hFrac_slice_7075 = new TH1D("hFrac_Slice_7075"," ",100,-0.8,1);
+  TH1D* hFrac_slice_7580 = new TH1D("hFrac_Slice_7580"," ",100,-0.8,1);
+  TH1D* hFrac_slice_8085 = new TH1D("hFrac_Slice_8085"," ",100,-0.8,1);
+  TH1D* hFrac_slice_8590 = new TH1D("hFrac_Slice_8590"," ",100,-0.8,1);
+  TH1D* hFrac_slice_9095 = new TH1D("hFrac_Slice_9095"," ",100,-0.8,1);
+  TH1D* hFrac_slice_95100 = new TH1D("hFrac_Slice_90100"," ",100,-0.8,1);
+  TH1D* hFrac_slice_100105 = new TH1D("hFrac_Slice_100105"," ",100,-0.8,1);
+  TH1D* hFrac_slice_105110 = new TH1D("hFrac_Slice_105110"," ",100,-0.8,1);
+  TH1D* hFrac_slice_110115 = new TH1D("hFrac_Slice_110115"," ",100,-0.8,1);
+  TH1D* hFrac_slice_115120 = new TH1D("hFrac_Slice_115120"," ",100,-0.8,1);
   
   TH2D* hcal_kin = new TH2D("hcal_kin"," ", 100,-10,0.2,100,-6,10);
 
@@ -223,6 +226,7 @@ int readenergy(){
   int mode;
   float Enu_t;
   float coslep;
+  
   tree->SetBranchAddress("nfsp",&nfsp);
   tree->SetBranchAddress("pdg",&pdg);
   tree->SetBranchAddress("px",&px);
@@ -237,6 +241,7 @@ int readenergy(){
   Long64_t nentries = tree->GetEntries();
   //int countpipm = 0;
   //int countpi0 = 0;
+
   for(unsigned int iEntry=0;iEntry<nentries;iEntry++){
 
     tree->GetEntry(iEntry);
@@ -283,8 +288,8 @@ int readenergy(){
     /////select mode/topology - liquid
     
     //if (mode==1){                                                     //individual true modes
-    //if (id_0pi(PartVecAboveLiquid)==1){                               //0pi from detected particles 
-    if (id_1pi(PartVecAboveLiquid) ==1){                                //1pi from detected particles
+    if (id_0pi(PartVecAboveLiquid)==1){                               //0pi from detected particles 
+    //if (id_1pi(PartVecAboveLiquid) ==1){                                //1pi from detected particles
     //if (id_0pi(PartVecAboveLiquid) == 0 && id_1pi(PartVec) == 0) {    //other
       
       ECL = calorimetric(PartVecAboveLiquid);
@@ -360,8 +365,8 @@ int readenergy(){
       }
       
       
-      //EKL = kinematic(PartVecAboveLiquid,coslep);       //for when looking at 0pi modes
-      EKL = cc1pikinematic(PartVecAboveLiquid,coslep);         //for when looking at 1pi modes
+      EKL = kinematic(PartVecAboveLiquid,coslep);       //for when looking at 0pi modes
+      //EKL = cc1pikinematic(PartVecAboveLiquid,coslep);         //for when looking at 1pi modes
       if (EKL != 0){
 	EKL_diff = EKL - Enu_t;
 	EKL_diff_frac = EKL_diff/Enu_t;
@@ -399,8 +404,8 @@ int readenergy(){
     /////select mode/topology - gas
     
     //if(mode==1){                                                               //individual true modes
-    //if (id_0pi(PartVecAboveGas)==1){                                           //0pi from detected particles 
-    if (id_1pi(PartVecAboveGas) ==1){                                          //1pi from detected particles
+    if (id_0pi(PartVecAboveGas)==1){                                           //0pi from detected particles 
+    //if (id_1pi(PartVecAboveGas) ==1){                                          //1pi from detected particles
     //if (id_0pi(PartVecAboveGas) == 0 && id_1pi(PartVecAboveGas) == 0) {        //other
 
       ECG = calorimetric(PartVecAboveGas);
@@ -414,8 +419,8 @@ int readenergy(){
 	hCG_diff_frac->Fill(ECG_diff_frac);
       }
 	
-      //EKG = kinematic(PartVecAboveGas,coslep);          //for when looking at 0pi modes
-      EKG = cc1pikinematic(PartVecAboveGas,coslep);     //for when looking at 1pi modes
+      EKG = kinematic(PartVecAboveGas,coslep);          //for when looking at 0pi modes
+      //EKG = cc1pikinematic(PartVecAboveGas,coslep);     //for when looking at 1pi modes
       if (EKG != 0){
 	EKG_diff = EKG-Enu_t;
 	EKG_diff_frac = EKG_diff/Enu_t;
@@ -437,44 +442,47 @@ int readenergy(){
     }    
   }
   //cout<<"PI 0:  "<<countpi0<<"   Pi pm:  "<< countpipm<<endl;
-  /*
-  hFrac_slice_0001->Fit("gaus");
-  hFrac_slice_0102->Fit("gaus");
-  hFrac_slice_0203->Fit("gaus");
-  hFrac_slice_0304->Fit("gaus");
-  hFrac_slice_0405->Fit("gaus");
-  hFrac_slice_0506->Fit("gaus");
-  hFrac_slice_0607->Fit("gaus");
-  hFrac_slice_0708->Fit("gaus");
-  hFrac_slice_0809->Fit("gaus");
-  hFrac_slice_0910->Fit("gaus");
-  hFrac_slice_1011->Fit("gaus");
-  hFrac_slice_1112->Fit("gaus");
-  hFrac_slice_1213->Fit("gaus");
-  hFrac_slice_1314->Fit("gaus");
-  hFrac_slice_1415->Fit("gaus");
-  hFrac_slice_1520->Fit("gaus");
-  hFrac_slice_2025->Fit("gaus");
-  hFrac_slice_2530->Fit("gaus");
-  hFrac_slice_3035->Fit("gaus");
-  hFrac_slice_3540->Fit("gaus");
-  hFrac_slice_4045->Fit("gaus");
-  hFrac_slice_4550->Fit("gaus");
-  hFrac_slice_5055->Fit("gaus");
-  hFrac_slice_5560->Fit("gaus");
-  hFrac_slice_6065->Fit("gaus");
-  hFrac_slice_6570->Fit("gaus");
-  hFrac_slice_7075->Fit("gaus");
-  hFrac_slice_7580->Fit("gaus");
-  hFrac_slice_8085->Fit("gaus");
-  hFrac_slice_8590->Fit("gaus");
-  hFrac_slice_9095->Fit("gaus");
-  hFrac_slice_95100->Fit("gaus");
-  hFrac_slice_100105->Fit("gaus");
-  hFrac_slice_105110->Fit("gaus");
-  hFrac_slice_110115->Fit("gaus");
-  hFrac_slice_115120->Fit("gaus");
-  */
+
+  TF1 *fit = new TF1("fit","crystalball");
+  fit->SetParameters(2200,0.02,0.002,2,1);
+
+  hFrac_slice_0001->Fit("fit");
+  hFrac_slice_0102->Fit("fit");
+  hFrac_slice_0203->Fit("fit");
+  hFrac_slice_0304->Fit("fit");
+  hFrac_slice_0405->Fit("fit");
+  hFrac_slice_0506->Fit("fit");
+  hFrac_slice_0607->Fit("fit");
+  hFrac_slice_0708->Fit("fit");
+  hFrac_slice_0809->Fit("fit");
+  hFrac_slice_0910->Fit("fit");
+  hFrac_slice_1011->Fit("fit");
+  hFrac_slice_1112->Fit("fit");
+  hFrac_slice_1213->Fit("fit");
+  hFrac_slice_1314->Fit("fit");
+  hFrac_slice_1415->Fit("fit");
+  hFrac_slice_1520->Fit("fit");
+  hFrac_slice_2025->Fit("fit");
+  hFrac_slice_2530->Fit("fit");
+  hFrac_slice_3035->Fit("fit");
+  hFrac_slice_3540->Fit("fit");
+  hFrac_slice_4045->Fit("fit");
+  hFrac_slice_4550->Fit("fit");
+  hFrac_slice_5055->Fit("fit");
+  hFrac_slice_5560->Fit("fit");
+  hFrac_slice_6065->Fit("fit");
+  hFrac_slice_6570->Fit("fit");
+  hFrac_slice_7075->Fit("fit");
+  hFrac_slice_7580->Fit("fit");
+  hFrac_slice_8085->Fit("fit");
+  hFrac_slice_8590->Fit("fit");
+  hFrac_slice_9095->Fit("fit");
+  hFrac_slice_95100->Fit("fit");
+  hFrac_slice_100105->Fit("fit");
+  hFrac_slice_105110->Fit("fit");
+  hFrac_slice_110115->Fit("fit");
+  hFrac_slice_115120->Fit("fit");
+  
   //plotting two 1D histograms on same canvas
 
   /*

@@ -8,16 +8,15 @@ class Particle: public TObject
     public:
   
         int pdgid;
-        float threshold;
-        float eff;
         float Px;
         float Py;
         float Pz;
         float Energy;
 	int Id;
-	//int Nfsp;
+	float Trand;
+	float Rrand;
         Particle();  
-        Particle(int pdg, float px, float py, float pz, float energy, int id);
+        Particle(int pdg, float px, float py, float pz, float energy, int id, float trand, float rrand);
 	~Particle();
 	float GetEnergy();
 	int GetPDG();
@@ -26,6 +25,8 @@ class Particle: public TObject
 	float GetZMom();
 	float GetMomMag();
 	int GetID();
+	float GetTrand();
+	float GetRrand();
 };
 
 #endif
