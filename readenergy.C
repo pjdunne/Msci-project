@@ -11,7 +11,7 @@
 #include "TH2.h"
 #include "TStyle.h"
 #include "TCanvas.h"
-#inlcude "TRandom3.h"
+#include "TRandom3.h"
 #include <random>
 #include <cmath>
 #include "Particle.C"
@@ -242,6 +242,7 @@ int readenergy(){
   //int countpipm = 0;
   //int countpi0 = 0;
 
+  TRandom3 ranobj;
   for(unsigned int iEntry=0;iEntry<nentries;iEntry++){
 
     tree->GetEntry(iEntry);
@@ -251,20 +252,21 @@ int readenergy(){
       
     for (int i = 0; i < nfsp; ++i)  {
 	
-	id++;    
-	Particle Part = Particle(pdg[i], px[i], py[i],pz[i], energy[i], id);
+	id++;
+	float Trand = ranobj.Rndm();
+	Particle Part = Particle(pdg[i], px[i], py[i],pz[i], energy[i], id, Trand);
 	PartVec.push_back(Part);
       }
     
     vector<Particle> PartVec1;
     PartVec1 = PartVec;
-    //PartVec = resolution(PartVec,0.05); //1,2 or 5%
+    PartVec = resolution(PartVec,0.05); //1,2 or 5%
 
-    PartVecAboveLiquid = PartVec;
-    PartVecAboveGas = PartVec;
-    
-    //PartVecAboveLiquid = liquidMomThresh(PartVec);
-    //PartVecAboveGas = gasMomThresh(PartVec);
+    //PartVecAboveLiquid = PartVec;
+    //PartVecAboveGas = PartVec;
+   
+    PartVecAboveLiquid = liquidMomThresh(PartVec);
+    PartVecAboveGas = gasMomThresh(PartVec);
 
     hnfspmode->Fill(mode,nfsp);
     
@@ -287,8 +289,8 @@ int readenergy(){
 
     /////select mode/topology - liquid
     
-    //if (mode==1){                                                     //individual true modes
-    if (id_0pi(PartVecAboveLiquid)==1){                               //0pi from detected particles 
+    if (mode==1){                                                     //individual true modes
+    //if (id_0pi(PartVecAboveLiquid)==1){                               //0pi from detected particles 
     //if (id_1pi(PartVecAboveLiquid) ==1){                                //1pi from detected particles
     //if (id_0pi(PartVecAboveLiquid) == 0 && id_1pi(PartVec) == 0) {    //other
       
@@ -403,8 +405,8 @@ int readenergy(){
     
     /////select mode/topology - gas
     
-    //if(mode==1){                                                               //individual true modes
-    if (id_0pi(PartVecAboveGas)==1){                                           //0pi from detected particles 
+    if(mode==1){                                                               //individual true modes
+    //if (id_0pi(PartVecAboveGas)==1){                                           //0pi from detected particles 
     //if (id_1pi(PartVecAboveGas) ==1){                                          //1pi from detected particles
     //if (id_0pi(PartVecAboveGas) == 0 && id_1pi(PartVecAboveGas) == 0) {        //other
 
@@ -445,7 +447,7 @@ int readenergy(){
 
   TF1 *fit = new TF1("fit","crystalball");
   fit->SetParameters(2200,0.02,0.002,2,1);
-
+  
   hFrac_slice_0001->Fit("fit");
   hFrac_slice_0102->Fit("fit");
   hFrac_slice_0203->Fit("fit");
@@ -541,11 +543,11 @@ int readenergy(){
   */
 
   //Drawing out histograms on canvases - don't have to go into TBrowser
-  
+  /*
   TCanvas *c = new TCanvas("c", "Energy difference with nfsp");
   c->SetGrid();
   hdiff->Draw();
-  /*
+  
   TCanvas *c1 = new TCanvas("c1", "Calorimetric Liquid");
   hCL->Draw();
 

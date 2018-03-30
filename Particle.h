@@ -14,9 +14,9 @@ class Particle: public TObject
         float Energy;
 	int Id;
 	float Trand;
-	float Rrand;
+	//float Rrand;
         Particle();  
-        Particle(int pdg, float px, float py, float pz, float energy, int id, float trand, float rrand);
+        Particle(int pdg, float px, float py, float pz, float energy, int id, float trand);// float rrand);
 	~Particle();
 	float GetEnergy();
 	int GetPDG();
@@ -26,7 +26,7 @@ class Particle: public TObject
 	float GetMomMag();
 	int GetID();
 	float GetTrand();
-	float GetRrand();
+	//float GetRrand();
 };
 
 #endif

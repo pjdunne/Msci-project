@@ -4,7 +4,6 @@
 #include <chrono>
 
 vector<Particle> resolution(vector<Particle> PartVec, float w){
-  //TRandom3 *r0 = new TRandom3();
   vector<Particle> PartDet;
   PartDet.clear();
   for(unsigned int i=0;i < PartVec.size();i++){
@@ -99,11 +98,11 @@ vector<Particle> resolution(vector<Particle> PartVec, float w){
     //float En2 = En + diff;
     //cout<<"En:  "<<En<<"   En2:  "<<En2<<endl;
     //hEn_En2->Fill(En,En2);
-    float pmag2 = sqrt( pow(En,2) - pow(mass,2)); //assuming c= 1
+    float pmag2 = sqrt( pow(En,2.0) - pow(mass,2.0)); //assuming c= 1      //should En be En2 here????
     float px2 = unitx * pmag2;
     float py2 = unity * pmag2;
     float pz2 = unitz * pmag2;
-    Particle Part2 = Particle(Part.GetPDG(), px2, py2, pz2, En2, Part.GetID()); 
+    Particle Part2 = Particle(Part.GetPDG(), px2, py2, pz2, En2, Part.GetID(), Part.GetTrand()); 
     PartDet.push_back(Part2);
   }			                        					
   return (PartDet);

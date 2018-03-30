@@ -9,10 +9,10 @@ Particle::Particle()
   Energy = 0.;
   Id = 0;
   Trand = 0;    //random number for threshold
-  Rrand = 0;    //random number for resolution
+  //Rrand = 0;    //random number for resolution
 }
 
-Particle::Particle(int pdg, float px, float py, float pz, float energy, int id, float trand, float rrand)
+Particle::Particle(int pdg, float px, float py, float pz, float energy, int id, float trand)//, float rrand)
 {
     pdgid = pdg;
     Px = px;
@@ -21,7 +21,7 @@ Particle::Particle(int pdg, float px, float py, float pz, float energy, int id, 
     Energy = energy;
     Id = id;
     Trand = trand;
-    Rrand = rrand;
+    //Rrand = rrand;
     
 }
 
@@ -57,9 +57,9 @@ int Particle::GetID(){
 }
 
 float Particle::GetTrand(){
-  return Trand();
+  return Trand;
 }
 
-float Particle::GetRrand(){
-  return Rrand();
-}
+/*float Particle::GetRrand(){
+  return Rrand;
+  }*/
