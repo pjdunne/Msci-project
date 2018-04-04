@@ -5,3 +5,5 @@
 *.pcm
 *.C#
 *.png
+test.*
+sigmoid.*
