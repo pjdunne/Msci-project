@@ -38,7 +38,7 @@ float cc1pikinematic(vector<Particle> PartVec,float coslep)
   float Pzlep = 0;
   float Pxlep = 0;
   float Pylep = 0;
-  float PlPpidotprod;
+  float PlPpidotprod = 0;
   
   for (unsigned int i=0; i<PartVec.size();i++){
     Particle Part = PartVec[i];

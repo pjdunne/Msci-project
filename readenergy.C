@@ -159,8 +159,8 @@ int readenergy(){
   hL_cal_kin_diff_true->GetZaxis()->SetTitle("True (GeV)");
 
   TH1D* hFrac_slice_0001 = new TH1D("hFrac_Slice_0001"," ",100,-0.8,1);
-  TH1D* hFrac_slice_0102 = new TH1D("hFrac_Slice_0102"," ",100,-0.8,1);
-  TH1D* hFrac_slice_0203 = new TH1D("hFrac_Slice_0203"," ",100,-0.8,1);
+  TH1D* hFrac_slice_0102 = new TH1D("hFrac_Slice_0102"," ",100,-1,1);
+  TH1D* hFrac_slice_0203 = new TH1D("hFrac_Slice_0203"," ",100,-1,1);
   TH1D* hFrac_slice_0304 = new TH1D("hFrac_Slice_0304"," ",100,-0.8,1);
   TH1D* hFrac_slice_0405 = new TH1D("hFrac_Slice_0405"," ",100,-0.8,1);
   TH1D* hFrac_slice_0506 = new TH1D("hFrac_Slice_0506"," ",100,-0.8,1);
@@ -446,7 +446,7 @@ int readenergy(){
   //cout<<"PI 0:  "<<countpi0<<"   Pi pm:  "<< countpipm<<endl;
 
   TF1 *fit = new TF1("fit","crystalball");
-  fit->SetParameters(2200,0.02,0.002,2,1);
+  fit->SetParameters(2200,0.02,0.002,1,1);
   
   hFrac_slice_0001->Fit("fit");
   hFrac_slice_0102->Fit("fit");
