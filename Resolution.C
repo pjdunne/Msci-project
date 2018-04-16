@@ -110,11 +110,11 @@ vector<Particle> resolution(vector<Particle> PartVec, float w){
 
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine generator (seed);
-    std::normal_distribution<double> distribution (En,w);
+    std::normal_distribution<double> distribution (En,sig);
     float En2 =  distribution(generator);
 
     
-    float pmag2 = sqrt( pow(En,2.0) - pow(mass,2.0)); //assuming c= 1      //should En be En2 here????
+    float pmag2 = sqrt( pow(En2,2.0) - pow(mass,2.0)); //assuming c= 1      //should En be En2 here????
     float px2 = unitx * pmag2;
     float py2 = unity * pmag2;
     float pz2 = unitz * pmag2;
@@ -124,15 +124,3 @@ vector<Particle> resolution(vector<Particle> PartVec, float w){
   return (PartDet);
   
 }
-© 2018 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-API
-Training
-Shop
-Blog
-About
