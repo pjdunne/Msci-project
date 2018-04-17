@@ -3,7 +3,7 @@
 #include <random>
 #include <chrono>
 
-vector<Particle> resolution(vector<Particle> PartVec, float w){
+vector<Particle> resolution(vector<Particle> PartVec){
   vector<Particle> PartDet;
   PartDet.clear();
   for(unsigned int i=0;i < PartVec.size();i++){
@@ -114,7 +114,7 @@ vector<Particle> resolution(vector<Particle> PartVec, float w){
     float En2 =  distribution(generator);
 
     
-    float pmag2 = sqrt( pow(En2,2.0) - pow(mass,2.0)); //assuming c= 1      //should En be En2 here????
+    float pmag2 = sqrt( pow(En2,2.0) - pow(mass,2.0)); //assuming c= 1
     float px2 = unitx * pmag2;
     float py2 = unity * pmag2;
     float pz2 = unitz * pmag2;
