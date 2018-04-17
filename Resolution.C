@@ -105,16 +105,16 @@ vector<Particle> resolution(vector<Particle> PartVec, float w){
     }
     
     //float sig = w; //this makes 1std dev = w
-    float sig = w* En; //or 1std dev = w fraction of the original energy
+    float sig = w* pmag; //or 1std dev = w fraction of the original energy
     
 
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine generator (seed);
-    std::normal_distribution<double> distribution (En,sig);
-    float En2 =  distribution(generator);
+    std::normal_distribution<double> distribution (pmag,sig);
+    float pmag2 =  distribution(generator);
 
     
-    float pmag2 = sqrt( pow(En2,2.0) - pow(mass,2.0)); //assuming c= 1      //should En be En2 here????
+    float En2 = sqrt( pow(pmag2,2.0) + pow(mass,2.0)); //assuming c= 1      //should En be En2 here????
     float px2 = unitx * pmag2;
     float py2 = unity * pmag2;
     float pz2 = unitz * pmag2;
