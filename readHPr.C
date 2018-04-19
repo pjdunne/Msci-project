@@ -288,7 +288,7 @@ double chiPprG=Chi(N_HEprG,G_HEprG);
   if (b==2){
   h_HEprG->SaveAs("Proton momentum GENIE model 2 (gas).pdf");}
 
-chi_squared_total=Chi(N_HEpr,G_HEpr);
+double chi_squared_total=Chi(N_HEpr,G_HEpr);
   TCanvas *h_HEpr = new TCanvas("h_HEpr", "NEUT and GENIE proton momentum comparison (no threshold)");
   G_HEpr->Draw();
   h_HEpr->Update();
@@ -297,12 +297,19 @@ chi_squared_total=Chi(N_HEpr,G_HEpr);
   auto legend = new TLegend(0.4,0.7,0.6,0.9);
   legend->AddEntry(N_HEpr,"NEUT","f");
   legend->AddEntry(G_HEpr,"GENIE","f");
-  legend->SetHeader(Form("#chi^{2}=%f", chi_squared_total/bin));
+  legend->SetHeader(Form("#chi^{2}=%f", chi_squared_total));
   legend->Draw();
+  if (b==0){
+  h_HEprG->SaveAs("Proton momentum GENIE model 0 (no threshold).pdf");}
+  if (b==1){
+  h_HEprG->SaveAs("Proton momentum GENIE model 1 (no threshold).pdf");}
+  if (b==2){
+  h_HEprG->SaveAs("Proton momentum GENIE model 2 (no threshold).pdf");}
+
 
 cout <<"GENIE Model:"<< b<<endl;
-cout<<"Proton Momentum Liquid"<<""<<chiPprL<<endl;
-cout<<"Proton Momentum Gas:"<<""<<chiPprG<<endl;
+cout<<"Proton Momentum Liquid:"<<" "<<chiPprL<<endl;
+cout<<"Proton Momentum Gas:"<<" "<<chiPprG<<endl;
 
   }
 
