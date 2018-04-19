@@ -253,7 +253,7 @@ double chiPprL=Chi(N_HEprL,G_HEprL);
   auto legend7 = new TLegend(0.4,0.7,0.6,0.9);
   legend7->AddEntry(N_HEprL,"NEUT","f");
   legend7->AddEntry(G_HEprL,"GENIE","f");
-  legend7->SetHeader(Form("#chi^{2}=%f", chi_squared_total/bin));
+  legend7->SetHeader(Form("#chi^{2}=%f", chiPprL));
   legend7->Draw();
   if (b==0){
   h_HEprL->SaveAs("Proton momentum GENIE model 0 (liquid).pdf");}
@@ -279,7 +279,7 @@ double chiPprG=Chi(N_HEprG,G_HEprG);
   auto legend6 = new TLegend(0.4,0.7,0.6,0.9);
   legend6->AddEntry(N_HEprG,"NEUT","f");
   legend6->AddEntry(G_HEprG,"GENIE","f");
-  legend6->SetHeader(Form("#chi^{2}=%f", chi_squared_total/bin));
+  legend6->SetHeader(Form("#chi^{2}=%f", chiPprG));
   legend6->Draw();
   if (b==0){
   h_HEprG->SaveAs("Proton momentum GENIE model 0 (gas).pdf");}
