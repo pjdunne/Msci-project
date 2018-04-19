@@ -1,6 +1,7 @@
 #include "TObject.h"
 #include <iostream>
 #include <string>
+#include <sstream>
 #include "TROOT.h"
 #include "TChain.h"
 #include "TFile.h"
@@ -16,19 +17,38 @@
 #include "Kinematic.C"
 #include "Resolution.C"
 #include "Identify.C"
+#include "Chi.C"
 #include "Linkdef.h"
 #include "TAxis.h"
 #include "TGaxis.h"
-
-
+#include "Norm.C"
+#include "TextTable.h"
 
 int readVars_NG(){
+ for(int b =0; b < 3;b++){
   TFile* fileNEUT = new TFile("T2K_Ar_numu_fhc_trunk07_Eshita_merge_flat_v4.root");
+ // TFile* fileNEUT = new TFile("genie_argon_fnalsmall_run1_flat_v2.root");
   TTree* tree = (TTree*)fileNEUT->Get("FlatTree_VARS");
+  TFile* fileGENIE;
+  if(b==0){
+  fileGENIE = new TFile("genie_argon_fnalsmall_run1_flat_v2.root");}
+  if(b==1){
+  fileGENIE = new TFile("genie_argon_fnalsmall_MecwithNC_proc_flat.root");}
+  if(b==2){
+  fileGENIE = new TFile("genie_argon_fnalsmall_Effsftem_proc_flat.root");}
+
+
+  TFile *Flux = new TFile("t2kflux_2016_plus250kA.root");
+  TH1D* hFlux = (TH1D*)Flux->Get("enu_nd280_numu");
+  TAxis *axis = hFlux->GetXaxis();
+  int bmax = axis->GetNbins()+1;
+  double wid = axis->GetBinWidth(0);
+ // double integral = hFlux->Integral(0,bmax,"width");
+  //cout<<integral<<endl;
   
-  //TFile* fileGENIE = new TFile("genie_argon_fnalsmall_run1_flat_v2.root");
-  TFile* fileGENIE = new TFile("genie_argon_fnalsmall_MecwithNC_proc_flat.root");
-  //TFile* fileGENIE = new TFile("genie_argon_fnalsmall_Effsftem_proc_flat.root");
+ //TCanvas *canv = new TCanvas("enu_nd280_numu", "T2K nu_mu flux at ND280 with +250 kA horn operation");
+ //hFlux->Draw();
+ // canv->SaveAs("T2K_Flux.pdf");
 
   TTree* treeG = (TTree*)fileGENIE->Get("FlatTree_VARS");
  
@@ -72,6 +92,11 @@ int readVars_NG(){
    G_PmuG->GetXaxis()->SetTitle("Momentum(Gev)");
    G_EpiL->GetXaxis()->SetTitle("Energy (Gev)");
    G_EpiG->GetXaxis()->SetTitle("Energy (Gev)");
+
+   N_PmuG->GetYaxis()->SetTitle("Number of events");
+   G_PmuG->GetYaxis()->SetTitle("Number of events");
+   G_EpiL->GetYaxis()->SetTitle("Number of events");
+   G_EpiG->GetYaxis()->SetTitle("Number of events");
   TGaxis::SetMaxDigits(4);
 
   vector<Particle> PartVecLiquid;
@@ -91,7 +116,6 @@ int readVars_NG(){
   float Enu_t;
   int mode;
  
-
   //Variables from GENIE tree
   int nfspG;                
   float coslepG;
@@ -102,7 +126,6 @@ int readVars_NG(){
   float energyG[240];
   float Enu_tG;
   int modeG;
-
 
   //NEUT
   tree->SetBranchAddress("Enu_true",&Enu_t);
@@ -126,8 +149,6 @@ int readVars_NG(){
   treeG->SetBranchAddress("Mode",&modeG);
   treeG->SetBranchAddress("CosLep",&coslepG);
 
-///
-
 //Read NEUT
   Long64_t nentries = tree->GetEntries();
   double wG = 20000./nentries;
@@ -143,8 +164,6 @@ int readVars_NG(){
 
         h->Fill(Enu_t);
 
-
-
 	for (int i = 0; i < nfsp; ++i)  {
 	          int id = 0;
 		  id++;
@@ -152,20 +171,15 @@ int readVars_NG(){
                   Particle Part = Particle(pdg[i], px[i], py[i],pz[i], energy[i], id);
 		  PartVec.push_back(Part);
 		  if(pdg[i]==2212){nPr++;}                //Proton Number
-		 	
-	
 		  if(pdg[i] == 13){                   //Muon Momentum
-		  N_Pmu->Fill(Part.GetMomentum());}}	
-		  
+		  N_Pmu->Fill(Part.GetMomentum());}}		  
 	//MODE SELECTION
-       // if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
+        if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
        // if (id_1pi(PartVec) == 1){ // use this to choose 1 pi modes
-        if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes  
-
-
+       // if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes  
 	nPrN->Fill(nPr);
 	nPr=0;			
-        PartRes=Res.ResFunc(PartVec,.05);
+        PartRes=Res.ResFunc(PartVec,.01);
         PartVecLiquid=liquidMomThresh(PartRes);
 	for (int i =0; i<PartVecLiquid.size(); i++){
 		Particle P = PartVecLiquid[i];
@@ -200,9 +214,9 @@ int readVars_NG(){
 	if (EPiVec.size()>0){
 	N_HEpiG->Fill(maxi(EPiVec),wG);} //highest pion energy gas
 	}
-	
 	}
 //Read GENIE
+  double wL2 = 1*wL;//*1.49148689133;
   Long64_t nentriesG= treeG->GetEntries();
   for(unsigned int iEntry=0;iEntry< nentriesG;iEntry++){
 	treeG->GetEntry(iEntry);
@@ -212,9 +226,6 @@ int readVars_NG(){
         PartVecLiquid.clear();
 	PartVecGas.clear();
 	Resolution Res;
-
-
-
 
 	for (int i = 0; i < nfspG; ++i)  {
 	          int id = 0;
@@ -228,14 +239,12 @@ int readVars_NG(){
         		G_Pmu->Fill(Part.GetMomentum());}}	
 
 	//MODE SELECTION
-        //if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
+        if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
         //if (id_1pi(PartVec) == 1){ // use this to choose 1 pi modes
-        if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes  
-
-
+        //if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes  
 	nPrG->Fill(nPr);
 	nPr=0;										
-        PartRes=Res.ResFunc(PartVec,.05);
+        PartRes=Res.ResFunc(PartVec,.01);
         PartVecLiquid=liquidMomThresh(PartRes);
 	for (int i =0; i<PartVecLiquid.size(); i++){
 		Particle P = PartVecLiquid[i];
@@ -249,9 +258,9 @@ int readVars_NG(){
 		//highest energy pion liquid
 		}
 	if (EPiVec.size()>0){
-        G_HEpiL->Fill(maxi(EPiVec),wL);} //Highest E pion
+        G_HEpiL->Fill(maxi(EPiVec),wL2);} //Highest E pion
 	EPiVec.clear();
-	nPrG_L->Fill(nPr,wL);
+	nPrG_L->Fill(nPr,wL2);
 	nPr=0;
 	PartVecGas=gasMomThresh(PartRes);
 	for (int j =0; j<PartVecGas.size(); j++){
@@ -267,60 +276,29 @@ int readVars_NG(){
 	if (EPiVec.size()>0){
 	G_HEpiG->Fill(maxi(EPiVec),wG);} 
 	nPrG_G->Fill(nPr,wG);      
-	
 	}
 	}
 
+N_PmuG = NormG(N_PmuG);
+G_PmuG = NormG(G_PmuG);
+
+N_PmuL = NormL(N_PmuL);
+G_PmuL = NormL(G_PmuL);
+
+nPrN_L = NormL(nPrN_L);
+nPrG_L = NormL(nPrG_L);
+
+nPrN_G = NormL(nPrN_G);
+nPrG_G = NormL(nPrG_G);
 //GRAPHS__________________________________________________________________
-double chi_squared_total=0;
-for (int i = 0; i < N_Pmu->GetXaxis()->GetNbins()+1; ++i) {
-    // N_Pmu is here the MC proton multiplicity distribution from NEUT
-    double mc_content = N_Pmu->GetBinContent(i+1);
-
-    // nPrG is here_data is the MC proton multiplicity distribution from GENIE
-    double data_content = G_Pmu->GetBinContent(i+1);
-    // Set the error to be the square root of the bin content in one bin (Poisson errors)
-    double error = sqrt(mc_content);
-    // Calculate a chi2 assuming the probability distribution function is a Gaussian
-    //double chi2 = (data_content - mc_content)^2/(error^2);
-    // Calculate a chi2 assuming the probability distribution function is a Poisson
-   
-    if (mc_content !=0 && data_content !=0){
-    double chi2 = mc_content-data_content+data_content*log(data_content/mc_content);
-    chi_squared_total = chi_squared_total + chi2;}
-}
-//muLep NEUT and GENIE liquid
-  TCanvas *hN_Pmu = new TCanvas("hN_Pmu", "NEUT and GENIE muon momentum magnitude comparison (no threshold)");
-  N_Pmu->Draw();
-  hN_Pmu->Update();
-  G_Pmu->SetLineColor(kRed);
-  G_Pmu->Draw("same");
-  auto legend2 = new TLegend(0.3,0.7,0.5,0.9);
-  legend2->AddEntry(N_Pmu,"NEUT","f");
-  legend2->AddEntry(G_Pmu,"GENIE","f");
-  legend2->SetHeader(Form("#chi^{2}=%f", chi_squared_total/bin));
-  legend2->Draw();
-
-//NEW GRAPH________________________________________________________________
-chi_squared_total=0;
-for (int i = 0; i < N_PmuG->GetXaxis()->GetNbins()+1; ++i) {
-    // N_PmuG is here the MC proton multiplicity distribution from NEUT
-    double mc_content = N_PmuG->GetBinContent(i+1);
-
-    // nPrG is here_data is the MC proton multiplicity distribution from GENIE
-    double data_content = G_PmuG->GetBinContent(i+1);
-    // Set the error to be the square root of the bin content in one bin (Poisson errors)
-    double error = sqrt(mc_content);
-    // Calculate a chi2 assuming the probability distribution function is a Gaussian
-    //double chi2 = (data_content - mc_content)^2/(error^2);
-    // Calculate a chi2 assuming the probability distribution function is a Poisson
-   
-    if (mc_content !=0 && data_content !=0){
-    double chi2 = mc_content-data_content+data_content*log(data_content/mc_content);
-    chi_squared_total = chi_squared_total + chi2;}
-}
-
-  TCanvas *hN_PmuG = new TCanvas("hN_PmuG", "NEUT and GENIE muon momentum magnitude comparison (gas)");
+double chiPmuG=Chi(N_PmuG,G_PmuG);
+  TCanvas *hN_PmuG;
+  if(b==0){
+  hN_PmuG = new TCanvas("hN_PmuG", "NEUT and GENIE muon momentum magnitude comparison 0 (gas)");}
+  if(b==1){
+  hN_PmuG = new TCanvas("hN_PmuG1", "NEUT and GENIE muon momentum magnitude comparison 1 (gas)");}
+  if(b==2){
+  hN_PmuG = new TCanvas("hN_PmuG2", "NEUT and GENIE muon momentum magnitude comparison 2 (gas)");}
   N_PmuG->Draw();
   hN_PmuG->Update();
   G_PmuG->SetLineColor(kRed);
@@ -328,30 +306,23 @@ for (int i = 0; i < N_PmuG->GetXaxis()->GetNbins()+1; ++i) {
   auto legend = new TLegend(0.3,0.7,0.5,0.9);
   legend->AddEntry(N_PmuG,"NEUT","f");
   legend->AddEntry(G_PmuG,"GENIE","f");
-  legend->SetHeader(Form("#chi^{2}=%f", chi_squared_total/bin));
+  legend->SetHeader(Form("#chi^{2}=%f", chiPmuG));
   legend->Draw();
+  if (b==0){
+  hN_PmuG->SaveAs("Muon momentum GENIE model 0 (gas).pdf");}
+  if (b==1){
+  hN_PmuG->SaveAs("Muon momentum GENIE model 1 (gas).pdf");}
+  if (b==2){
+  hN_PmuG->SaveAs("Muon momentum GENIE model 2 (gas).pdf");}
 
-
-//NEW GRAPH________________________________________________________________
-chi_squared_total=0;
-for (int i = 0; i < N_PmuL->GetXaxis()->GetNbins()+1; ++i) {
-    // N_PmuL is here the MC proton multiplicity distribution from NEUT
-    double mc_content = N_PmuL->GetBinContent(i+1);
-
-    // nPrG is here_data is the MC proton multiplicity distribution from GENIE
-    double data_content = G_PmuL->GetBinContent(i+1);
-    // Set the error to be the square root of the bin content in one bin (Poisson errors)
-    double error = sqrt(mc_content);
-    // Calculate a chi2 assuming the probability distribution function is a Gaussian
-    //double chi2 = (data_content - mc_content)^2/(error^2);
-    // Calculate a chi2 assuming the probability distribution function is a Poisson
-   
-    if (mc_content !=0 && data_content !=0){
-    double chi2 = mc_content-data_content+data_content*log(data_content/mc_content);
-    chi_squared_total = chi_squared_total + chi2;}
-}
-
-  TCanvas *hN_PmuL = new TCanvas("hN_PmuL", "NEUT and GENIE muon momentum magnitude comparison (liquid)");
+double chiPmuL=Chi(N_PmuL,G_PmuL);
+  TCanvas *hN_PmuL;
+  if(b==0){
+  hN_PmuL = new TCanvas("hN_PmuL", "NEUT and GENIE muon momentum magnitude comparison 0 (liquid)");}
+  if(b==1){
+  hN_PmuL = new TCanvas("hN_PmuL1", "NEUT and GENIE muon momentum magnitude comparison 1 (liquid)");}
+  if(b==2){
+  hN_PmuL = new TCanvas("hN_PmuL2", "NEUT and GENIE muon momentum magnitude comparison 2 (liquid)");}
   N_PmuL->Draw();
   hN_PmuL->Update();
   G_PmuL->SetLineColor(kRed);
@@ -359,28 +330,23 @@ for (int i = 0; i < N_PmuL->GetXaxis()->GetNbins()+1; ++i) {
   auto legend1 = new TLegend(0.3,0.7,0.5,0.9);
   legend1->AddEntry(N_PmuL,"NEUT","f");
   legend1->AddEntry(G_PmuL,"GENIE","f");
-  legend1->SetHeader(Form("#chi^{2}=%f", chi_squared_total/bin));
+  legend1->SetHeader(Form("#chi^{2}=%f", chiPmuL));
   legend1->Draw();
+  if (b==0){
+  hN_PmuL->SaveAs("Muon momentum GENIE model 0 (liquid).pdf");}
+  if (b==1){
+  hN_PmuL->SaveAs("Muon momentum GENIE model 1 (liquid).pdf");}
+  if (b==2){
+  hN_PmuL->SaveAs("Muon momentum GENIE model 2 (liquid).pdf");} 
 
-//NEW GRAPH________________________________________________________________
-chi_squared_total=0;
-for (int i = 0; i < nPrN_L->GetXaxis()->GetNbins()+1; ++i) {
-     double mc_content = nPrN_L->GetBinContent(i+1);
-
-    // nPrG is here_data is the MC proton multiplicity distribution from GENIE
-    double data_content = nPrG_L->GetBinContent(i+1);
-    // Set the error to be the square root of the bin content in one bin (Poisson errors)
-    double error = sqrt(mc_content);
-    // Calculate a chi2 assuming the probability distribution function is a Gaussian
-    //double chi2 = (data_content - mc_content)^2/(error^2);
-    // Calculate a chi2 assuming the probability distribution function is a Poisson
-   
-    if (mc_content !=0 && data_content !=0){
-    double chi2 = mc_content-data_content+data_content*log(data_content/mc_content);
-    chi_squared_total = chi_squared_total + chi2;}
-}
-
-  TCanvas *hnPr_L = new TCanvas("hnPr_L", "NEUT and GENIE proton number comparison (liquid)");
+double chinPrL=Chi(nPrN_L,nPrG_L)*bin/12;
+  TCanvas *hnPr_L;
+  if(b==0){
+  hnPr_L = new TCanvas("hnPr_L", "NEUT and GENIE proton number comparison 0 (liquid)");}
+  if(b==1){
+  hnPr_L = new TCanvas("hnPr_L1", "NEUT and GENIE proton number comparison 1 (liquid)");}
+  if(b==2){
+  hnPr_L = new TCanvas("hnPr_L2", "NEUT and GENIE proton number comparison 2 (liquid)");}
   nPrN_L->Draw("*H");
   hnPr_L->Update();
   nPrG_L->SetLineColor(kRed);
@@ -388,29 +354,23 @@ for (int i = 0; i < nPrN_L->GetXaxis()->GetNbins()+1; ++i) {
   auto legend8 = new TLegend(0.3,0.7,0.5,0.9);
   legend8->AddEntry(nPrN_L,"NEUT","f");
   legend8->AddEntry(nPrG_L,"GENIE","f");
-  legend8->SetHeader(Form("#chi^{2}=%f", chi_squared_total/12));
+  legend8->SetHeader(Form("#chi^{2}=%f", chinPrL));
   legend8->Draw();
+  if (b==0){
+  hnPr_L->SaveAs("Proton multiplicity GENIE model 0 (liquid).pdf");}
+  if (b==1){
+  hnPr_L->SaveAs("Proton multiplicity GENIE model 1 (liquid).pdf");}
+  if (b==2){
+  hnPr_L->SaveAs("Proton multiplicity GENIE model 2 (liquid).pdf");}
 
-//NEW GRAPH________________________________________________________________
-chi_squared_total=0;
-for (int i = 0; i < nPrN_G->GetXaxis()->GetNbins()+1; ++i) {
-    // N_PmuL is here the MC proton multiplicity distribution from NEUT
-    double mc_content = nPrN_G->GetBinContent(i+1);
-
-    // nPrG is here_data is the MC proton multiplicity distribution from GENIE
-    double data_content = nPrG_G->GetBinContent(i+1);
-    // Set the error to be the square root of the bin content in one bin (Poisson errors)
-    double error = sqrt(mc_content);
-    // Calculate a chi2 assuming the probability distribution function is a Gaussian
-    //double chi2 = (data_content - mc_content)^2/(error^2);
-    // Calculate a chi2 assuming the probability distribution function is a Poisson
-   
-    if (mc_content !=0 && data_content !=0){
-    double chi2 = mc_content-data_content+data_content*log(data_content/mc_content);
-    chi_squared_total = chi_squared_total + chi2;}
-}
-
-  TCanvas *hnPr_G = new TCanvas("hnPr_G", "NEUT and GENIE proton number comparison (gas)");
+double chinPrG=Chi(nPrN_G,nPrG_G)*bin/12;
+  TCanvas *hnPr_G; 
+  if(b==0){
+  hnPr_G = new TCanvas("hnPr_G", "NEUT and GENIE proton number comparison 0 (gas)");}
+  if(b==1){
+  hnPr_G = new TCanvas("hnPr_G1", "NEUT and GENIE proton number comparison 1 (gas)");}
+  if(b==2){
+  hnPr_G = new TCanvas("hnPr_G2", "NEUT and GENIE proton number comparison 2 (gas)");}
   nPrN_G->Draw("*H");
   hnPr_G->Update();
   nPrG_G->SetLineColor(kRed);
@@ -418,30 +378,31 @@ for (int i = 0; i < nPrN_G->GetXaxis()->GetNbins()+1; ++i) {
   auto legend9 = new TLegend(0.3,0.7,0.5,0.9);
   legend9->AddEntry(nPrN_G,"NEUT","f");
   legend9->AddEntry(nPrG_G,"GENIE","f");
-  legend9->SetHeader(Form("#chi^{2}=%f", chi_squared_total/12));
+  legend9->SetHeader(Form("#chi^{2}=%f", chinPrG));
   legend9->Draw();
+  if (b==0){
+  hnPr_G->SaveAs("Proton multiplicity GENIE model 0 (gas).pdf");}
+  if (b==1){
+  hnPr_G->SaveAs("Proton multiplicity GENIE model 1 (gas).pdf");}
+  if (b==2){
+  hnPr_G->SaveAs("Proton multiplicity GENIE model 2 (gas).pdf");}
 
-
-//NEW GRAPH________________________________________________________________
-chi_squared_total=0;
-
-for (int i = 0; i < nPrN->GetXaxis()->GetNbins()+1; ++i) {
-    // nPrN is here the MC proton multiplicity distribution from NEUT
-    double mc_content = nPrN->GetBinContent(i+1);
-
-    // nPrG is here_data is the MC proton multiplicity distribution from GENIE
-    double data_content = nPrG->GetBinContent(i+1);
-    // Set the error to be the square root of the bin content in one bin (Poisson errors)
-    double error = sqrt(mc_content);
-    // Calculate a chi2 assuming the probability distribution function is a Gaussian
-    //double chi2 = (data_content - mc_content)^2/(error^2);
-    // Calculate a chi2 assuming the probability distribution function is a Poisson
    
-    if (mc_content !=0 && data_content !=0){
-    double chi2 = mc_content-data_content+data_content*log(data_content/mc_content);
-    chi_squared_total = chi_squared_total + chi2;}
-}
-  TCanvas *hnPr = new TCanvas("hnPr", "NEUT and GENIE proton number comparison (no threshold)");
+cout <<"GENIE Model:"<< b<<endl;
+cout<<"Proton Multiplicity Liquid:"<<""<<chinPrL<<endl;
+cout<<"Proton Multiplicity Gas:"<<""<<chinPrG<<endl;
+cout<<"Muon momentum Liquid:"<<""<<chiPmuL<<endl;
+cout<<"Muon momentum Gas:"<<""<<chiPmuG<<endl;
+
+/*
+double chinPr=Chi(nPrN,nPrG);
+  TCanvas *hnPr;
+  if(b==0){
+  hnPr = new TCanvas("hnPr", "NEUT and GENIE proton number comparison 0 (no threshold)");}
+  if(b==1){
+  hnPr = new TCanvas("hnPr1", "NEUT and GENIE proton number comparison 1 (no threshold)");}
+  if(b==2){
+  hnPr = new TCanvas("hnPr2", "NEUT and GENIE proton number comparison 2 (no threshold)");}
   nPrN->Draw("*H");
   hnPr->Update();
   nPrG->SetLineColor(kRed);
@@ -449,29 +410,31 @@ for (int i = 0; i < nPrN->GetXaxis()->GetNbins()+1; ++i) {
   auto legend3 = new TLegend(0.3,0.7,0.5,0.9);
   legend3->AddEntry(nPrN,"NEUT","f");
   legend3->AddEntry(nPrG,"GENIE","f");
-  legend3->SetHeader(Form("#chi^{2}=%f", chi_squared_total/12));
+  legend3->SetHeader(Form("#chi^{2}=%f", chinPr));
   legend3->Draw();
-/*
-// NEW GRAPH_______________________________________________________________
-chi_squared_total=0;
 
-for (int i = 0; i < N_EpiL->GetXaxis()->GetNbins()+1; ++i) {
-    // N_Pmu is here the MC pmu distribution from NEUT
-    double mc_content = N_EpiL->GetBinContent(i+1);
 
-    // N_Pmu is here_data is the MC pmu distribution from GENIE
-    double data_content = G_EpiL->GetBinContent(i+1);
-    // Set the error to be the square root of the bin content in one bin (Poisson errors)
-    double error = sqrt(mc_content);
-    // Calculate a chi2 assuming the probability distribution function is a Gaussian
-    //double chi2 = (data_content - mc_content)^2/(error^2);
-    // Calculate a chi2 assuming the probability distribution function is a Poisson
-   
-    if (mc_content !=0 && data_content !=0){
-    double chi2 = mc_content-data_content+data_content*log(data_content/mc_content);
-    chi_squared_total = chi_squared_total + chi2;}
-}
+double chiPmu= Chi(N_Pmu,G_Pmu);
+  TCanvas* hNPmu;
+  if(b==0){
+  hNPmu = new TCanvas("hN_Pmu", "NEUT and GENIE muon momentum magnitude comparison 0  (no threshold)");}
+  if(b==1){
+  hNPmu = new TCanvas("hN_Pmu1", "NEUT and GENIE muon momentum magnitude comparison 1 (no threshold)");}
+  if(b==2){
+  hNPmu = new TCanvas("hN_Pmu2", "NEUT and GENIE muon momentum magnitude comparison 2 (no threshold)");}
+  N_Pmu->Draw();
+  hNPmu->Update();
+  G_Pmu->SetLineColor(kRed);
+  G_Pmu->Draw("same");
+  auto legend2 = new TLegend(0.3,0.7,0.5,0.9);
+  legend2->AddEntry(N_Pmu,"NEUT","f");
+  legend2->AddEntry(G_Pmu,"GENIE","f");
+  legend2->SetHeader(Form("#chi^{2}=%f", chiPmu));
+  legend2->Draw();
 
+
+
+chi_squared_total=Chi(N_EpiL,G_EpiL);
 
   TCanvas *h_EpiL = new TCanvas("h_EpiL", "NEUT and GENIE pion energy comparison (liquid)");
   N_EpiL->Draw();
@@ -483,21 +446,8 @@ for (int i = 0; i < N_EpiL->GetXaxis()->GetNbins()+1; ++i) {
   legend4->AddEntry(G_EpiL,"GENIE","f");
   legend4->SetHeader(Form("#chi^{2}=%f", chi_squared_total/bin));
   legend4->Draw();
-//
-//NEW GRAPH________________________________________________________________
-chi_squared_total=0;
 
-for (int i = 0; i < N_EpiG->GetXaxis()->GetNbins()+1; ++i) {
-    double mc_content = N_EpiG->GetBinContent(i+1);
-    double data_content = G_EpiG->GetBinContent(i+1);
-    double error = sqrt(mc_content);
-    // Calculate a chi2 assuming the probability distribution function is a Gaussian
-    //double chi2 = (data_content - mc_content)^2/(error^2);
-    // Calculate a chi2 assuming the probability distribution function is a Poisson
-    if (mc_content !=0 && data_content !=0){
-    double chi2 = mc_content-data_content+data_content*log(data_content/mc_content);
-    chi_squared_total = chi_squared_total + chi2;}
-}
+chi_squared_total=Chi(N_EpiG,G_EpiG);
   TCanvas *h_EpiG = new TCanvas("h_EpiG", "NEUT and GENIE pion energy comparison (gas)");
   N_EpiG->Draw();
   h_EpiG->Update();
@@ -509,28 +459,7 @@ for (int i = 0; i < N_EpiG->GetXaxis()->GetNbins()+1; ++i) {
   legend5->SetHeader(Form("#chi^{2}=%f", chi_squared_total/bin));
   legend5->Draw();
 
-
-//NEW GRAPH________________________________________________________________
-chi_squared_total=0;
-
-for (int i = 0; i < N_HEpiL->GetXaxis()->GetNbins()+1; ++i) {
-    // N_Pmu is here the MC pmu distribution from NEUT
-    double mc_content = N_HEpiL->GetBinContent(i+1);
-
-    // N_Pmu is here_data is the MC pmu distribution from GENIE
-    double data_content = G_HEpiL->GetBinContent(i+1);
-    // Set the error to be the square root of the bin content in one bin (Poisson errors)
-    double error = sqrt(mc_content);
-    // Calculate a chi2 assuming the probability distribution function is a Gaussian
-    //double chi2 = (data_content - mc_content)^2/(error^2);
-    // Calculate a chi2 assuming the probability distribution function is a Poisson
-   
-    if (mc_content !=0 && data_content !=0){
-    double chi2 = mc_content-data_content+data_content*log(data_content/mc_content);
-    chi_squared_total = chi_squared_total + chi2;}
-}
-
-
+chi_squared_total=Chi(N_HEpiL,G_HEpiL);
   TCanvas *h_HEpiL = new TCanvas("h_HEpiL", "NEUT and GENIE pion energy comparison (liquid)");
   N_HEpiL->Draw();
   h_HEpiL->Update();
@@ -543,19 +472,7 @@ for (int i = 0; i < N_HEpiL->GetXaxis()->GetNbins()+1; ++i) {
   legend7->Draw();
 //
 //NEW GRAPH________________________________________________________________
-chi_squared_total=0;
-
-for (int i = 0; i < N_HEpiG->GetXaxis()->GetNbins()+1; ++i) {
-    double mc_content = N_HEpiG->GetBinContent(i+1);
-    double data_content = G_HEpiG->GetBinContent(i+1);
-    double error = sqrt(mc_content);
-    // Calculate a chi2 assuming the probability distribution function is a Gaussian
-    //double chi2 = (data_content - mc_content)^2/(error^2);
-    // Calculate a chi2 assuming the probability distribution function is a Poisson
-    if (mc_content !=0 && data_content !=0){
-    double chi2 = mc_content-data_content+data_content*log(data_content/mc_content);
-    chi_squared_total = chi_squared_total + chi2;}
-}
+chi_squared_total=Chi(N_HEpiG,G_HEpiG);
   TCanvas *h_HEpiG = new TCanvas("h_HEpiG", "NEUT and GENIE pion energy comparison (gas)");
   N_HEpiG->Draw();
   h_HEpiG->Update();
@@ -567,5 +484,31 @@ for (int i = 0; i < N_HEpiG->GetXaxis()->GetNbins()+1; ++i) {
   legend6->SetHeader(Form("#chi^{2}=%f", chi_squared_total/bin));
   legend6->Draw();
 */
+}
+   /* TextTable t( '-', '|', '+' );
+
+    t.add( "0pi" );
+    t.add( "GENIE 0" );
+   // t.add( "GENIE 1" );
+   // t.add( "GENIE 2" );
+    t.endOfRow();
+
+    t.add("");
+    t.add( "Gas | Liquid" );
+    t.add( "Gas | Liquid" );
+    t.add( "Gas | Liquid" );
+    t.endOfRow();
+
+    t.add( "nPr" );
+    t.add( "chinPrG | chinPrL" );
+    t.endOfRow();
+
+    t.add( "Pmu" );
+    t.add( "chinPmuG | chinPmuL" );
+    t.endOfRow();
+
+    t.setAlignment( 2, TextTable::Alignment::RIGHT );
+    std::cout << t;
+    */
 
   return (0);}
