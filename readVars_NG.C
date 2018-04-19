@@ -342,11 +342,11 @@ double chiPmuL=Chi(N_PmuL,G_PmuL);
 double chinPrL=Chi(nPrN_L,nPrG_L)*bin/12;
   TCanvas *hnPr_L;
   if(b==0){
-  hnPr_L = new TCanvas("hnPr_L", "NEUT and GENIE proton number comparison 0 (liquid)");}
+  hnPr_L = new TCanvas("hnPr_L", "NEUT and GENIE proton multiplicity comparison 0 (liquid)");}
   if(b==1){
-  hnPr_L = new TCanvas("hnPr_L1", "NEUT and GENIE proton number comparison 1 (liquid)");}
+  hnPr_L = new TCanvas("hnPr_L1", "NEUT and GENIE proton multiplicity  comparison 1 (liquid)");}
   if(b==2){
-  hnPr_L = new TCanvas("hnPr_L2", "NEUT and GENIE proton number comparison 2 (liquid)");}
+  hnPr_L = new TCanvas("hnPr_L2", "NEUT and GENIE proton multiplicity comparison 2 (liquid)");}
   nPrN_L->Draw("*H");
   hnPr_L->Update();
   nPrG_L->SetLineColor(kRed);
@@ -387,12 +387,40 @@ double chinPrG=Chi(nPrN_G,nPrG_G)*bin/12;
   if (b==2){
   hnPr_G->SaveAs("Proton multiplicity GENIE model 2 (gas).pdf");}
 
-   
+ 
+double chiPmu= Chi(N_Pmu,G_Pmu);
+  TCanvas* hNPmu;
+  if(b==0){
+  hNPmu = new TCanvas("hN_Pmu", "NEUT and GENIE muon momentum magnitude comparison 0  (no threshold)");}
+  if(b==1){
+  hNPmu = new TCanvas("hN_Pmu1", "NEUT and GENIE muon momentum magnitude comparison 1 (no threshold)");}
+  if(b==2){
+  hNPmu = new TCanvas("hN_Pmu2", "NEUT and GENIE muon momentum magnitude comparison 2 (no threshold)");}
+  N_Pmu->Draw();
+  hNPmu->Update();
+  G_Pmu->SetLineColor(kRed);
+  G_Pmu->Draw("same");
+  auto legend2 = new TLegend(0.3,0.7,0.5,0.9);
+  legend2->AddEntry(N_Pmu,"NEUT","f");
+  legend2->AddEntry(G_Pmu,"GENIE","f");
+  legend2->SetHeader(Form("#chi^{2}=%f", chiPmu));
+  legend2->Draw();
+  if (b==0){
+  hN_PmuL->SaveAs("Muon momentum GENIE model 0 (no threshold).pdf");}
+  if (b==1){
+  hN_PmuL->SaveAs("Muon momentum GENIE model 1 (no threshold).pdf");}
+  if (b==2){
+  hN_PmuL->SaveAs("Muon momentum GENIE model 2 (no threshold).pdf");} 
+
+  
 cout <<"GENIE Model:"<< b<<endl;
 cout<<"Proton Multiplicity Liquid:"<<""<<chinPrL<<endl;
 cout<<"Proton Multiplicity Gas:"<<""<<chinPrG<<endl;
 cout<<"Muon momentum Liquid:"<<""<<chiPmuL<<endl;
 cout<<"Muon momentum Gas:"<<""<<chiPmuG<<endl;
+
+
+
 
 /*
 double chinPr=Chi(nPrN,nPrG);
@@ -413,24 +441,6 @@ double chinPr=Chi(nPrN,nPrG);
   legend3->SetHeader(Form("#chi^{2}=%f", chinPr));
   legend3->Draw();
 
-
-double chiPmu= Chi(N_Pmu,G_Pmu);
-  TCanvas* hNPmu;
-  if(b==0){
-  hNPmu = new TCanvas("hN_Pmu", "NEUT and GENIE muon momentum magnitude comparison 0  (no threshold)");}
-  if(b==1){
-  hNPmu = new TCanvas("hN_Pmu1", "NEUT and GENIE muon momentum magnitude comparison 1 (no threshold)");}
-  if(b==2){
-  hNPmu = new TCanvas("hN_Pmu2", "NEUT and GENIE muon momentum magnitude comparison 2 (no threshold)");}
-  N_Pmu->Draw();
-  hNPmu->Update();
-  G_Pmu->SetLineColor(kRed);
-  G_Pmu->Draw("same");
-  auto legend2 = new TLegend(0.3,0.7,0.5,0.9);
-  legend2->AddEntry(N_Pmu,"NEUT","f");
-  legend2->AddEntry(G_Pmu,"GENIE","f");
-  legend2->SetHeader(Form("#chi^{2}=%f", chiPmu));
-  legend2->Draw();
 
 
 
