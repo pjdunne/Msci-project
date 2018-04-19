@@ -366,11 +366,11 @@ double chinPrL=Chi(nPrN_L,nPrG_L)*bin/12;
 double chinPrG=Chi(nPrN_G,nPrG_G)*bin/12;
   TCanvas *hnPr_G; 
   if(b==0){
-  hnPr_G = new TCanvas("hnPr_G", "NEUT and GENIE proton number comparison 0 (gas)");}
+  hnPr_G = new TCanvas("hnPr_G", "NEUT and GENIE proton multiplicity comparison 0 (gas)");}
   if(b==1){
-  hnPr_G = new TCanvas("hnPr_G1", "NEUT and GENIE proton number comparison 1 (gas)");}
+  hnPr_G = new TCanvas("hnPr_G1", "NEUT and GENIE proton multiplicity comparison 1 (gas)");}
   if(b==2){
-  hnPr_G = new TCanvas("hnPr_G2", "NEUT and GENIE proton number comparison 2 (gas)");}
+  hnPr_G = new TCanvas("hnPr_G2", "NEUT and GENIE proton multiplicity comparison 2 (gas)");}
   nPrN_G->Draw("*H");
   hnPr_G->Update();
   nPrG_G->SetLineColor(kRed);
@@ -413,24 +413,15 @@ double chiPmu= Chi(N_Pmu,G_Pmu);
   hN_PmuL->SaveAs("Muon momentum GENIE model 2 (no threshold).pdf");} 
 
   
-cout <<"GENIE Model:"<< b<<endl;
-cout<<"Proton Multiplicity Liquid:"<<""<<chinPrL<<endl;
-cout<<"Proton Multiplicity Gas:"<<""<<chinPrG<<endl;
-cout<<"Muon momentum Liquid:"<<""<<chiPmuL<<endl;
-cout<<"Muon momentum Gas:"<<""<<chiPmuG<<endl;
 
-
-
-
-/*
 double chinPr=Chi(nPrN,nPrG);
   TCanvas *hnPr;
   if(b==0){
-  hnPr = new TCanvas("hnPr", "NEUT and GENIE proton number comparison 0 (no threshold)");}
+  hnPr = new TCanvas("hnPr", "NEUT and GENIE proton multiplicity comparison 0 (no threshold)");}
   if(b==1){
-  hnPr = new TCanvas("hnPr1", "NEUT and GENIE proton number comparison 1 (no threshold)");}
+  hnPr = new TCanvas("hnPr1", "NEUT and GENIE proton multiplicity comparison 1 (no threshold)");}
   if(b==2){
-  hnPr = new TCanvas("hnPr2", "NEUT and GENIE proton number comparison 2 (no threshold)");}
+  hnPr = new TCanvas("hnPr2", "NEUT and GENIE proton multiplicity comparison 2 (no threshold)");}
   nPrN->Draw("*H");
   hnPr->Update();
   nPrG->SetLineColor(kRed);
@@ -441,6 +432,21 @@ double chinPr=Chi(nPrN,nPrG);
   legend3->SetHeader(Form("#chi^{2}=%f", chinPr));
   legend3->Draw();
 
+
+
+
+cout <<"GENIE Model:"<< b<<endl;
+cout<<"Proton Multiplicity Liquid:"<<""<<chinPrL<<endl;
+cout<<"Proton Multiplicity Gas:"<<""<<chinPrG<<endl;
+cout<<"Muon momentum Liquid:"<<""<<chiPmuL<<endl;
+cout<<"Muon momentum Gas:"<<""<<chiPmuG<<endl;
+
+
+
+
+
+
+/*
 
 
 
