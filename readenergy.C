@@ -55,7 +55,7 @@ int readenergy(){
   hCL_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
   hCL_diff_true_frac->GetYaxis()->SetTitle("Fractional calorimetric reconstructed energy difference");
 
-  TH1D* hCL_diff_frac = new TH1D("hCL_diff_frac","Liquid TPC - Fractional calorimetric difference",100,-1,1);
+  TH1D* hCL_diff_frac = new TH1D("hCL_diff_frac"," ",100,-0.6,0.2);
   hCL_diff_frac->GetXaxis()->SetTitle("(E_cal - E_true)/E_true");
   hCL_diff_frac->GetYaxis()->SetTitle("No. of events");
   //hCL_diff_frac->SetFillColor(kAzure-6);
@@ -80,7 +80,7 @@ int readenergy(){
   hCG_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
   hCG_diff_true_frac->GetYaxis()->SetTitle("Fractional calorimetric reconstructed energy difference");
 
-  TH1D* hCG_diff_frac = new TH1D("hCG_diff_frac","Gas TPC - Fractional calorimetric difference",100,-1,1);
+  TH1F* hCG_diff_frac = new TH1F("hCG_diff_frac"," ",100,-0.6,0.2);
   hCG_diff_frac->GetXaxis()->SetTitle("(E_cal - E_true)/E_true");
   hCG_diff_frac->GetYaxis()->SetTitle("No. of events");
 
@@ -96,15 +96,15 @@ int readenergy(){
   //hKL_diff->SetFillColor(kAzure-6);
   hKL_diff->SetLineColor(kBlack);
 
-  TH2D* hKL_diff_true = new TH2D("hKL_diff_true","Liquid TPC - Kinematic difference as function of true energy",100,0,12,100,-50,50);
+  TH2D* hKL_diff_true = new TH2D("hKL_diff_true","Liquid TPC - Kinematic difference as function of true energy",100,0,12,100,-10,10);
   hKL_diff_true->GetXaxis()->SetTitle("True Energy (GeV)");
   hKL_diff_true->GetYaxis()->SetTitle("Kinematic reconstructed energy difference (GeV)");
   
-  TH2D* hKL_diff_true_frac = new TH2D("hKL_diff_true_frac","Liquid TPC - Fractional kinematic difference as function of true energy",100,0,12,100,-20,20);
+  TH2D* hKL_diff_true_frac = new TH2D("hKL_diff_true_frac","Liquid TPC - Fractional kinematic difference as function of true energy",100,0,12,100,-1,10);
   hKL_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
   hKL_diff_true_frac->GetYaxis()->SetTitle("Fractional kinematic reconstructed energy difference");
   
-  TH1D* hKL_diff_frac = new TH1D("hKL_diff_frac","Liquid TPC - Fractional kinematic difference",100,-10,10);
+  TH1D* hKL_diff_frac = new TH1D("hKL_diff_frac"," ",100,-1,1);
   hKL_diff_frac->GetXaxis()->SetTitle("(E_kin - E_true)/E_true");
   hKL_diff_frac->GetYaxis()->SetTitle("No. of events");
 
@@ -128,7 +128,7 @@ int readenergy(){
   hKG_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
   hKG_diff_true_frac->GetYaxis()->SetTitle("Fractional kinematic reconstructed energy difference");
 
-  TH1D* hKG_diff_frac = new TH1D("hKG_diff_frac","Gas TPC - Fractional kinematic difference",100,-2,2);
+  TH1D* hKG_diff_frac = new TH1D("hKG_diff_frac"," ",100,-1,1);
   hKG_diff_frac->GetXaxis()->SetTitle("(E_kin - E_true)/E_true");
   hKG_diff_frac->GetYaxis()->SetTitle("No. of events");
   
@@ -201,20 +201,32 @@ int readenergy(){
   hdiff->GetXaxis()->SetTitle("NFSP");
   hdiff->GetYaxis()->SetTitle("E_cal - E_true (GeV)");
   
-  TH1D* hproton = new TH1D("hproton"," ",100, 0, 3);
-  TH1D* hprotonafter = new TH1D("hprotonafter"," ",100,0,3);
+  TH1D* hproton = new TH1D("hproton"," ",100, 0, 2);
+  hproton->GetXaxis()->SetTitle("Proton momentum (GeV)");
+  hproton->GetYaxis()->SetTitle("Number of protons");
+  TH1D* hprotongas = new TH1D("hprotongas"," ",100,0,2);
+  TH1D* hprotonliquid = new TH1D("hprotonliquid"," ",100,0,2);
+
   TH1D* hmuon = new TH1D("hmuon"," ", 100,0,5);
-  TH1D* hmuonafter = new TH1D("hmuonafter"," ",100,0,5);
-  TH1D* hpi0 = new TH1D("hpi0"," ",100, 0, 2);
-  TH1D* hpi0after = new TH1D("hpi0after"," ",100,0,2);
+  hmuon->GetXaxis()->SetTitle("Muon momentum (GeV)");
+  hmuon->GetYaxis()->SetTitle("Number of muons");
+  TH1D* hmuongas = new TH1D("hmuongas"," ",100,0,5);
+  TH1D* hmuonliquid = new TH1D("hmuonlqiuid"," ",100,0,5);
+
   TH1D* hpipm = new TH1D("hpipm"," ",100, 0, 2);
-  TH1D* hpipmafter = new TH1D("hpipmafter"," ",100,0,2);
+  hpipm->GetXaxis()->SetTitle("Neutral pion momentum (GeV)");
+  hpipm->GetYaxis()->SetTitle("Number of neutral pions");
+  TH1D* hpipmgas = new TH1D("hpipmgas"," ",100,0,2);
+  TH1D* hpipmliquid = new TH1D("hpipmliquid"," ",100,0,2);
 
   TH2D* hnfspmode = new TH2D("hnfspmode"," ",100, 0, 60, 100, 0, 24);
   TH2D* hmodeediff = new TH2D("hmodeediff"," ",100, 0, 60, 100, -1,1);
+
+  TH1D* hKR_diff_frac = new TH1D("hCR_diff_frac"," ",100,-1,1);
+  
   
   TGaxis::SetMaxDigits(4);
-  gStyle->SetOptStat(0);     //Stats box
+  //gStyle->SetOptStat(0);     //Stats box
 
   vector<Particle> PartVecAboveLiquid;
   vector<Particle> PartVecAboveGas;
@@ -246,6 +258,16 @@ int readenergy(){
   //int countpipm = 0;
   //int countpi0 = 0;
 
+  int countmode1 = 0;
+  int countmodepi = 0;
+  int countmodeother=0;
+  int countccqe = 0;
+  int countcc1pi =0;
+  int countother = 0;
+  int countccqeright = 0;
+  int countcc1piright = 0;
+  int countotherright = 0;
+  
   TRandom3 ranobj;
   for(unsigned int iEntry=0;iEntry<nentries;iEntry++){
 
@@ -260,38 +282,67 @@ int readenergy(){
 	float Trand = ranobj.Rndm();
 	Particle Part = Particle(pdg[i], px[i], py[i],pz[i], energy[i], id, Trand);
 	PartVec.push_back(Part);
-      }
+    }
     
     vector<Particle> PartVec1;
     PartVec1 = PartVec;
-    PartVec = resolution(PartVec);
+    //PartVec = resolution(PartVec);
+    
 
-    PartVecAboveLiquid = PartVec;
-    PartVecAboveGas = PartVec;
+    //PartVecAboveLiquid = PartVec1;
+    //PartVecAboveGas = PartVec;
 
-    //PartVecAboveLiquid = liquidMomThresh(PartVec);
-    //PartVecAboveGas = gasMomThresh(PartVec);
+    PartVecAboveLiquid = liquidMomThresh(PartVec);
+    PartVecAboveGas = gasMomThresh(PartVec);
 
-    for(int i = 0; i<PartVec.size();i++){
-      int pdgid = PartVec[i].GetPDG();
+    
+
+    //Preliminary plots
+    /*
+    for(int i = 0; i<PartVec1.size();i++){
+      int pdgid = PartVec1[i].GetPDG();
       if (pdgid == 13) {
-	hmuon->Fill(PartVec1[i].GetEnergy());
-	hmuonafter->Fill(PartVec[i].GetEnergy());
+	hmuon->Fill(PartVec1[i].GetMomMag());
       }
       if (pdgid == 2212) {
-	hproton->Fill(PartVec1[i].GetEnergy());
-	hprotonafter->Fill(PartVec[i].GetEnergy());
-      }
-      if (pdgid == 111) {
-	hpi0->Fill(PartVec1[i].GetEnergy());
-	hpi0after->Fill(PartVec[i].GetEnergy());
+	hproton->Fill(PartVec1[i].GetMomMag());
       }
       if (abs(pdgid) == 211) {
-	hpipm->Fill(PartVec1[i].GetEnergy());
-	hpipmafter->Fill(PartVec[i].GetEnergy());
+	hpipm->Fill(PartVec1[i].GetMomMag());
       }
     }
+    
+    for(int i = 0; i<PartVecAboveGas.size();i++){
+      int pdgid = PartVecAboveGas[i].GetPDG();
+      if (pdgid == 13) {
+	hmuongas->Fill(PartVecAboveGas[i].GetMomMag());
+      }
+      if (pdgid == 2212) {
+	hprotongas->Fill(PartVecAboveGas[i].GetMomMag());
+      }
+      if (abs(pdgid) == 211) {
+	hpipmgas->Fill(PartVecAboveGas[i].GetMomMag());
+      }
+    }
+    
+    for(int i = 0; i<PartVecAboveLiquid.size();i++){
+      int pdgid = PartVecAboveLiquid[i].GetPDG();
+      if (pdgid == 13) {
+	hmuonliquid->Fill(PartVecAboveLiquid[i].GetMomMag());
+      }
+      if (pdgid == 2212) {
+	hprotonliquid->Fill(PartVecAboveLiquid[i].GetMomMag());
+      }
+      if (abs(pdgid) == 211) {
+	hpipmliquid->Fill(PartVecAboveLiquid[i].GetMomMag());
+      }
+    }
+    */  
 
+    if (mode == 1) countmode1++;
+    else if (mode == 11 || mode == 13) countmodepi++;
+    else if (mode < 27) countmodeother++;
+    
     hnfspmode->Fill(mode,nfsp);
     
     float ECL=0;
@@ -311,13 +362,22 @@ int readenergy(){
     float ECKG_diff=0;
     float ECKG_diff_frac=0;
 
+    //TEMP
+    float EKR=0;
+    float EKR_diff=0;
+    float EKR_diff_frac=0;
+
+
+    
+
     /////select mode/topology - liquid
     
-    //if (mode==1){                                                     //individual true modes
-    //if (id_0pi(PartVecAboveLiquid)==1){                               //0pi from detected particles 
-    //if (id_1pi(PartVecAboveLiquid) ==1){                                //1pi from detected particles
-    //if (id_0pi(PartVecAboveLiquid) == 0 && id_1pi(PartVec) == 0) {    //other
-      
+    if (mode==1 && mode != 16 && mode != 36){                                                     //individual true modes
+    //if (mode < 27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveLiquid)==1){                               //0pi from detected particles 
+    //if (mode <27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveLiquid) ==1){                                //1pi from detected particles
+    //if (mode < 27 && mode != 16 36 && id_0pi(PartVecAboveLiquid) == 0 && id_1pi(PartVec) == 0) {    //other
+      countccqe++;
+      if (mode ==1) countccqeright++;
       ECL = calorimetric(PartVecAboveLiquid);
       if (ECL != 0){
         ECL_diff = ECL-Enu_t;
@@ -330,6 +390,7 @@ int readenergy(){
 	hdiff->Fill(PartVec.size(),ECL_diff);
 	hmodeediff->Fill(mode,ECL_diff);
 
+		
 	//investigating ECL_diff with nfsp
 	
 	/*	if (nfsp == 3 && ECL_diff>0.8) {
@@ -389,7 +450,16 @@ int readenergy(){
 	else if (Enu_t > 11.0 && Enu_t < 11.5) hFrac_slice_110115->Fill(ECL_diff_frac);
 	else hFrac_slice_115120->Fill(ECL_diff_frac);
       }
-      
+
+      //showing effects of resolution on reconstructed
+      /*
+      EKR = kinematic(PartVec1,coslep);
+      if (EKR != 0){
+	EKR_diff = EKR-Enu_t;
+	EKR_diff_frac = EKR_diff/Enu_t;
+	hKR_diff_frac->Fill(EKR_diff_frac);
+      }
+      */
       
       EKL = kinematic(PartVecAboveLiquid,coslep);       //for when looking at 0pi modes
       //EKL = cc1pikinematic(PartVecAboveLiquid,coslep);         //for when looking at 1pi modes
@@ -405,6 +475,7 @@ int readenergy(){
           hL_cal_kin_diff_true->Fill(ECL_diff, EKL_diff, Enu_t);
           hcal_kin->Fill(ECL_diff,EKL_diff);
 	}
+
 	//hdiff->Fill(PartVec.size(),EKL_diff);
 
 	//investigating EKL_diff with nfsp
@@ -425,20 +496,23 @@ int readenergy(){
 	hCKL_diff_frac->Fill(Enu_t,ECKL_diff_frac);
 	hL_cal_kin_diff_true_frac->Fill(ECL_diff_frac,EKL_diff_frac,Enu_t);
       }
-      //}
+    }
     
     /////select mode/topology - gas
     
-    //if(mode==1){                                                               //individual true modes
-    //if (id_0pi(PartVecAboveGas)==1){                                           //0pi from detected particles 
-    //if (id_1pi(PartVecAboveGas) ==1){                                          //1pi from detected particles
-    //if (id_0pi(PartVecAboveGas) == 0 && id_1pi(PartVecAboveGas) == 0) {        //other
+    if(mode==1 && mode != 16 && mode != 36){                                                               //individual true modes
+    //if (mode<27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas)==1){                                           //0pi from detected particles 
+    //if (mode<27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveGas) ==1){                                          //1pi from detected particles
+    //if (mode <27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas) == 0 && id_1pi(PartVecAboveGas) == 0) {        //other
 
+      countcc1pi++;
+      if (mode == 11 || mode == 13) countcc1piright++;
+    
       ECG = calorimetric(PartVecAboveGas);
       if (ECG != 0) {
 	ECG_diff = ECG-Enu_t;
 	ECG_diff_frac = ECG_diff/Enu_t;
-	hCG->Fill(ECG);
+	hCG->Fill(ECG,0.001);
 	hCG_diff->Fill(ECG_diff);
 	hCG_diff_true->Fill(Enu_t,ECG_diff);
 	hCG_diff_true_frac->Fill(Enu_t,ECG_diff_frac);
@@ -465,8 +539,25 @@ int readenergy(){
       }
       
       hE->Fill(Enu_t);
-      //}    
+    }
+
+    if (id_0pi(PartVecAboveGas) == 0 && id_1pi(PartVecAboveGas)== 0 && mode<27 && mode != 16){
+      countother++;
+      /*
+      cout<<"Mode  "<<mode<<endl;
+      for (int i=0; i<PartVecAboveGas.size();i++){
+	Particle m = PartVecAboveGas[i];
+	cout<<m.GetPDG()<<endl;
+	}*/
+      if (mode != 1 && mode != 11 && mode != 13) {
+	countotherright++;
+      }
+    }
   }
+  
+  //cout<<"Modes"<<endl<<"Mode 1   "<<countmode1<<endl<<"Mode 1pi   "<<countmodepi<<endl<<"Other modes   "<<countmodeother<<endl;
+  //cout<<"Identified"<<endl<<"CCQE   "<<countccqe<<endl<<"CC1pi   "<<countcc1pi<<endl<<"OTHER   "<<countother<<endl;
+  //cout<<"Correct"<<endl<<"mode 1 as CCQE   "<<countccqeright<<endl<<"mode 11 or 13 as cc1pi   "<<countcc1piright<<endl<<"other modes as other   "<<countotherright<<endl;
   //cout<<"PI 0:  "<<countpi0<<"   Pi pm:  "<< countpipm<<endl;
 
   /*
@@ -566,50 +657,77 @@ int readenergy(){
   hE->Draw("][same");
   */
 
-  //Two histograms, same canvas, same scale 
+  //Two 1D  histograms, same canvas, same scale - showing effect of res and thresh on reconstructed
 
+  /*
+  gStyle->SetHatchesSpacing(0.5);
   
-  TCanvas *resproton = new TCanvas("rsproton","Proton energy: before and after resolution");
-  hproton->Draw();
-  hprotonafter->SetLineColor(kRed);
-  resproton->Update();
-  hprotonafter->Draw("same");
-  auto legend1 = new TLegend(0.6,0.7,0.9,0.9);
-  legend1->AddEntry(hproton,"Before","l");
-  legend1->AddEntry(hprotonafter,"After","l");
+  TCanvas *kinres = new TCanvas("kinres","Kinematic energy: with and without resolution and threshold");
+  hKG_diff_frac->SetLineColor(kBlack);
+  //hKG_diff_frac->SetFillStyle(3002);
+  hKG_diff_frac->SetFillColor(kGray);
+  //hKG_diff_frac->SetLineWidth(3);
+  hKG_diff_frac->Draw();
+  kinres->Update();
+  hKL_diff_frac->SetLineColor(kBlack);
+  //hKL_diff_frac->SetLineWidth(3);
+  hKL_diff_frac->SetFillStyle(3409);
+  hKL_diff_frac->SetFillColor(kGray+2);
+  hKL_diff_frac->Draw("same");
+  kinres->Update();
+  hKR_diff_frac->SetLineColor(kBlack);
+  //hKR_diff_frac->SetLineWidth(2);
+  hKR_diff_frac->SetFillStyle(3003);
+  hKR_diff_frac->SetFillColor(kBlack);
+  hKR_diff_frac->Draw("same");
+  //kinres->Update();
+  auto legend1 = new TLegend(0.2,0.7,0.4,0.85);
+  legend1->SetBorderSize(0);
+  legend1->AddEntry(hKG_diff_frac,"Original","f");
+  legend1->AddEntry(hKR_diff_frac,"Resolution","f");
+  legend1->AddEntry(hKL_diff_frac,"Threshold","f");
   legend1->Draw();
-  
-  TCanvas *resmuon = new TCanvas("resmuon","Muon energy: before and after resolution");
+  */
+  /*
+  TCanvas *resmuon = new TCanvas("resmuon","Muon momentum: before and after resolution");
+  hmuon->SetLineColor(kGray);
+  hmuon->SetLineWidth(3);
   hmuon->Draw();
-  hmuonafter->SetLineColor(kRed);
+  hmuongas->SetLineColor(kGray+3);
   resmuon->Update();
-  hmuonafter->Draw("same");
-  auto legend2 = new TLegend(0.6,0.7,0.9,0.9);
-  legend2->AddEntry(hmuon,"Before","l");
-  legend2->AddEntry(hmuonafter,"After","l");
+  hmuongas->Draw("same");
+  resmuon->Update();
+  hmuonliquid->SetLineColor(kBlack);
+  hmuonliquid->Draw("same");
+  auto legend2 = new TLegend(0.6,0.7,0.9,0.85);
+  legend2->SetBorderSize(0);
+  legend2->AddEntry(hmuon,"Before threshold","l");
+  legend2->AddEntry(hmuongas,"GAr threshold","l");
+  legend2->AddEntry(hmuonliquid,"LAr threshold","l");
   legend2->Draw();
-  
-  TCanvas *respipm = new TCanvas("respipm","Pipm energy: before and after resolution");
+  */
+  /*
+  TCanvas *respipm = new TCanvas("respipm","Pipm momentum: before and after resolution");
+  hpipm->SetLineColor(kGray);
+  hpipm->SetLineWidth(3);
   hpipm->Draw();
-  hpipmafter->SetLineColor(kRed);
+  hpipmgas->SetLineColor(kGray+1);
+  hpipmgas->SetLineWidth(2);
   respipm->Update();
-  hpipmafter->Draw("same");
-  auto legend3 = new TLegend(0.6,0.7,0.9,0.9);
-  legend3->AddEntry(hpipm,"Before","l");
-  legend3->AddEntry(hpipmafter,"After","l");
-  legend3->Draw();
-  
-  TCanvas *respi0 = new TCanvas("respi0","Pi0 energy: before and after resolution");
-  hpi0->Draw();
-  hpi0after->SetLineColor(kRed);
-  respi0->Update();
-  hpi0after->Draw("same");
-  auto legend4 = new TLegend(0.6,0.7,0.9,0.9);
-  legend4->AddEntry(hpi0,"Before","l");
-  legend4->AddEntry(hpi0after,"After","l");
+  hpipmgas->Draw("same");
+  respipm->Update();
+  hpipmliquid->SetLineColor(kBlack);
+  hpipmliquid->Draw("same");
+  auto legend4 = new TLegend(0.55,0.7,0.9,0.85);
+  legend4->AddEntry(hpipm,"Before threshold","l");
+  legend4->AddEntry(hpipmgas,"GAr threshold","l");
+  legend4->AddEntry(hpipmliquid,"LAr threshold","l");
+  legend4->SetBorderSize(0);
   legend4->Draw();
+  */
+  gStyle->SetLegendTextSize(0.05);
   
-
+ 
   /*
   TCanvas *c = new TCanvas("c", "Energy difference with nfsp");
   c->SetGrid();
