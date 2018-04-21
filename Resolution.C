@@ -99,6 +99,56 @@ vector<Particle> resolution(vector<Particle> PartVec){
       mass = 0.13957;
       w = 0.05;
     }
+    //K0
+    else if (abs(Part.GetPDG())== 311){
+      mass = 0.497611;
+      w = 0.1;
+    }
+    //sigma +
+    else if (abs(Part.GetPDG())== 3222){
+      mass = 1.18937 ;
+      w = 0.05;
+    }
+    //sigma ++ c
+    else if (abs(Part.GetPDG())== 4222){
+      mass = 2.45402;
+      w = 0.05;
+    }
+    //sigma -
+    else if (abs(Part.GetPDG())== 3112){
+      mass = 1.197449 ;
+      w = 0.05;
+    }
+    //sigma + c
+    else if (abs(Part.GetPDG())== 4212){
+      mass = 2.4529 ;
+      w = 0.05;
+    }
+    //sigma 0
+    else if (abs(Part.GetPDG())== 3212){
+      mass = 1.192642;
+      w = 0.1;
+    }
+    //D0
+    else if (abs(Part.GetPDG())== 421){
+      mass = 1.86484;
+      w = 0.1;
+    }
+    //D+ s
+    else if (abs(Part.GetPDG())== 431){
+      mass = 1.96847;
+      w = 0.05;
+    }
+    //D+
+    else if (abs(Part.GetPDG())== 411){
+      mass = 1.86962;
+      w = 0.05;
+    }
+    //lambda + c
+    else if (abs(Part.GetPDG())== 4122){
+      mass = 2.28646;
+      w = 0.05;
+    }
     
     else {
       cout<<"Particle type not detected: "<< Part.GetPDG() <<endl;
