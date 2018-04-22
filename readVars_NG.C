@@ -43,7 +43,7 @@ int readVars_NG(){
   TAxis *axis = hFlux->GetXaxis();
   int bmax = axis->GetNbins()+1;
   double wid = axis->GetBinWidth(0);
- // double integral = hFlux->Integral(0,bmax,"width");
+  double integral = hFlux->Integral(0,bmax,"width");
   //cout<<integral<<endl;
   
  //TCanvas *canv = new TCanvas("enu_nd280_numu", "T2K nu_mu flux at ND280 with +250 kA horn operation");
@@ -174,9 +174,9 @@ int readVars_NG(){
 		  if(pdg[i] == 13){                   //Muon Momentum
 		  N_Pmu->Fill(Part.GetMomentum());}}		  
 	//MODE SELECTION
-        if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
+        //if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
        // if (id_1pi(PartVec) == 1){ // use this to choose 1 pi modes
-       // if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes  
+        if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes  
 	nPrN->Fill(nPr);
 	nPr=0;			
         PartRes=Res.ResFunc(PartVec,.01);
@@ -239,9 +239,9 @@ int readVars_NG(){
         		G_Pmu->Fill(Part.GetMomentum());}}	
 
 	//MODE SELECTION
-        if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
+        //if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
         //if (id_1pi(PartVec) == 1){ // use this to choose 1 pi modes
-        //if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes  
+        if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes  
 	nPrG->Fill(nPr);
 	nPr=0;										
         PartRes=Res.ResFunc(PartVec,.01);
@@ -288,8 +288,8 @@ G_PmuL = NormL(G_PmuL);
 nPrN_L = NormL(nPrN_L);
 nPrG_L = NormL(nPrG_L);
 
-nPrN_G = NormL(nPrN_G);
-nPrG_G = NormL(nPrG_G);
+nPrN_G = NormG(nPrN_G);
+nPrG_G = NormG(nPrG_G);
 //GRAPHS__________________________________________________________________
 double chiPmuG=Chi(N_PmuG,G_PmuG);
   TCanvas *hN_PmuG;
@@ -422,7 +422,7 @@ double chinPr=Chi(nPrN,nPrG);
   hnPr = new TCanvas("hnPr1", "NEUT and GENIE proton multiplicity comparison 1 (no threshold)");}
   if(b==2){
   hnPr = new TCanvas("hnPr2", "NEUT and GENIE proton multiplicity comparison 2 (no threshold)");}
-  nPrN->Draw("*H");
+  nPrN->Draw();
   hnPr->Update();
   nPrG->SetLineColor(kRed);
   nPrG->Draw("same");
@@ -432,19 +432,11 @@ double chinPr=Chi(nPrN,nPrG);
   legend3->SetHeader(Form("#chi^{2}=%f", chinPr));
   legend3->Draw();
 
-
-
-
 cout <<"GENIE Model:"<< b<<endl;
 cout<<"Proton Multiplicity Liquid:"<<""<<chinPrL<<endl;
 cout<<"Proton Multiplicity Gas:"<<""<<chinPrG<<endl;
 cout<<"Muon momentum Liquid:"<<""<<chiPmuL<<endl;
 cout<<"Muon momentum Gas:"<<""<<chiPmuG<<endl;
-
-
-
-
-
 
 /*
 
