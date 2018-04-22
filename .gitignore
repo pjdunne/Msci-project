@@ -7,3 +7,5 @@
 *.png
 test.*
 sigmoid.*
+.#*
+*.C~

@@ -24,7 +24,7 @@
 #include "TGaxis.h"
 #include "TStyle.h"
 
-int readenergyGENIE(){
+int greadenergy(){
   TFile* file = new TFile("/home/priyanka/Documents/project/Msci-project/GENIE.root");
   TTree* tree = (TTree*)file->Get("FlatTree_VARS");
 
@@ -289,7 +289,7 @@ int readenergyGENIE(){
     PartVec = resolution(PartVec);
     
 
-    //PartVecAboveLiquid = PartVec1;
+    //PartVecAboveLiquid = PartVec;
     //PartVecAboveGas = PartVec;
 
     PartVecAboveLiquid = liquidMomThresh(PartVec);
@@ -298,17 +298,17 @@ int readenergyGENIE(){
     
 
     //Preliminary plots
-    /*
-    for(int i = 0; i<PartVec1.size();i++){
-      int pdgid = PartVec1[i].GetPDG();
+    
+    for(int i = 0; i<PartVec.size();i++){
+      int pdgid = PartVec[i].GetPDG();
       if (pdgid == 13) {
-	hmuon->Fill(PartVec1[i].GetMomMag());
+	hmuon->Fill(PartVec[i].GetMomMag());
       }
       if (pdgid == 2212) {
-	hproton->Fill(PartVec1[i].GetMomMag());
+	hproton->Fill(PartVec[i].GetMomMag());
       }
       if (abs(pdgid) == 211) {
-	hpipm->Fill(PartVec1[i].GetMomMag());
+	hpipm->Fill(PartVec[i].GetMomMag());
       }
     }
     
@@ -337,7 +337,7 @@ int readenergyGENIE(){
 	hpipmliquid->Fill(PartVecAboveLiquid[i].GetMomMag());
       }
     }
-    */  
+      
 
     if (mode == 1) countmode1++;
     else if (mode == 11 || mode == 13) countmodepi++;
@@ -372,10 +372,10 @@ int readenergyGENIE(){
 
     /////select mode/topology - liquid
     
-    if (mode==1 && mode != 16 && mode != 36){                                                     //individual true modes
+    //if (mode==1 && mode != 16 && mode != 36){                                                     //individual true modes
     //if (mode < 27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveLiquid)==1){                               //0pi from detected particles 
     //if (mode <27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveLiquid) ==1){                                //1pi from detected particles
-    //if (mode < 27 && mode != 16 36 && id_0pi(PartVecAboveLiquid) == 0 && id_1pi(PartVec) == 0) {    //other
+    if (mode < 27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveLiquid) == 0 && id_1pi(PartVec) == 0) {    //other
       countccqe++;
       if (mode ==1) countccqeright++;
       ECL = calorimetric(PartVecAboveLiquid);
@@ -453,7 +453,7 @@ int readenergyGENIE(){
 
       //showing effects of resolution on reconstructed
       
-      ECR = calorimetric(PartVec1);
+      ECR = kinematic(PartVec1,coslep);
       if (ECR != 0){
 	ECR_diff = ECR-Enu_t;
 	ECR_diff_frac = ECR_diff/Enu_t;
@@ -461,8 +461,8 @@ int readenergyGENIE(){
       }
       
       
-      EKL = kinematic(PartVecAboveLiquid,coslep);       //for when looking at 0pi modes
-      //EKL = cc1pikinematic(PartVecAboveLiquid,coslep);         //for when looking at 1pi modes
+      //EKL = kinematic(PartVecAboveLiquid,coslep);       //for when looking at 0pi modes
+      EKL = cc1pikinematic(PartVecAboveLiquid,coslep);         //for when looking at 1pi modes
       if (EKL != 0){
 	EKL_diff = EKL - Enu_t;
 	EKL_diff_frac = EKL_diff/Enu_t;
@@ -500,10 +500,10 @@ int readenergyGENIE(){
     
     /////select mode/topology - gas
     
-    if(mode==1 && mode != 16 && mode != 36){                                                               //individual true modes
+    //if(mode==1 && mode != 16 && mode != 36){                                                               //individual true modes
     //if (mode<27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas)==1){                                           //0pi from detected particles 
     //if (mode<27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveGas) ==1){                                          //1pi from detected particles
-    //if (mode <27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas) == 0 && id_1pi(PartVecAboveGas) == 0) {        //other
+    if (mode <27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas) == 0 && id_1pi(PartVecAboveGas) == 0) {        //other
 
       countcc1pi++;
       if (mode == 11 || mode == 13) countcc1piright++;
@@ -519,8 +519,8 @@ int readenergyGENIE(){
 	hCG_diff_frac->Fill(ECG_diff_frac);
       }
 	
-      EKG = kinematic(PartVecAboveGas,coslep);          //for when looking at 0pi modes
-      //EKG = cc1pikinematic(PartVecAboveGas,coslep);     //for when looking at 1pi modes
+      //EKG = kinematic(PartVecAboveGas,coslep);          //for when looking at 0pi modes
+      EKG = cc1pikinematic(PartVecAboveGas,coslep);     //for when looking at 1pi modes
       if (EKG != 0){
 	EKG_diff = EKG-Enu_t;
 	EKG_diff_frac = EKG_diff/Enu_t;
@@ -661,33 +661,32 @@ int readenergyGENIE(){
 
   
   gStyle->SetHatchesSpacing(0.5);
-  
+  /*
   TCanvas *calres = new TCanvas("calres","Calorimetric energy: with and without resolution and threshold");
-  hCG_diff_frac->SetLineColor(kBlack);
-  //hCG_diff_frac->SetFillStyle(3002);
-  hCG_diff_frac->SetFillColor(kGray);
-  //hCG_diff_frac->SetLineWidth(3);
-  hCG_diff_frac->Draw();
+  hKG_diff_frac->SetLineColor(kBlack);
+  hKG_diff_frac->SetFillColor(kGray);
+  hKG_diff_frac->Draw();
   calres->Update();
-  hCL_diff_frac->SetLineColor(kBlack);
-  //hCL_diff_frac->SetLineWidth(3);
-  hCL_diff_frac->SetFillStyle(3409);
-  hCL_diff_frac->SetFillColor(kGray+2);
-  hCL_diff_frac->Draw("same");
+  //hKL_diff_frac->SetLineColor(kBlack);
+  hKL_diff_frac->SetLineColor(kRed);
+  hKL_diff_frac->SetFillStyle(3409);
+  //hKL_diff_frac->SetFillColor(kGray+2);
+  hKL_diff_frac->SetFillColor(kRed);
+  hKL_diff_frac->Draw("same");
   calres->Update();
-  hCR_diff_frac->SetLineColor(kBlack);
-  //hCR_diff_frac->SetLineWidth(2);
+  //hCR_diff_frac->SetLineColor(kBlack);
+  hCR_diff_frac->SetLineColor(kBlue);
   hCR_diff_frac->SetFillStyle(3003);
-  hCR_diff_frac->SetFillColor(kBlack);
+  //hCR_diff_frac->SetFillColor(kBlack);
+  hCR_diff_frac->SetFillColor(kBlue);
   hCR_diff_frac->Draw("same");
-  //calres->Update();
   auto legend1 = new TLegend(0.2,0.7,0.4,0.85);
   legend1->SetBorderSize(0);
-  legend1->AddEntry(hCG_diff_frac,"Original","f");
+  legend1->AddEntry(hKG_diff_frac,"Original","f");
   legend1->AddEntry(hCR_diff_frac,"Resolution","f");
-  legend1->AddEntry(hCL_diff_frac,"Threshold","f");
+  legend1->AddEntry(hKL_diff_frac,"Threshold","f");
   legend1->Draw();
-  
+  */
   /*
   TCanvas *resmuon = new TCanvas("resmuon","Muon momentum: before and after resolution");
   hmuon->SetLineColor(kGray);

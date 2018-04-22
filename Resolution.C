@@ -163,6 +163,7 @@ vector<Particle> resolution(vector<Particle> PartVec){
     std::normal_distribution<double> distribution (pmag,sig);
     float pmag2 =  distribution(generator);
 
+    //cout<<Part.GetPDG()<<" "<<pmag<<" "<<pmag2<<endl;
     
     float En2 = sqrt( pow(pmag2,2.0) + pow(mass,2.0)); //assuming c= 1      //should En be En2 here????
     float px2 = unitx * pmag2;
