@@ -1,29 +1,31 @@
-#include "Threshold.h"
-Threshold::Threshold()
-{
- 
-  float threshold = 0.05;
-
-}
-
+#include <TRandom3.h>
 
 float Sigmoid(float x, float m, float Eff, float steep){
 	return Eff/(1+exp(-(steep*(x-m))));}
 
-vector<Particle> Threshold::ThreshFunc(vector<Particle> PartVec, float prot_thresh, float neutron_thresh, float pi_pm_thresh, float pi0_thresh, float Eff, float steep, int A){
+vector<Particle> Threshold(vector<Particle> PartVec, float prot_thresh, float neutron_thresh, float mu_thresh, float pi_pm_thresh, float pi0_thresh, float Eff, float steep, int A){
 	
-
-        float En;
 	vector<Particle> PartVecAbove;
 	PartVecAbove.clear();
 	
 	for(unsigned int i=0;i < PartVec.size();i++){
+		//TRandom *ra = new TRandom3(); 
+		//TRandom *ra1 = new TRandom3();
+		//TRandom *ra2 = new TRandom3();
+		//TRandom *ra3 = new TRandom3();
+		//TRandom *ra4 = new TRandom3();
 		Particle Part = PartVec[i];
 		int pdg = Part.GetPDG();
-		En=Part.GetEnergy();
 		if(A==1){
 	        float P=Part.GetMomentum();
- 	        float r = ((double) rand() / (RAND_MAX));
+ 	       // double r = ra->Rndm();
+		//double r1 = ra1->Rndm();
+		//double r2 = ra2->Rndm();
+		//double r3 = ra3->Rndm();
+		//double r4 = ra4->Rndm();
+
+
+		float r = ((double) rand() / (RAND_MAX));
 		float r1 = ((double) rand() / (RAND_MAX));
 		float r2 = ((double) rand() / (RAND_MAX));
 		float r3 = ((double) rand() / (RAND_MAX));
@@ -41,7 +43,9 @@ vector<Particle> Threshold::ThreshFunc(vector<Particle> PartVec, float prot_thre
    		 else if (pdg == 2112 && r3 < Sigmoid(P, neutron_thresh, Eff, steep)){
    		   PartVecAbove.push_back(Part);
    		 }
-   		 if (pdg != 111 && abs(pdg) != 211 && pdg != 2212 && pdg != 2112){
+   		 else if (pdg == 13 && r2 < Sigmoid(P, mu_thresh, Eff, steep)){
+   		   PartVecAbove.push_back(Part);}
+   		 if (pdg != 111 && abs(pdg) != 211 && pdg != 2212 && pdg != 2112 && pdg != 13){
    		   PartVecAbove.push_back(Part);}
 		}
 
@@ -74,34 +78,34 @@ return (PartVecAbove);}
 
 
 vector<Particle> liquidMomThresh(vector<Particle> PartVec){
-  Threshold Thresh;		
-  float prot_thresh = .2; //2212
+  float prot_liq_thresh = .32; //2212
   float neutron_thresh = 4.; //2112
   float pi_pm_thresh = 0.059; // +/-211
   float pi0_thresh = .059; //111
-  float Eff = .95; //Efficiency
+  float Eff = 1.; //Efficiency
+  float mu_thresh = 0.05; //13
   float steep = 90.;
-  int A=0;
+  int A=1;
   
-  return Thresh.ThreshFunc(PartVec, prot_thresh, neutron_thresh, pi_pm_thresh, pi0_thresh, Eff,steep, A);
+  return Threshold(PartVec, prot_liq_thresh, neutron_thresh, mu_thresh, pi_pm_thresh, pi0_thresh, Eff,steep, A);
   
 }
 
 vector<Particle> gasMomThresh(vector<Particle> PartVec){
-  Threshold Thresh;	
-  float prot_thresh = .059; //2212
+  float prot_gas_thresh = .058; //2212
   float neutron_thresh = 4.; //2112
   float pi_pm_thresh = 0.016; // +/-211
   float pi0_thresh = .016; //111
-  float Eff = .99; //Efficiency
+  float Eff = 1.; //Efficiency
+  float mu_thresh = 0.0; //13
+
   float steep = 90.;
   int A=1;
-  return Thresh.ThreshFunc(PartVec, prot_thresh, neutron_thresh, pi_pm_thresh, pi0_thresh, Eff,steep, A);
+  return (Threshold(PartVec, prot_gas_thresh, neutron_thresh, mu_thresh, pi_pm_thresh, pi0_thresh, Eff,steep, A));
   
 }
 
 
-Threshold::~Threshold(){}
 
 
 
