@@ -47,11 +47,11 @@ int greadenergy(){
   //hCL_diff->SetFillColor(kAzure-6);
   hCL_diff->SetLineColor(kBlack);
 
-  TH2D* hCL_diff_true = new TH2D("hCL_diff_true","Liquid TPC - Calorimetric difference as function of true energy",100,0,12,100,-10,0.5);
+  TH2D* hCL_diff_true = new TH2D("hCL_diff_true","Liquid TPC - Calorimetric difference as function of true energy",300,0,10,200,-8,5);
   hCL_diff_true->GetXaxis()->SetTitle("True Energy (GeV)");
   hCL_diff_true->GetYaxis()->SetTitle("Calorimetric reconstructed energy difference (GeV)");
   
-  TH2D* hCL_diff_true_frac = new TH2D("hCL_diff_true_frac","Liquid TPC - Fractional calorimetric difference as function of true energy",100,0,12,100,-1,1);
+  TH2D* hCL_diff_true_frac = new TH2D("hCL_diff_true_frac","Liquid TPC - Fractional calorimetric difference as function of true energy",300,0,10,200,-1,0.3);
   hCL_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
   hCL_diff_true_frac->GetYaxis()->SetTitle("Fractional calorimetric reconstructed energy difference");
 
@@ -96,11 +96,11 @@ int greadenergy(){
   //hKL_diff->SetFillColor(kAzure-6);
   hKL_diff->SetLineColor(kBlack);
 
-  TH2D* hKL_diff_true = new TH2D("hKL_diff_true","Liquid TPC - Kinematic difference as function of true energy",100,0,12,100,-10,10);
+  TH2D* hKL_diff_true = new TH2D("hKL_diff_true","Liquid TPC - Kinematic difference as function of true energy",300,0,10,300,-20,20);
   hKL_diff_true->GetXaxis()->SetTitle("True Energy (GeV)");
   hKL_diff_true->GetYaxis()->SetTitle("Kinematic reconstructed energy difference (GeV)");
   
-  TH2D* hKL_diff_true_frac = new TH2D("hKL_diff_true_frac","Liquid TPC - Fractional kinematic difference as function of true energy",100,0,12,100,-1,10);
+  TH2D* hKL_diff_true_frac = new TH2D("hKL_diff_true_frac","Liquid TPC - Fractional kinematic difference as function of true energy",300,0,10,200,-10,10);
   hKL_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
   hKL_diff_true_frac->GetYaxis()->SetTitle("Fractional kinematic reconstructed energy difference");
   
@@ -226,7 +226,7 @@ int greadenergy(){
   
   
   TGaxis::SetMaxDigits(4);
-  //gStyle->SetOptStat(0);     //Stats box
+  gStyle->SetOptStat(0);     //Stats box
 
   vector<Particle> PartVecAboveLiquid;
   vector<Particle> PartVecAboveGas;
@@ -298,7 +298,7 @@ int greadenergy(){
     
 
     //Preliminary plots
-    
+    /*
     for(int i = 0; i<PartVec.size();i++){
       int pdgid = PartVec[i].GetPDG();
       if (pdgid == 13) {
@@ -337,7 +337,7 @@ int greadenergy(){
 	hpipmliquid->Fill(PartVecAboveLiquid[i].GetMomMag());
       }
     }
-      
+    */
 
     if (mode == 1) countmode1++;
     else if (mode == 11 || mode == 13) countmodepi++;
@@ -381,6 +381,13 @@ int greadenergy(){
       ECL = calorimetric(PartVecAboveLiquid);
       if (ECL != 0){
         ECL_diff = ECL-Enu_t;
+	/*
+	if (ECL_diff<-0.7){
+	  cout<<"MODE  "<<mode<<endl;
+	  for (int i = 0; i<PartVecAboveLiquid.size();i++){
+	    cout<<PartVecAboveLiquid[i].GetPDG()<<endl;
+	  }
+	}*/
         ECL_diff_frac = ECL_diff/Enu_t;
 	hCL->Fill(ECL);
 	hCL_diff->Fill(ECL_diff);
@@ -461,8 +468,8 @@ int greadenergy(){
       }
       
       
-      //EKL = kinematic(PartVecAboveLiquid,coslep);       //for when looking at 0pi modes
-      EKL = cc1pikinematic(PartVecAboveLiquid,coslep);         //for when looking at 1pi modes
+      EKL = kinematic(PartVecAboveLiquid,coslep);       //for when looking at 0pi modes
+      //EKL = cc1pikinematic(PartVecAboveLiquid,coslep);         //for when looking at 1pi modes
       if (EKL != 0){
 	EKL_diff = EKL - Enu_t;
 	EKL_diff_frac = EKL_diff/Enu_t;
@@ -519,8 +526,8 @@ int greadenergy(){
 	hCG_diff_frac->Fill(ECG_diff_frac);
       }
 	
-      //EKG = kinematic(PartVecAboveGas,coslep);          //for when looking at 0pi modes
-      EKG = cc1pikinematic(PartVecAboveGas,coslep);     //for when looking at 1pi modes
+      EKG = kinematic(PartVecAboveGas,coslep);          //for when looking at 0pi modes
+      //EKG = cc1pikinematic(PartVecAboveGas,coslep);     //for when looking at 1pi modes
       if (EKG != 0){
 	EKG_diff = EKG-Enu_t;
 	EKG_diff_frac = EKG_diff/Enu_t;
@@ -723,14 +730,14 @@ int greadenergy(){
   legend4->AddEntry(hpipmliquid,"LAr threshold","l");
   legend4->SetBorderSize(0);
   legend4->Draw();
-  */
-  gStyle->SetLegendTextSize(0.05);
   
+  gStyle->SetLegendTextSize(0.05);
+  */
  
   /*
-  TCanvas *c = new TCanvas("c", "Energy difference with nfsp");
-  c->SetGrid();
-  hdiff->Draw();
+  TCanvas *c = new TCanvas("c", "Genie");
+  //c->SetGrid();
+  hCL_diff_true_frac->Draw("colz");
   */
   
   return (0);

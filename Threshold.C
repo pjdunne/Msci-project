@@ -16,9 +16,9 @@ vector<Particle> threshold(vector<Particle> PartVec, float prot_thresh, float pi
     pmag=Part.GetMomMag();
     pdg = Part.GetPDG();
 
-    //float r = Part.GetTrand();
+    float r = Part.GetTrand();
      
-    float r = ((double) rand() / (RAND_MAX));
+    //float r = ((double) rand() / (RAND_MAX));
 
     if (abs(pdg) == 211 && r < Sigmoid(pmag,pi_pm_thresh,Eff)){
       PartVecAbove.push_back(Part);

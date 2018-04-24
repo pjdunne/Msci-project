@@ -47,13 +47,13 @@ int readenergy(){
   //hCL_diff->SetFillColor(kAzure-6);
   hCL_diff->SetLineColor(kBlack);
 
-  TH2D* hCL_diff_true = new TH2D("hCL_diff_true","Liquid TPC - Calorimetric difference as function of true energy",100,0,12,100,-10,0.5);
+  TH2D* hCL_diff_true = new TH2D("hCL_diff_true"," ",300,0,10,200,-8,0.75);
   hCL_diff_true->GetXaxis()->SetTitle("True Energy (GeV)");
-  hCL_diff_true->GetYaxis()->SetTitle("Calorimetric reconstructed energy difference (GeV)");
+  hCL_diff_true->GetYaxis()->SetTitle("E_cal-E_true (GeV)");
   
-  TH2D* hCL_diff_true_frac = new TH2D("hCL_diff_true_frac","Liquid TPC - Fractional calorimetric difference as function of true energy",100,0,12,100,-1,1);
+  TH2D* hCL_diff_true_frac = new TH2D("hCL_diff_true_frac"," ",300,0,10,200,-1,0.3);
   hCL_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
-  hCL_diff_true_frac->GetYaxis()->SetTitle("Fractional calorimetric reconstructed energy difference");
+  hCL_diff_true_frac->GetYaxis()->SetTitle("(E_cal - E_true)/E_true");
 
   TH1D* hCL_diff_frac = new TH1D("hCL_diff_frac"," ",100,-0.6,0.2);
   hCL_diff_frac->GetXaxis()->SetTitle("(E_cal - E_true)/E_true");
@@ -72,13 +72,13 @@ int readenergy(){
   //hCG_diff->SetFillColor(kAzure-6);
   hCG_diff->SetLineColor(kBlack);
 
-  TH2D* hCG_diff_true = new TH2D("hCG_diff_true","Gas TPC - Calorimetric difference as function of true energy",100,0,12,100,-10,0.5);
+  TH2D* hCG_diff_true = new TH2D("hCG_diff_true"," ",300,0,10,200,-8,0.75);
   hCG_diff_true->GetXaxis()->SetTitle("True Energy (GeV)");
   hCG_diff_true->GetYaxis()->SetTitle("Calorimetric reconstructed energy difference (GeV)");
   
-  TH2D* hCG_diff_true_frac = new TH2D("hCG_diff_true_frac","Gas TPC - Fractional calorimetric difference as function of true energy",100,0,12,100,-1,1);
+  TH2D* hCG_diff_true_frac = new TH2D("hCG_diff_true_frac"," ",300,0,12,200,-1,0.3);
   hCG_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
-  hCG_diff_true_frac->GetYaxis()->SetTitle("Fractional calorimetric reconstructed energy difference");
+  hCG_diff_true_frac->GetYaxis()->SetTitle("(E_cal - E_true)/E_true");
 
   TH1F* hCG_diff_frac = new TH1F("hCG_diff_frac"," ",100,-0.6,0.2);
   hCG_diff_frac->GetXaxis()->SetTitle("(E_cal - E_true)/E_true");
@@ -96,13 +96,13 @@ int readenergy(){
   //hKL_diff->SetFillColor(kAzure-6);
   hKL_diff->SetLineColor(kBlack);
 
-  TH2D* hKL_diff_true = new TH2D("hKL_diff_true","Liquid TPC - Kinematic difference as function of true energy",100,0,12,100,-10,10);
+  TH2D* hKL_diff_true = new TH2D("hKL_diff_true"," ",300,0,10,300,-5,1);
   hKL_diff_true->GetXaxis()->SetTitle("True Energy (GeV)");
-  hKL_diff_true->GetYaxis()->SetTitle("Kinematic reconstructed energy difference (GeV)");
+  hKL_diff_true->GetYaxis()->SetTitle("E_kin-E_true (GeV)");
   
-  TH2D* hKL_diff_true_frac = new TH2D("hKL_diff_true_frac","Liquid TPC - Fractional kinematic difference as function of true energy",100,0,12,100,-1,10);
+  TH2D* hKL_diff_true_frac = new TH2D("hKL_diff_true_frac"," ",300,0,10,200,-1,1);
   hKL_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
-  hKL_diff_true_frac->GetYaxis()->SetTitle("Fractional kinematic reconstructed energy difference");
+  hKL_diff_true_frac->GetYaxis()->SetTitle("(E_kin - E_true)/E_true");
   
   TH1D* hKL_diff_frac = new TH1D("hKL_diff_frac"," ",100,-1,1);
   hKL_diff_frac->GetXaxis()->SetTitle("(E_kin - E_true)/E_true");
@@ -120,13 +120,13 @@ int readenergy(){
   //hKG_diff->SetFillColor(kAzure-6);
   hKG_diff->SetLineColor(kBlack);
 
-  TH2D* hKG_diff_true = new TH2D("hKG_diff_true","Gas TPC - Kinematic difference as function of true energy",100,0,12,100,-10,10);
+  TH2D* hKG_diff_true = new TH2D("hKG_diff_true"," ",300,0,10,300,-8,6);
   hKG_diff_true->GetXaxis()->SetTitle("True Energy (GeV)");
   hKG_diff_true->GetYaxis()->SetTitle("Kinematic reconstructed energy difference (GeV)");
   
-  TH2D* hKG_diff_true_frac = new TH2D("hKG_diff_true_frac","Gas TPC - Fractional kinematic difference as function of true energy",100,0,12,100,-1,10);
+  TH2D* hKG_diff_true_frac = new TH2D("hKG_diff_true_frac"," ",300,0,12,200,-1,2);
   hKG_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
-  hKG_diff_true_frac->GetYaxis()->SetTitle("Fractional kinematic reconstructed energy difference");
+  hKG_diff_true_frac->GetYaxis()->SetTitle("(E_kin - E_true)/E_true");
 
   TH1D* hKG_diff_frac = new TH1D("hKG_diff_frac"," ",100,-1,1);
   hKG_diff_frac->GetXaxis()->SetTitle("(E_kin - E_true)/E_true");
@@ -222,12 +222,13 @@ int readenergy(){
   TH2D* hnfspmode = new TH2D("hnfspmode"," ",100, 0, 60, 100, 0, 24);
   TH2D* hmodeediff = new TH2D("hmodeediff"," ",100, 0, 60, 100, -1,1);
 
-  TH1D* hKR_diff_frac = new TH1D("hCR_diff_frac"," ",100,-1,1);
+  TH1D* hCR_diff_frac = new TH1D("hCR_diff_frac"," ",100,-0.6,0.2);
   
   
   TGaxis::SetMaxDigits(4);
-  //gStyle->SetOptStat(0);     //Stats box
-
+  gStyle->SetOptStat(0);     //Stats box
+  //gStyle->SetPalette(86);
+  
   vector<Particle> PartVecAboveLiquid;
   vector<Particle> PartVecAboveGas;
   vector<Particle> PartVec;
@@ -285,7 +286,7 @@ int readenergy(){
     }
     
     vector<Particle> PartVec1;
-    PartVec1 = PartVec;
+    //PartVec1 = PartVec;
     PartVec = resolution(PartVec);
     
 
@@ -294,8 +295,6 @@ int readenergy(){
 
     PartVecAboveLiquid = liquidMomThresh(PartVec);
     PartVecAboveGas = gasMomThresh(PartVec);
-
-    
 
     //Preliminary plots
     /*
@@ -363,19 +362,19 @@ int readenergy(){
     float ECKG_diff_frac=0;
 
     //TEMP
-    float EKR=0;
-    float EKR_diff=0;
-    float EKR_diff_frac=0;
+    float ECR=0;
+    float ECR_diff=0;
+    float ECR_diff_frac=0;
 
 
     
 
     /////select mode/topology - liquid
     
-    //if (mode==1 && mode != 16 && mode != 36){                                                     //individual true modes
-    if (mode < 27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveLiquid)==1){                               //0pi from detected particles 
-    //if (mode <27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveLiquid) ==1){                                //1pi from detected particles
-    //if (mode < 27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveLiquid) == 0 && id_1pi(PartVec) == 0) {    //other
+    //if (mode==1 && mode != 16 && mode != 36){                                                                  //individual true modes
+    //if (mode < 27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveLiquid)==1){                               //0pi from detected particles 
+    //if (mode <27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveLiquid) ==1){                               //1pi from detected particles
+    if (mode < 27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveLiquid) == 0 && id_1pi(PartVec) == 0) {    //other
       countccqe++;
       if (mode ==1) countccqeright++;
       ECL = calorimetric(PartVecAboveLiquid);
@@ -453,11 +452,11 @@ int readenergy(){
 
       //showing effects of resolution on reconstructed
       /*
-      EKR = kinematic(PartVec1,coslep);
-      if (EKR != 0){
-	EKR_diff = EKR-Enu_t;
-	EKR_diff_frac = EKR_diff/Enu_t;
-	hKR_diff_frac->Fill(EKR_diff_frac);
+      ECR = calorimetric(PartVec1);
+      if (ECR != 0){
+	ECR_diff = ECR-Enu_t;
+	ECR_diff_frac = ECR_diff/Enu_t;
+	hCR_diff_frac->Fill(ECR_diff_frac);
       }
       */
       
@@ -501,9 +500,9 @@ int readenergy(){
     /////select mode/topology - gas
     
     //if(mode==1 && mode != 16 && mode != 36){                                                                          //individual true modes
-    if (mode<27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas)==1){                                           //0pi from detected particles 
+    //if (mode<27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas)==1){                                           //0pi from detected particles 
     //if (mode<27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveGas) ==1){                                          //1pi from detected particles
-    //if (mode <27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas) == 0 && id_1pi(PartVecAboveGas) == 0) {       //other
+    if (mode <27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas) == 0 && id_1pi(PartVecAboveGas) == 0) {       //other
 
       countcc1pi++;
       if (mode == 11 || mode == 13) countcc1piright++;
@@ -513,9 +512,9 @@ int readenergy(){
 	ECG_diff = ECG-Enu_t;
 	ECG_diff_frac = ECG_diff/Enu_t;
 	hCG->Fill(ECG,0.001);
-	hCG_diff->Fill(ECG_diff);
-	hCG_diff_true->Fill(Enu_t,ECG_diff);
-	hCG_diff_true_frac->Fill(Enu_t,ECG_diff_frac);
+	hCG_diff->Fill(ECG_diff,0.001);
+	hCG_diff_true->Fill(Enu_t,ECG_diff,0.001);
+	hCG_diff_true_frac->Fill(Enu_t,ECG_diff_frac,0.001);
 	hCG_diff_frac->Fill(ECG_diff_frac);
       }
 	
@@ -524,18 +523,18 @@ int readenergy(){
       if (EKG != 0){
 	EKG_diff = EKG-Enu_t;
 	EKG_diff_frac = EKG_diff/Enu_t;
-	hKG->Fill(EKG);
-	hKG_diff->Fill(EKG_diff);
-	hKG_diff_true->Fill(Enu_t,EKG_diff);
-	hKG_diff_true_frac->Fill(Enu_t,EKG_diff_frac);
-	hKG_diff_frac->Fill(EKG_diff_frac);
+	hKG->Fill(EKG,0.001);
+	hKG_diff->Fill(EKG_diff,0.001);
+	hKG_diff_true->Fill(Enu_t,EKG_diff,0.001);
+	hKG_diff_true_frac->Fill(Enu_t,EKG_diff_frac,0.001);
+	hKG_diff_frac->Fill(EKG_diff_frac,0.001);
       }
       	
       if (ECG != 0 && EKG != 0){
 	ECKG_diff = ECG - EKG;
 	ECKG_diff_frac = ECKG_diff / Enu_t;
-	hCKG_diff->Fill(Enu_t,ECKG_diff);
-	hCKG_diff_frac->Fill(Enu_t,ECKG_diff_frac);
+	hCKG_diff->Fill(Enu_t,ECKG_diff,0.001);
+	hCKG_diff_frac->Fill(Enu_t,ECKG_diff_frac,0.001);
       }
       
       hE->Fill(Enu_t);
@@ -663,29 +662,24 @@ int readenergy(){
   gStyle->SetHatchesSpacing(0.5);
   
   TCanvas *kinres = new TCanvas("kinres","Kinematic energy: with and without resolution and threshold");
-  hKG_diff_frac->SetLineColor(kBlack);
-  //hKG_diff_frac->SetFillStyle(3002);
-  hKG_diff_frac->SetFillColor(kGray);
-  //hKG_diff_frac->SetLineWidth(3);
-  hKG_diff_frac->Draw();
+  hCG_diff_frac->SetLineColor(kBlack);
+  hCG_diff_frac->SetFillColor(kGray);
+  hCG_diff_frac->Draw();
   kinres->Update();
-  hKL_diff_frac->SetLineColor(kBlack);
-  //hKL_diff_frac->SetLineWidth(3);
-  hKL_diff_frac->SetFillStyle(3409);
-  hKL_diff_frac->SetFillColor(kGray+2);
-  hKL_diff_frac->Draw("same");
+  hCL_diff_frac->SetLineColor(kRed);
+  hCL_diff_frac->SetFillStyle(3409);
+  hCL_diff_frac->SetFillColor(kRed);
+  hCL_diff_frac->Draw("same");
   kinres->Update();
-  hKR_diff_frac->SetLineColor(kBlack);
-  //hKR_diff_frac->SetLineWidth(2);
-  hKR_diff_frac->SetFillStyle(3003);
-  hKR_diff_frac->SetFillColor(kBlack);
-  hKR_diff_frac->Draw("same");
-  //kinres->Update();
+  hCR_diff_frac->SetLineColor(kBlue);
+  hCR_diff_frac->SetFillStyle(3003);
+  hCR_diff_frac->SetFillColor(kBlue);
+  hCR_diff_frac->Draw("same");
   auto legend1 = new TLegend(0.2,0.7,0.4,0.85);
   legend1->SetBorderSize(0);
-  legend1->AddEntry(hKG_diff_frac,"Original","f");
-  legend1->AddEntry(hKR_diff_frac,"Resolution","f");
-  legend1->AddEntry(hKL_diff_frac,"Threshold","f");
+  legend1->AddEntry(hCG_diff_frac,"Original","f");
+  legend1->AddEntry(hCR_diff_frac,"Resolution","f");
+  legend1->AddEntry(hCL_diff_frac,"Threshold","f");
   legend1->Draw();
   */
   /*
@@ -724,14 +718,14 @@ int readenergy(){
   legend4->AddEntry(hpipmliquid,"LAr threshold","l");
   legend4->SetBorderSize(0);
   legend4->Draw();
-  */
-  gStyle->SetLegendTextSize(0.05);
   
+  gStyle->SetLegendTextSize(0.05);
+  */
  
   /*
-  TCanvas *c = new TCanvas("c", "Energy difference with nfsp");
-  c->SetGrid();
-  hdiff->Draw();
+  TCanvas *c = new TCanvas("c", "variable name");
+  //c->SetGrid();
+  hCL_diff_true_frac->Draw("colz");
   */
   
   return (0);

@@ -18,7 +18,9 @@ float calorimetric(vector<Particle> PartVec){
     else if(pdg == 2112){
       E_cal += (En - mneutron);
     }
-    
+    else if(abs(pdg) == 4122 || abs(pdg) == 3122 || abs(pdg) == 4222 || abs(pdg) == 3222 || abs(pdg) == 4212 | abs(pdg) == 3212){
+      E_cal += (En - mneutron);
+    }
     else{
       if (pdg == 11 || pdg == 13) {
       hasLep = kTRUE;

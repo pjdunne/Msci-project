@@ -53,7 +53,6 @@ int id_1pi(vector<Particle> PartVec){
     	if (pdg == 211){
     		counter++;
     	}
-	
 	if (pdg == -211){
 	        counter+=2;
 	}
