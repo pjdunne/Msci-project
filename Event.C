@@ -17,20 +17,20 @@ Event::Event()
   
 }
 
-Event::Event(int id, float E0, float ECL, float ECG, float EKL, float EKG, int nfsp0, int nfspL, int nfspG, int mode, int topL, int topG);
+Event::Event(int _id, float _E0, float _ECL, float _ECG, float _EKL, float _EKG, int _nfsp0, int _nfspL, int _nfspG, int _mode, int _topL, int _topG)
 {
-  int id = id;
-  float E0 = E0; 
-  float ECL  = ECL; 
-  float ECG = ECG; 
-  float EKL = EKL; 
-  float EKG = EKG; 
-  int nfsp0 = nfsp0; 
-  int nfspL = nfspL; 
-  int nfspG = nfspG;
-  int mode = mode; 
-  int topL = topL; 
-  int topG = topG; 
+  int id = _id;
+  float E0 = _E0; 
+  float ECL  = _ECL; 
+  float ECG = _ECG; 
+  float EKL = _EKL; 
+  float EKG = _EKG; 
+  int nfsp0 = _nfsp0; 
+  int nfspL = _nfspL; 
+  int nfspG = _nfspG;
+  int mode = _mode; 
+  int topL = _topL; 
+  int topG = _topG; 
 }
 
 Event::~Event(){}

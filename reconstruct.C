@@ -33,11 +33,10 @@ float calorimetric(vector<Particle> PartVec){
     return E_cal;
     }
   else return 0;
-
+}
  //Kinematic CC0Pi
 
-float kinematic(vector<Particle> PartVec, float coslep)
-{
+float kinematic(vector<Particle> PartVec, float coslep){
 
   float E_kin=0;
   float Elep=0;
