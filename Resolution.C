@@ -69,6 +69,11 @@ vector<Particle> resolution(vector<Particle> PartVec){
       mass = 1.1156;
       w = 0.1;
     }
+    //lambda + c
+    else if (abs(Part.GetPDG())== 4122){
+      mass = 2.28646;
+      w = 0.05;
+    }
     //K+/-
     else if (abs(Part.GetPDG())== 321){
       mass = 0.493677;
@@ -144,11 +149,7 @@ vector<Particle> resolution(vector<Particle> PartVec){
       mass = 1.86962;
       w = 0.05;
     }
-    //lambda + c
-    else if (abs(Part.GetPDG())== 4122){
-      mass = 2.28646;
-      w = 0.05;
-    }
+    
     
     else {
       cout<<"Particle type not detected: "<< Part.GetPDG() <<endl;

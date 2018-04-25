@@ -51,7 +51,7 @@ int readenergy(){
   hCL_diff_true->GetXaxis()->SetTitle("True Energy (GeV)");
   hCL_diff_true->GetYaxis()->SetTitle("E_cal-E_true (GeV)");
   
-  TH2D* hCL_diff_true_frac = new TH2D("hCL_diff_true_frac"," ",300,0,10,200,-1,0.3);
+  TH2D* hCL_diff_true_frac = new TH2D("hCL_diff_true_frac"," ",300,0,10,200,-0.6,0.5);
   hCL_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
   hCL_diff_true_frac->GetYaxis()->SetTitle("(E_cal - E_true)/E_true");
 
@@ -100,7 +100,7 @@ int readenergy(){
   hKL_diff_true->GetXaxis()->SetTitle("True Energy (GeV)");
   hKL_diff_true->GetYaxis()->SetTitle("E_kin-E_true (GeV)");
   
-  TH2D* hKL_diff_true_frac = new TH2D("hKL_diff_true_frac"," ",300,0,10,200,-1,1);
+  TH2D* hKL_diff_true_frac = new TH2D("hKL_diff_true_frac"," ",300,0,10,200,-30,30);
   hKL_diff_true_frac->GetXaxis()->SetTitle("True Energy (GeV)");
   hKL_diff_true_frac->GetYaxis()->SetTitle("(E_kin - E_true)/E_true");
   
@@ -223,6 +223,8 @@ int readenergy(){
   TH2D* hmodeediff = new TH2D("hmodeediff"," ",100, 0, 60, 100, -1,1);
 
   TH1D* hCR_diff_frac = new TH1D("hCR_diff_frac"," ",100,-0.6,0.2);
+
+  TH2D* hKinErr = new TH2D("hKinErr"," ",200,0,30,200,-2,20);
   
   
   TGaxis::SetMaxDigits(4);
@@ -370,11 +372,11 @@ int readenergy(){
     
 
     /////select mode/topology - liquid
-    
-    //if (mode==1 && mode != 16 && mode != 36){                                                                  //individual true modes
+
+    //if (mode != 11 && mode != 13 && mode != 1 && mode != 16 && mode <27){                                                                  //individual true modes
     //if (mode < 27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveLiquid)==1){                               //0pi from detected particles 
-    //if (mode <27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveLiquid) ==1){                               //1pi from detected particles
-    if (mode < 27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveLiquid) == 0 && id_1pi(PartVec) == 0) {    //other
+    if (mode <27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveLiquid) ==1){                               //1pi from detected particles
+    //if (mode < 27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveLiquid) == 0 && id_1pi(PartVec) == 0) {    //other
       countccqe++;
       if (mode ==1) countccqeright++;
       ECL = calorimetric(PartVecAboveLiquid);
@@ -460,8 +462,8 @@ int readenergy(){
       }
       */
       
-      EKL = kinematic(PartVecAboveLiquid,coslep);       //for when looking at 0pi modes
-      //EKL = cc1pikinematic(PartVecAboveLiquid,coslep);         //for when looking at 1pi modes
+      //EKL = kinematic(PartVecAboveLiquid,coslep);       //for when looking at 0pi modes
+      EKL = cc1pikinematic(PartVecAboveLiquid,coslep);         //for when looking at 1pi modes
       if (EKL != 0){
 	EKL_diff = EKL - Enu_t;
 	EKL_diff_frac = EKL_diff/Enu_t;
@@ -470,6 +472,7 @@ int readenergy(){
 	hKL_diff_true->Fill(Enu_t,EKL_diff);
 	hKL_diff_true_frac->Fill(Enu_t,EKL_diff_frac);
 	hKL_diff_frac->Fill(EKL_diff_frac);
+	hKinErr->Fill(EKL,EKL_diff_frac);
 	if (ECL_diff != 0) {
           hL_cal_kin_diff_true->Fill(ECL_diff, EKL_diff, Enu_t);
           hcal_kin->Fill(ECL_diff,EKL_diff);
@@ -499,10 +502,10 @@ int readenergy(){
     
     /////select mode/topology - gas
     
-    //if(mode==1 && mode != 16 && mode != 36){                                                                          //individual true modes
+    //if(mode != 11 && mode != 13 && mode != 1 && mode != 16 && mode <27){                                                                          //individual true modes
     //if (mode<27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas)==1){                                           //0pi from detected particles 
-    //if (mode<27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveGas) ==1){                                          //1pi from detected particles
-    if (mode <27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas) == 0 && id_1pi(PartVecAboveGas) == 0) {       //other
+    if (mode<27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveGas) ==1){                                          //1pi from detected particles
+    //if (mode <27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas) == 0 && id_1pi(PartVecAboveGas) == 0) {       //other
 
       countcc1pi++;
       if (mode == 11 || mode == 13) countcc1piright++;
@@ -540,7 +543,7 @@ int readenergy(){
       hE->Fill(Enu_t);
     }
 
-    if (id_0pi(PartVecAboveGas) == 0 && id_1pi(PartVecAboveGas)== 0 && mode<27 && mode != 16){
+    if (mode<27 && mode != 16 && id_0pi(PartVecAboveLiquid) == 0 && id_1pi(PartVecAboveLiquid)== 0){
       countother++;
       /*
       cout<<"Mode  "<<mode<<endl;
