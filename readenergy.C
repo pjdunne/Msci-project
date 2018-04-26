@@ -271,6 +271,10 @@ int readenergy(){
   int countotherright = 0;
   
   TRandom3 ranobj;
+  unsigned seed = 3;
+  //unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  std::default_random_engine generator (seed);
+  
   for(unsigned int iEntry=0;iEntry<nentries;iEntry++){
 
     tree->GetEntry(iEntry);
@@ -433,12 +437,10 @@ int readenergy(){
 	float sig = w* pmag; //or 1std dev = w fraction of the original energy
 
 
-	unsigned seed = 1;
-	//unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-	std::default_random_engine generator (seed);
 	std::normal_distribution<double> distribution (pmag,sig);
 	float pmag2 =  distribution(generator);
 
+	//cout<<"PMAG  "<<pmag<< " "<<pmag2<<endl;
 	//cout<<Part.GetPDG()<<" "<<pmag<<" "<<pmag2<<endl;
 
 	float En2 = sqrt( pow(pmag2,2.0) + pow(mass,2.0)); //assuming c= 1      //should En be En2 here????
@@ -537,8 +539,8 @@ int readenergy(){
     /////select mode/topology - liquid
 
     //if (mode != 11 && mode != 13 && mode != 1 && mode != 16 && mode <27){                                                                  //individual true modes
-    //if (mode < 27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveLiquid)==1){                               //0pi from detected particles 
-    if (mode <27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveLiquid) ==1){                               //1pi from detected particles
+    if (mode < 27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveLiquid)==1){                               //0pi from detected particles 
+    //if (mode <27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveLiquid) ==1){                               //1pi from detected particles
     //if (mode < 27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveLiquid) == 0 && id_1pi(PartVec) == 0) {    //other
       countccqe++;
       if (mode ==1) countccqeright++;
@@ -625,8 +627,8 @@ int readenergy(){
       }
       */
       
-      //EKL = kinematic(PartVecAboveLiquid,coslep);       //for when looking at 0pi modes
-      EKL = cc1pikinematic(PartVecAboveLiquid,coslep);         //for when looking at 1pi modes
+      EKL = kinematic(PartVecAboveLiquid,coslep);                //for when looking at 0pi modes
+      //EKL = cc1pikinematic(PartVecAboveLiquid,coslep);         //for when looking at 1pi modes
       if (EKL != 0){
 	EKL_diff = EKL - Enu_t;
 	EKL_diff_frac = EKL_diff/Enu_t;
@@ -665,9 +667,9 @@ int readenergy(){
     
     /////select mode/topology - gas
     
-    //if(mode != 11 && mode != 13 && mode != 1 && mode != 16 && mode <27){                                                                          //individual true modes
-    //if (mode<27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas)==1){                                           //0pi from detected particles 
-    if (mode<27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveGas) ==1){                                          //1pi from detected particles
+    //if(mode != 11 && mode != 13 && mode != 1 && mode != 16 && mode <27){                                              //individual true modes
+    if (mode<27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas)==1){                                           //0pi from detected particles 
+    //if (mode<27 && mode != 16 && mode != 36 && id_1pi(PartVecAboveGas) ==1){                                          //1pi from detected particles
     //if (mode <27 && mode != 16 && mode != 36 && id_0pi(PartVecAboveGas) == 0 && id_1pi(PartVecAboveGas) == 0) {       //other
 
       countcc1pi++;
@@ -725,47 +727,50 @@ int readenergy(){
   //cout<<"Correct"<<endl<<"mode 1 as CCQE   "<<countccqeright<<endl<<"mode 11 or 13 as cc1pi   "<<countcc1piright<<endl<<"other modes as other   "<<countotherright<<endl;
   //cout<<"PI 0:  "<<countpi0<<"   Pi pm:  "<< countpipm<<endl;
 
-  /*
-  TF1 *fit = new TF1("fit","crystalball");
-  fit->SetParameters(2200,0.02,0.002,1,1);
   
-  hFrac_slice_0001->Fit("fit");
-  hFrac_slice_0102->Fit("fit");
-  hFrac_slice_0203->Fit("fit");
-  hFrac_slice_0304->Fit("fit");
-  hFrac_slice_0405->Fit("fit");
-  hFrac_slice_0506->Fit("fit");
-  hFrac_slice_0607->Fit("fit");
-  hFrac_slice_0708->Fit("fit");
-  hFrac_slice_0809->Fit("fit");
-  hFrac_slice_0910->Fit("fit");
-  hFrac_slice_1011->Fit("fit");
-  hFrac_slice_1112->Fit("fit");
-  hFrac_slice_1213->Fit("fit");
-  hFrac_slice_1314->Fit("fit");
-  hFrac_slice_1415->Fit("fit");
-  hFrac_slice_1520->Fit("fit");
-  hFrac_slice_2025->Fit("fit");
-  hFrac_slice_2530->Fit("fit");
-  hFrac_slice_3035->Fit("fit");
-  hFrac_slice_3540->Fit("fit");
-  hFrac_slice_4045->Fit("fit");
-  hFrac_slice_4550->Fit("fit");
-  hFrac_slice_5055->Fit("fit");
-  hFrac_slice_5560->Fit("fit");
-  hFrac_slice_6065->Fit("fit");
-  hFrac_slice_6570->Fit("fit");
-  hFrac_slice_7075->Fit("fit");
-  hFrac_slice_7580->Fit("fit");
-  hFrac_slice_8085->Fit("fit");
-  hFrac_slice_8590->Fit("fit");
-  hFrac_slice_9095->Fit("fit");
-  hFrac_slice_95100->Fit("fit");
-  hFrac_slice_100105->Fit("fit");
-  hFrac_slice_105110->Fit("fit");
-  hFrac_slice_110115->Fit("fit");
-  hFrac_slice_115120->Fit("fit");
-  */
+  TF1 *normal = new TF1("normal","crystalball");
+  normal->SetParameters(2200,0.02,0.002,1,1);
+
+  TF1 *low = new TF1("low","crystalball");
+  low->SetParameters(100,-0.05,0.005,1,3);
+  
+  hFrac_slice_0001->Fit("low");
+  hFrac_slice_0102->Fit("low");
+  hFrac_slice_0203->Fit("normal");
+  hFrac_slice_0304->Fit("normal");
+  hFrac_slice_0405->Fit("normal");
+  hFrac_slice_0506->Fit("normal");
+  hFrac_slice_0607->Fit("normal");
+  hFrac_slice_0708->Fit("normal");
+  hFrac_slice_0809->Fit("normal");
+  hFrac_slice_0910->Fit("normal");
+  hFrac_slice_1011->Fit("normal");
+  hFrac_slice_1112->Fit("normal");
+  hFrac_slice_1213->Fit("normal");
+  hFrac_slice_1314->Fit("normal");
+  hFrac_slice_1415->Fit("normal");
+  hFrac_slice_1520->Fit("normal");
+  hFrac_slice_2025->Fit("normal");
+  hFrac_slice_2530->Fit("normal");
+  hFrac_slice_3035->Fit("normal");
+  hFrac_slice_3540->Fit("normal");
+  hFrac_slice_4045->Fit("normal");
+  hFrac_slice_4550->Fit("normal");
+  hFrac_slice_5055->Fit("normal");
+  hFrac_slice_5560->Fit("normal");
+  hFrac_slice_6065->Fit("normal");
+  hFrac_slice_6570->Fit("normal");
+  hFrac_slice_7075->Fit("normal");
+  hFrac_slice_7580->Fit("normal");
+  hFrac_slice_8085->Fit("normal");
+  hFrac_slice_8590->Fit("normal");
+  hFrac_slice_9095->Fit("normal");
+  hFrac_slice_95100->Fit("normal");
+  hFrac_slice_100105->Fit("normal");
+  hFrac_slice_105110->Fit("normal");
+  hFrac_slice_110115->Fit("normal");
+  hFrac_slice_115120->Fit("normal");
+  
   //plotting two 1D histograms on same canvas - different scales
 
   /*
