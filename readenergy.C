@@ -225,8 +225,7 @@ int readenergy(){
   TH1D* hCR_diff_frac = new TH1D("hCR_diff_frac"," ",100,-0.6,0.2);
 
   TH2D* hKinErr = new TH2D("hKinErr"," ",200,0,30,200,-2,20);
-  
-  
+    
   TGaxis::SetMaxDigits(4);
   gStyle->SetOptStat(0);     //Stats box
   //gStyle->SetPalette(86);
@@ -434,7 +433,8 @@ int readenergy(){
 	float sig = w* pmag; //or 1std dev = w fraction of the original energy
 
 
-	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	unsigned seed = 1;
+	//unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator (seed);
 	std::normal_distribution<double> distribution (pmag,sig);
 	float pmag2 =  distribution(generator);
