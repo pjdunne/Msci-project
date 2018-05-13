@@ -22,12 +22,15 @@
 #include "TextTable.h"
 #include "Norm.C"
 #include "Chi.C"
-
+#include "fstream"
 int readHPr(){
-  for(int b =0; b < 3;b++){
-  int bin = 100;
-  TFile* fileNEUT = new TFile("T2K_Ar_numu_fhc_trunk07_Eshita_merge_flat_v4.root");
-  //TFile* fileNEUT = new TFile("genie_argon_fnalsmall_run1_flat_v2.root");
+  ofstream myfile;
+  myfile.open ("summary1.txt");
+  for(int b =0; b < 2;b++){
+  int bin = 400;
+  //TFile* fileNEUT = new TFile("T2K_Ar_numu_fhc_trunk07_Eshita_merge_flat_v4.root"); \\Choose this to read NEUT files
+  TFile* fileNEUT = new TFile("genie_argon_fnalsmall_Effsftem_proc_flat.root"); \\Choose this to read GENIE files
+
 
   TTree* tree = (TTree*)fileNEUT->Get("FlatTree_VARS");
   TFile* fileGENIE;
@@ -41,14 +44,14 @@ int readHPr(){
   TTree* treeG = (TTree*)fileGENIE->Get("FlatTree_VARS");
 
 
-  TH1D* N_HEpr= new TH1D("N_HEpr", "NEUT and GENIE highest proton momentum", bin, 0, 2);
-  TH1D* G_HEpr= new TH1D("G_HEpr", "NEUT and GENIE highest proton momentum", bin, 0, 2);
+  TH1D* N_HEpr= new TH1D("N_HEpr", "NEUT and GENIE highest proton momentum", bin, 0, 7);
+  TH1D* G_HEpr= new TH1D("G_HEpr", "NEUT and GENIE highest proton momentum", bin, 0, 7);
 
-  TH1D* N_HEprL= new TH1D("N_HEprL", "NEUT and GENIE highest proton momentum (liquid)", bin, 0, 2);
-  TH1D* G_HEprL= new TH1D("G_HEprL", "NEUT and GENIE highest proton momentum (liquid)", bin, 0, 2);
+  TH1D* N_HEprL= new TH1D("N_HEprL", "NEUT and GENIE highest proton momentum (liquid)", bin, 0, 5);
+  TH1D* G_HEprL= new TH1D("G_HEprL", "NEUT and GENIE highest proton momentum (liquid)", bin, 0, 5);
 
-  TH1D* N_HEprG= new TH1D("N_HEprG", "NEUT and GENIE highest proton momentum (gas)", bin, 0, 2);
-  TH1D* G_HEprG= new TH1D("G_HEprG", "NEUT and GENIE highest proton momentum (gas)", bin, 0, 2);
+  TH1D* N_HEprG= new TH1D("N_HEprG", "NEUT and GENIE highest proton momentum (gas)", bin, 0, 5);
+  TH1D* G_HEprG= new TH1D("G_HEprG", "NEUT and GENIE highest proton momentum (gas)", bin, 0, 5);
 
  //hCL->SetFillColor(kYellow-7);
   //hKL->SetFillColor(kYellow-7);
@@ -58,17 +61,17 @@ int readHPr(){
  // hCG_diff->SetFillColor(kYellow-7);
  // hKG_diff->SetFillColor(kYellow-7);
 //  hKG->SetFillColor(kYellow-7);
-   N_HEpr->GetXaxis()->SetTitle("Momentum (Gev)");
+   N_HEpr->GetXaxis()->SetTitle("Momentum (GeV/c)");
    N_HEpr->GetYaxis()->SetTitle("Number of events");
-   G_HEpr->GetXaxis()->SetTitle("Momentum (Gev)");
+   G_HEpr->GetXaxis()->SetTitle("Momentum (GeV/c)");
    G_HEpr->GetYaxis()->SetTitle("Number of events");
-   N_HEprL->GetXaxis()->SetTitle("Momentum (Gev)");
+   N_HEprL->GetXaxis()->SetTitle("Momentum (GeV/c)");
    N_HEprL->GetYaxis()->SetTitle("Number of events");
-   N_HEprG->GetXaxis()->SetTitle("Momentum (Gev)");
+   N_HEprG->GetXaxis()->SetTitle("Momentum (GeV/c)");
    N_HEprG->GetYaxis()->SetTitle("Number of events");
-   G_HEprL->GetXaxis()->SetTitle("Momentum (Gev)");
+   G_HEprL->GetXaxis()->SetTitle("Momentum (GeV/c)");
    G_HEprL->GetYaxis()->SetTitle("Number of events");
-   G_HEprG->GetXaxis()->SetTitle("Momentum (Gev)");
+   G_HEprG->GetXaxis()->SetTitle("Momentum (GeV/c)");
    G_HEprG->GetYaxis()->SetTitle("Number of events");
   TGaxis::SetMaxDigits(4);
 
@@ -124,7 +127,7 @@ int readHPr(){
   treeG->SetBranchAddress("Mode",&modeG);
   treeG->SetBranchAddress("CosLep",&coslepG);
 
-
+float rw = 0.0;	
 //Read NEUT
   Long64_t nentries = tree->GetEntries();
   double wG = 1;//20000./nentries;
@@ -136,7 +139,7 @@ int readHPr(){
 	EPrVec.clear();
         PartVecLiquid.clear();
 	PartVecGas.clear();
-	Resolution Res;
+	//Resolution Res;
 
 
 	for (int i = 0; i < nfsp; ++i)  {
@@ -153,8 +156,8 @@ int readHPr(){
         //if (id_1pi(PartVec) == 1){   // use this to choose 1 pi modes
         //if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes  
 
-		
-        PartRes=Res.ResFunc(PartVec,.01);
+
+        PartRes=ResFunc(PartVec,rw);
         PartVecLiquid=liquidMomThresh(PartRes);
 	for (int i =0; i<PartVecLiquid.size(); i++){
 		Particle P = PartVecLiquid[i];
@@ -190,7 +193,7 @@ int readHPr(){
         PartVec.clear();
         PartVecLiquid.clear();
 	PartVecGas.clear();
-	Resolution Res2;
+	//Resolution Res2;
 
 	for (int i = 0; i < nfspG; ++i)  {
 	          int id = 0;
@@ -204,10 +207,10 @@ int readHPr(){
 	//MODE SELECTION
         if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
         //if (id_1pi(PartVec) == 1){ // use this to choose 1 pi modes
-       // if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes        
+        //if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes        
 
 						
-        PartRes=Res2.ResFunc(PartVec,.01);
+        PartRes=ResFunc(PartVec,rw);
         PartVecLiquid=liquidMomThresh(PartRes);
 	for (int i =0; i<PartVecLiquid.size(); i++){
 		Particle P = PartVecLiquid[i];
@@ -237,12 +240,12 @@ G_HEprG = NormG(G_HEprG);
 N_HEprL = NormL(N_HEprL);
 G_HEprL = NormL(G_HEprL);
 
-double chiPprL=Chi(N_HEprL,G_HEprL);
+double chiPprL=Chi(N_HEprL,G_HEprL,bin);
   TCanvas *h_HEprL;
   if(b==0){
-  h_HEprL = new TCanvas("h_HEprL", "NEUT and GENIE highest proton momentum comparison 0 (liquid)");}
+  h_HEprL = new TCanvas("h_HEprL", "0pi_GENIE2 and GENIE highest proton momentum comparison 0 (liquid)");}
   if(b==1){
-  h_HEprL = new TCanvas("h_HEprL1", "NEUT and GENIE highest  proton momentum comparison 1 (liquid)");}
+  h_HEprL = new TCanvas("h_HEprL1", "0pi_GENIE2 and GENIE highest  proton momentum comparison 1 (liquid)");}
   if(b==2){
   h_HEprL = new TCanvas("h_HEprL2", "NEUT and GENIE highest  proton momentum comparison 2 (liquid)");}
 
@@ -251,24 +254,24 @@ double chiPprL=Chi(N_HEprL,G_HEprL);
   N_HEprL->SetLineColor(kRed);
   N_HEprL->Draw("same");
   auto legend7 = new TLegend(0.4,0.7,0.6,0.9);
-  legend7->AddEntry(N_HEprL,"NEUT","f");
+  legend7->AddEntry(N_HEprL,"GENIE 2","f");
   legend7->AddEntry(G_HEprL,"GENIE","f");
   legend7->SetHeader(Form("#chi^{2}=%f", chiPprL));
   legend7->Draw();
   if (b==0){
-  h_HEprL->SaveAs("Proton momentum GENIE model 0 (liquid).pdf");}
+  h_HEprL->SaveAs("0pi_Proton momentum GENIE2_GENIE model 0 (liquid).pdf");}
   if (b==1){
-  h_HEprL->SaveAs("Proton momentum GENIE model 1 (liquid).pdf");}
+  h_HEprL->SaveAs("0pi_Proton momentum GENIE2_GENIE model 1 (liquid).pdf");}
   if (b==2){
   h_HEprL->SaveAs("Proton momentum GENIE model 2 (liquid).pdf");}
 
 
-double chiPprG=Chi(N_HEprG,G_HEprG);
+double chiPprG=Chi(N_HEprG,G_HEprG,bin);
   TCanvas *h_HEprG;
   if(b==0){
-  h_HEprG = new TCanvas("h_HEprG", "NEUT and GENIE highest  proton momentum comparison 0 (gas)");}
+  h_HEprG = new TCanvas("h_HEprG", "0pi_GENIE2 and GENIE highest  proton momentum comparison 0 (gas)");}
   if(b==1){
-  h_HEprG = new TCanvas("h_HEprG1", "NEUT and GENIE highest proton momentum comparison 1 (gas)");}
+  h_HEprG = new TCanvas("h_HEprG1", "0pi_GENIE2 and GENIE highest proton momentum comparison 1 (gas)");}
   if(b==2){
   h_HEprG = new TCanvas("h_HEprG2", "NEUT and GENIE highest proton momentum comparison 2 (gas)");}
 
@@ -277,25 +280,25 @@ double chiPprG=Chi(N_HEprG,G_HEprG);
   G_HEprG->SetLineColor(kRed);
   G_HEprG->Draw("same");
   auto legend6 = new TLegend(0.4,0.7,0.6,0.9);
-  legend6->AddEntry(N_HEprG,"NEUT","f");
+  legend6->AddEntry(N_HEprG,"GENIE 2","f");
   legend6->AddEntry(G_HEprG,"GENIE","f");
   legend6->SetHeader(Form("#chi^{2}=%f", chiPprG));
   legend6->Draw();
   if (b==0){
-  h_HEprG->SaveAs("Proton momentum GENIE model 0 (gas).pdf");}
+  h_HEprG->SaveAs("0pi_Proton momentum GENIE2_GENIE model 0 (gas).pdf");}
   if (b==1){
-  h_HEprG->SaveAs("Proton momentum GENIE model 1 (gas).pdf");}
+  h_HEprG->SaveAs("0pi_Proton momentum GENIE2_GENIE model 1 (gas).pdf");}
   if (b==2){
-  h_HEprG->SaveAs("Proton momentum GENIE model 2 (gas).pdf");}
+  h_HEprG->SaveAs("Proton momentum GENIE_GENIE model 2 (gas).pdf");}
 
-double chi_squared_total=Chi(N_HEpr,G_HEpr);
+/*double chi_squared_total=Chi(N_HEpr,G_HEpr,bin);
   TCanvas *h_HEpr = new TCanvas("h_HEpr", "NEUT and GENIE proton momentum comparison (no threshold)");
   G_HEpr->Draw();
   h_HEpr->Update();
   N_HEpr->SetLineColor(kRed);
   N_HEpr->Draw("same");
   auto legend = new TLegend(0.4,0.7,0.6,0.9);
-  legend->AddEntry(N_HEpr,"NEUT","f");
+  legend->AddEntry(N_HEpr,"GENIE 3","f");
   legend->AddEntry(G_HEpr,"GENIE","f");
   legend->SetHeader(Form("#chi^{2}=%f", chi_squared_total));
   legend->Draw();
@@ -305,12 +308,16 @@ double chi_squared_total=Chi(N_HEpr,G_HEpr);
   h_HEprG->SaveAs("Proton momentum GENIE model 1 (no threshold).pdf");}
   if (b==2){
   h_HEprG->SaveAs("Proton momentum GENIE model 2 (no threshold).pdf");}
-
+*/
 
 cout <<"GENIE Model:"<< b<<endl;
 cout<<"Proton Momentum Liquid:"<<" "<<chiPprL<<endl;
 cout<<"Proton Momentum Gas:"<<" "<<chiPprG<<endl;
 
-  }
+myfile <<"GENIE Model:"<< b<<"\n";
+myfile <<"Proton Momentum Liquid:"<<" "<<chiPprL<<"\n";
+myfile <<"Proton Momentum Gas:"<<" "<<chiPprG<<"\n";
 
+  }
+myfile.close();
   return (0);}
