@@ -28,8 +28,8 @@ int readHPr(){
   myfile.open ("summary1.txt");
   for(int b =0; b < 2;b++){
   int bin = 400;
-  //TFile* fileNEUT = new TFile("T2K_Ar_numu_fhc_trunk07_Eshita_merge_flat_v4.root"); \\Choose this to read NEUT files
-  TFile* fileNEUT = new TFile("genie_argon_fnalsmall_Effsftem_proc_flat.root"); \\Choose this to read GENIE files
+  //TFile* fileNEUT = new TFile("T2K_Ar_numu_fhc_trunk07_Eshita_merge_flat_v4.root"); //Choose this to read NEUT files
+  TFile* fileNEUT = new TFile("genie_argon_fnalsmall_Effsftem_proc_flat.root"); // Choose this to read GENIE files
 
 
   TTree* tree = (TTree*)fileNEUT->Get("FlatTree_VARS");
