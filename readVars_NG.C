@@ -23,11 +23,13 @@
 #include "TGaxis.h"
 #include "Norm.C"
 #include "TextTable.h"
-
+#include "fstream"
 int readVars_NG(){
+  ofstream myfile;
+  myfile.open ("summary2.txt");
  for(int b =0; b < 3;b++){
-  TFile* fileNEUT = new TFile("T2K_Ar_numu_fhc_trunk07_Eshita_merge_flat_v4.root");
- // TFile* fileNEUT = new TFile("genie_argon_fnalsmall_run1_flat_v2.root");
+  TFile* fileNEUT = new TFile("T2K_Ar_numu_fhc_trunk07_Eshita_merge_flat_v4.root"); \\ Choose this to read NEUT file
+ // TFile* fileNEUT = new TFile("genie_argon_fnalsmall_Effsftem_proc_flat.root");   \\ Choose this to read GENIE file
   TTree* tree = (TTree*)fileNEUT->Get("FlatTree_VARS");
   TFile* fileGENIE;
   if(b==0){
@@ -46,37 +48,35 @@ int readVars_NG(){
   double integral = hFlux->Integral(0,bmax,"width");
   //cout<<integral<<endl;
   
- //TCanvas *canv = new TCanvas("enu_nd280_numu", "T2K nu_mu flux at ND280 with +250 kA horn operation");
- //hFlux->Draw();
- // canv->SaveAs("T2K_Flux.pdf");
 
   TTree* treeG = (TTree*)fileGENIE->Get("FlatTree_VARS");
  
-  float bin = 100;
+  int bin = 400;
+  int Multbin =14;
   TH1D* h = new TH1D("h", "True  Energy plots", 1000, 0, 10);
 
   TH1D* N_Pmu = new TH1D("N_Pmu", "NEUT and GENIE muon momentum magnitude (no threshold)", bin, 0, 4);
   TH1D* G_Pmu = new TH1D("G_Pmu", "NEUT and GENIE muon momentum magnitude (no threshold)", bin, 0, 4);
 
-  TH1D* nPrG = new TH1D("nPrG", "NEUT and GENIE proton number (no threshold)", 12, 0, 12);
-  TH1D* nPrN = new TH1D("nPrN", "NEUT and GENIE proton number (no threshold)", 12, 0, 12);
+  TH1D* nPrG = new TH1D("nPrG", "NEUT and GENIE proton number (no threshold)", Multbin, 0, Multbin);
+  TH1D* nPrN = new TH1D("nPrN", "NEUT and GENIE proton number (no threshold)", Multbin, 0, Multbin);
 
-  TH1D* nPrG_L = new TH1D("nPrG_L", "NEUT and GENIE proton number (liquid)", 12, 0, 12);
-  TH1D* nPrG_G = new TH1D("nPrG_G", "NEUT and GENIE proton number (gas)", 12, 0, 12);
+  TH1D* nPrG_L = new TH1D("nPrG_L", "NEUT and GENIE proton number (liquid)", Multbin, 0, Multbin);
+  TH1D* nPrG_G = new TH1D("nPrG_G", "NEUT and GENIE proton number (gas)", Multbin, 0, Multbin);
 
-  TH1D* nPrN_L = new TH1D("nPrN_L", "NEUT and GENIE proton number (liquid)", 12, 0, 12);
-  TH1D* nPrN_G = new TH1D("nPrN_G", "NEUT and GENIE proton number (gas)", 12, 0, 12);
+  TH1D* nPrN_L = new TH1D("nPrN_L", "NEUT and GENIE proton number (liquid)", Multbin, 0, Multbin);
+  TH1D* nPrN_G = new TH1D("nPrN_G", "NEUT and GENIE proton number (gas)", Multbin, 0, Multbin);
 
-  TH1D* N_PmuG = new TH1D("N_PmuG", "NEUT and GENIE muon momentum magnitude (gas)", bin, 0, 4);
-  TH1D* G_PmuG = new TH1D("G_PmuG", "NEUT and GENIE muon momentum magnitude (gas)", bin, 0, 4);
+  TH1D* N_PmuG = new TH1D("N_PmuG", "NEUT and GENIE muon momentum magnitude (gas)", bin, 0, 6);
+  TH1D* G_PmuG = new TH1D("G_PmuG", "NEUT and GENIE muon momentum magnitude (gas)", bin, 0, 6);
 
-  TH1D* N_PmuL= new TH1D("N_PmuL", "NEUT and GENIE muon momentum magnitude (liquid)", bin, 0, 4);
-  TH1D* G_PmuL= new TH1D("G_PmuL", "NEUT and GENIE muon momentum magnitude (liquid)", bin, 0, 4);
+  TH1D* N_PmuL= new TH1D("N_PmuL", "NEUT and GENIE muon momentum magnitude (liquid)", bin, 0, 6);
+  TH1D* G_PmuL= new TH1D("G_PmuL", "NEUT and GENIE muon momentum magnitude (liquid)", bin, 0, 6);
 
-  TH1D* N_EpiL= new TH1D("N_EpiL", "NEUT and GENIE pion energy (liquid)", bin, 0, 4);
-  TH1D* G_EpiL= new TH1D("G_EpiL", "NEUT and GENIE pion energy (liquid)", bin, 0, 4);
-  TH1D* N_HEpiL= new TH1D("N_HEpiL", "NEUT and GENIE highest pion energy (liquid)", bin, 0, 4);
-  TH1D* G_HEpiL= new TH1D("G_HEpiL", "NEUT and GENIE highest pion energy (liquid)", bin, 0, 4);
+  TH1D* N_EpiL= new TH1D("N_EpiL", "NEUT and GENIE pion energy (liquid)", bin, 0, 6);
+  TH1D* G_EpiL= new TH1D("G_EpiL", "NEUT and GENIE pion energy (liquid)", bin, 0, 6);
+  TH1D* N_HEpiL= new TH1D("N_HEpiL", "NEUT and GENIE highest pion energy (liquid)", bin, 0, 6);
+  TH1D* G_HEpiL= new TH1D("G_HEpiL", "NEUT and GENIE highest pion energy (liquid)", bin, 0, 6);
 
 
   TH1D* N_EpiG= new TH1D("N_EpiG", "NEUT and GENIE pion energy (gas)", bin, 0, 4);
@@ -88,10 +88,10 @@ int readVars_NG(){
 // nPrG_G->SetFillColor(kYellow-7);
 // nPrG->SetFillColor(kYellow-7);
  
-   N_PmuG->GetXaxis()->SetTitle("Momentum (Gev)");
-   G_PmuG->GetXaxis()->SetTitle("Momentum(Gev)");
-   G_EpiL->GetXaxis()->SetTitle("Energy (Gev)");
-   G_EpiG->GetXaxis()->SetTitle("Energy (Gev)");
+   N_PmuG->GetXaxis()->SetTitle("Momentum (GeV/c)");
+   G_PmuG->GetXaxis()->SetTitle("Momentum(GeV/c)");
+   G_EpiL->GetXaxis()->SetTitle("Energy (GeV)");
+   G_EpiG->GetXaxis()->SetTitle("Energy (GeV)");
 
    N_PmuG->GetYaxis()->SetTitle("Number of events");
    G_PmuG->GetYaxis()->SetTitle("Number of events");
@@ -160,7 +160,7 @@ int readVars_NG(){
 	EPiVec.clear();
         PartVecLiquid.clear();
 	PartVecGas.clear();
-	Resolution Res;
+	
 
         h->Fill(Enu_t);
 
@@ -174,12 +174,13 @@ int readVars_NG(){
 		  if(pdg[i] == 13){                   //Muon Momentum
 		  N_Pmu->Fill(Part.GetMomentum());}}		  
 	//MODE SELECTION
-        //if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
-       // if (id_1pi(PartVec) == 1){ // use this to choose 1 pi modes
-        if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes  
+        if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
+        //if (id_1pi(PartVec) == 1){ // use this to choose 1 pi modes
+        //if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes  
+
 	nPrN->Fill(nPr);
 	nPr=0;			
-        PartRes=Res.ResFunc(PartVec,.01);
+        PartRes=ResFunc(PartVec,.01);
         PartVecLiquid=liquidMomThresh(PartRes);
 	for (int i =0; i<PartVecLiquid.size(); i++){
 		Particle P = PartVecLiquid[i];
@@ -202,10 +203,7 @@ int readVars_NG(){
 		int pdgn= Pa.GetPDG();
 		if(pdgn == 13){          
 		N_PmuG->Fill(Pa.GetMomentum(),wG);}
-
 		if(pdgn==2212){nPr++;}                            //Proton number
-			
-
 		if(pdgn == 111 | pdgn == 211 | pdgn == -211){   //Pion energy gas
 		N_EpiG->Fill(Pa.GetEnergy(),wG);
 		EPiVec.push_back(Pa.GetEnergy());}
@@ -225,7 +223,6 @@ int readVars_NG(){
         PartVec.clear();
         PartVecLiquid.clear();
 	PartVecGas.clear();
-	Resolution Res;
 
 	for (int i = 0; i < nfspG; ++i)  {
 	          int id = 0;
@@ -239,12 +236,12 @@ int readVars_NG(){
         		G_Pmu->Fill(Part.GetMomentum());}}	
 
 	//MODE SELECTION
-        //if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
+        if (id_0pi(PartVec) == 1){ // use this to choose 0 pi modes
         //if (id_1pi(PartVec) == 1){ // use this to choose 1 pi modes
-        if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes  
+        //if (id_0pi(PartVec) == 0 && id_1pi(PartVec) == 0){ // use this to choose other modes  
 	nPrG->Fill(nPr);
 	nPr=0;										
-        PartRes=Res.ResFunc(PartVec,.01);
+        PartRes=ResFunc(PartVec,.01);
         PartVecLiquid=liquidMomThresh(PartRes);
 	for (int i =0; i<PartVecLiquid.size(); i++){
 		Particle P = PartVecLiquid[i];
@@ -278,33 +275,31 @@ int readVars_NG(){
 	nPrG_G->Fill(nPr,wG);      
 	}
 	}
-
+//Normlise the histograms
 N_PmuG = NormG(N_PmuG);
 G_PmuG = NormG(G_PmuG);
-
 N_PmuL = NormL(N_PmuL);
 G_PmuL = NormL(G_PmuL);
-
 nPrN_L = NormL(nPrN_L);
 nPrG_L = NormL(nPrG_L);
-
 nPrN_G = NormG(nPrN_G);
 nPrG_G = NormG(nPrG_G);
+
 //GRAPHS__________________________________________________________________
-double chiPmuG=Chi(N_PmuG,G_PmuG);
+double chiPmuG=Chi(N_PmuG,G_PmuG, bin);
   TCanvas *hN_PmuG;
   if(b==0){
-  hN_PmuG = new TCanvas("hN_PmuG", "NEUT and GENIE muon momentum magnitude comparison 0 (gas)");}
+  hN_PmuG = new TCanvas("hN_PmuG", "GENIE2 and GENIE muon momentum magnitude comparison 0 (gas)");}
   if(b==1){
-  hN_PmuG = new TCanvas("hN_PmuG1", "NEUT and GENIE muon momentum magnitude comparison 1 (gas)");}
+  hN_PmuG = new TCanvas("hN_PmuG1", "GENIE2 and GENIE muon momentum magnitude comparison 1 (gas)");}
   if(b==2){
-  hN_PmuG = new TCanvas("hN_PmuG2", "NEUT and GENIE muon momentum magnitude comparison 2 (gas)");}
+  hN_PmuG = new TCanvas("hN_PmuG2", "GENIE2 and GENIE muon momentum magnitude comparison 2 (gas)");}
   N_PmuG->Draw();
   hN_PmuG->Update();
   G_PmuG->SetLineColor(kRed);
   G_PmuG->Draw("same");
   auto legend = new TLegend(0.3,0.7,0.5,0.9);
-  legend->AddEntry(N_PmuG,"NEUT","f");
+  legend->AddEntry(N_PmuG,"GENIE2","f");
   legend->AddEntry(G_PmuG,"GENIE","f");
   legend->SetHeader(Form("#chi^{2}=%f", chiPmuG));
   legend->Draw();
@@ -315,87 +310,87 @@ double chiPmuG=Chi(N_PmuG,G_PmuG);
   if (b==2){
   hN_PmuG->SaveAs("Muon momentum GENIE model 2 (gas).pdf");}
 
-double chiPmuL=Chi(N_PmuL,G_PmuL);
+double chiPmuL=Chi(N_PmuL,G_PmuL, bin);
   TCanvas *hN_PmuL;
   if(b==0){
-  hN_PmuL = new TCanvas("hN_PmuL", "NEUT and GENIE muon momentum magnitude comparison 0 (liquid)");}
+  hN_PmuL = new TCanvas("hN_PmuL", "GENIE2 and GENIE muon momentum magnitude comparison 0 (liquid)");}
   if(b==1){
-  hN_PmuL = new TCanvas("hN_PmuL1", "NEUT and GENIE muon momentum magnitude comparison 1 (liquid)");}
+  hN_PmuL = new TCanvas("hN_PmuL1", "GENIE2 and GENIE muon momentum magnitude comparison 1 (liquid)");}
   if(b==2){
-  hN_PmuL = new TCanvas("hN_PmuL2", "NEUT and GENIE muon momentum magnitude comparison 2 (liquid)");}
+  hN_PmuL = new TCanvas("hN_PmuL2", "GENIE2 and GENIE muon momentum magnitude comparison 2 (liquid)");}
   N_PmuL->Draw();
   hN_PmuL->Update();
   G_PmuL->SetLineColor(kRed);
   G_PmuL->Draw("same");
   auto legend1 = new TLegend(0.3,0.7,0.5,0.9);
-  legend1->AddEntry(N_PmuL,"NEUT","f");
+  legend1->AddEntry(N_PmuL,"GENIE2","f");
   legend1->AddEntry(G_PmuL,"GENIE","f");
   legend1->SetHeader(Form("#chi^{2}=%f", chiPmuL));
   legend1->Draw();
   if (b==0){
-  hN_PmuL->SaveAs("Muon momentum GENIE model 0 (liquid).pdf");}
+  hN_PmuL->SaveAs("Muon momentum GENIE2 GENIE model 0 (liquid).pdf");}
   if (b==1){
-  hN_PmuL->SaveAs("Muon momentum GENIE model 1 (liquid).pdf");}
+  hN_PmuL->SaveAs("Muon momentum GENIE2 GENIE model 1 (liquid).pdf");}
   if (b==2){
-  hN_PmuL->SaveAs("Muon momentum GENIE model 2 (liquid).pdf");} 
+  hN_PmuL->SaveAs("Muon momentum GENIE2 GENIE model 2 (liquid).pdf");} 
 
-double chinPrL=Chi(nPrN_L,nPrG_L)*bin/12;
+double chinPrL=Chi(nPrN_L,nPrG_L, Multbin);
   TCanvas *hnPr_L;
   if(b==0){
-  hnPr_L = new TCanvas("hnPr_L", "NEUT and GENIE proton multiplicity comparison 0 (liquid)");}
+  hnPr_L = new TCanvas("hnPr_L", "GENIE2 and GENIE proton multiplicity comparison 0 (liquid)");}
   if(b==1){
-  hnPr_L = new TCanvas("hnPr_L1", "NEUT and GENIE proton multiplicity  comparison 1 (liquid)");}
+  hnPr_L = new TCanvas("hnPr_L1", "GENIE2 and GENIE proton multiplicity  comparison 1 (liquid)");}
   if(b==2){
-  hnPr_L = new TCanvas("hnPr_L2", "NEUT and GENIE proton multiplicity comparison 2 (liquid)");}
-  nPrN_L->Draw("*H");
+  hnPr_L = new TCanvas("hnPr_L2", "GENIE2 and GENIE proton multiplicity comparison 2 (liquid)");}
+  nPrN_L->Draw();
   hnPr_L->Update();
   nPrG_L->SetLineColor(kRed);
   nPrG_L->Draw("same");
   auto legend8 = new TLegend(0.3,0.7,0.5,0.9);
-  legend8->AddEntry(nPrN_L,"NEUT","f");
+  legend8->AddEntry(nPrN_L,"GENIE2","f");
   legend8->AddEntry(nPrG_L,"GENIE","f");
   legend8->SetHeader(Form("#chi^{2}=%f", chinPrL));
   legend8->Draw();
   if (b==0){
-  hnPr_L->SaveAs("Proton multiplicity GENIE model 0 (liquid).pdf");}
+  hnPr_L->SaveAs("Proton multiplicity GENIE2 GENIE model 0 (liquid).pdf");}
   if (b==1){
-  hnPr_L->SaveAs("Proton multiplicity GENIE model 1 (liquid).pdf");}
+  hnPr_L->SaveAs("Proton multiplicity GENIE2 GENIE model 1 (liquid).pdf");}
   if (b==2){
-  hnPr_L->SaveAs("Proton multiplicity GENIE model 2 (liquid).pdf");}
+  hnPr_L->SaveAs("Proton multiplicity GENIE2 GENIE model 2 (liquid).pdf");}
 
-double chinPrG=Chi(nPrN_G,nPrG_G)*bin/12;
+double chinPrG=Chi(nPrN_G,nPrG_G, Multbin);
   TCanvas *hnPr_G; 
   if(b==0){
-  hnPr_G = new TCanvas("hnPr_G", "NEUT and GENIE proton multiplicity comparison 0 (gas)");}
+  hnPr_G = new TCanvas("hnPr_G", "GENIE2 and GENIE proton multiplicity comparison 0 (gas)");}
   if(b==1){
-  hnPr_G = new TCanvas("hnPr_G1", "NEUT and GENIE proton multiplicity comparison 1 (gas)");}
+  hnPr_G = new TCanvas("hnPr_G1", "GENIE2 and GENIE proton multiplicity comparison 1 (gas)");}
   if(b==2){
-  hnPr_G = new TCanvas("hnPr_G2", "NEUT and GENIE proton multiplicity comparison 2 (gas)");}
-  nPrN_G->Draw("*H");
+  hnPr_G = new TCanvas("hnPr_G2", "GENIE2 and GENIE proton multiplicity comparison 2 (gas)");}
+  nPrN_G->Draw();
   hnPr_G->Update();
   nPrG_G->SetLineColor(kRed);
   nPrG_G->Draw("same");
   auto legend9 = new TLegend(0.3,0.7,0.5,0.9);
-  legend9->AddEntry(nPrN_G,"NEUT","f");
+  legend9->AddEntry(nPrN_G,"GENIE2","f");
   legend9->AddEntry(nPrG_G,"GENIE","f");
   legend9->SetHeader(Form("#chi^{2}=%f", chinPrG));
   legend9->Draw();
   if (b==0){
-  hnPr_G->SaveAs("Proton multiplicity GENIE model 0 (gas).pdf");}
+  hnPr_G->SaveAs("Proton multiplicity GENIE2 GENIE model 0 (gas).pdf");}
   if (b==1){
-  hnPr_G->SaveAs("Proton multiplicity GENIE model 1 (gas).pdf");}
+  hnPr_G->SaveAs("Proton multiplicity GENIE2 GENIE model 1 (gas).pdf");}
   if (b==2){
-  hnPr_G->SaveAs("Proton multiplicity GENIE model 2 (gas).pdf");}
+  hnPr_G->SaveAs("Proton multiplicity GENIE2 GENIE model 2 (gas).pdf");}
 
  
-double chiPmu= Chi(N_Pmu,G_Pmu);
+double chiPmu= Chi(N_Pmu,G_Pmu, bin);
   TCanvas* hNPmu;
   if(b==0){
-  hNPmu = new TCanvas("hN_Pmu", "NEUT and GENIE muon momentum magnitude comparison 0  (no threshold)");}
+  hNPmu = new TCanvas("hN_Pmu", "GENIE2 and GENIE muon momentum magnitude comparison 0  (no threshold)");}
   if(b==1){
-  hNPmu = new TCanvas("hN_Pmu1", "NEUT and GENIE muon momentum magnitude comparison 1 (no threshold)");}
+  hNPmu = new TCanvas("hN_Pmu1", "GENIE2 and GENIE muon momentum magnitude comparison 1 (no threshold)");}
   if(b==2){
-  hNPmu = new TCanvas("hN_Pmu2", "NEUT and GENIE muon momentum magnitude comparison 2 (no threshold)");}
+  hNPmu = new TCanvas("hN_Pmu2", "GENIE2 and GENIE muon momentum magnitude comparison 2 (no threshold)");}
   N_Pmu->Draw();
   hNPmu->Update();
   G_Pmu->SetLineColor(kRed);
@@ -414,7 +409,7 @@ double chiPmu= Chi(N_Pmu,G_Pmu);
 
   
 
-double chinPr=Chi(nPrN,nPrG);
+double chinPr=Chi(nPrN,nPrG, Multbin);
   TCanvas *hnPr;
   if(b==0){
   hnPr = new TCanvas("hnPr", "NEUT and GENIE proton multiplicity comparison 0 (no threshold)");}
@@ -438,8 +433,12 @@ cout<<"Proton Multiplicity Gas:"<<""<<chinPrG<<endl;
 cout<<"Muon momentum Liquid:"<<""<<chiPmuL<<endl;
 cout<<"Muon momentum Gas:"<<""<<chiPmuG<<endl;
 
+myfile <<"GENIE Model:"<< b<<"\n";
+myfile <<"Proton Multiplicity Liquid:"<<" "<<chinPrL<<"\n";
+myfile <<"Proton Multiplicity Gas:"<<" "<<chinPrG<<"\n";
+myfile <<"Muon momentum Liquid:"<<" "<<chiPmuL<<"\n";
+myfile <<"Muon momentum Gas:"<<" "<<chiPmuG<<"\n";
 /*
-
 
 
 chi_squared_total=Chi(N_EpiL,G_EpiL);
@@ -493,30 +492,6 @@ chi_squared_total=Chi(N_HEpiG,G_HEpiG);
   legend6->Draw();
 */
 }
-   /* TextTable t( '-', '|', '+' );
-
-    t.add( "0pi" );
-    t.add( "GENIE 0" );
-   // t.add( "GENIE 1" );
-   // t.add( "GENIE 2" );
-    t.endOfRow();
-
-    t.add("");
-    t.add( "Gas | Liquid" );
-    t.add( "Gas | Liquid" );
-    t.add( "Gas | Liquid" );
-    t.endOfRow();
-
-    t.add( "nPr" );
-    t.add( "chinPrG | chinPrL" );
-    t.endOfRow();
-
-    t.add( "Pmu" );
-    t.add( "chinPmuG | chinPmuL" );
-    t.endOfRow();
-
-    t.setAlignment( 2, TextTable::Alignment::RIGHT );
-    std::cout << t;
-    */
-
+myfile.close();
   return (0);}
+
