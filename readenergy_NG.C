@@ -116,7 +116,7 @@ int readenergy_NG(){
   treeG->SetBranchAddress("E",&energyG);
   treeG->SetBranchAddress("Mode",&modeG);
   treeG->SetBranchAddress("CosLep",&coslepG);
-
+ 
 //Read NEUT
   Long64_t nentries = tree->GetEntries();
   for(unsigned int iEntry=0;iEntry< nentries;iEntry++){
