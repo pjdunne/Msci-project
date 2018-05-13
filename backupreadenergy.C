@@ -3,11 +3,26 @@
 #include "Linkdef.h"
 
 
+#include "TObject.h"
+#include <iostream>
+#include <string>
+#include "TROOT.h"
+#include "TChain.h"
+#include "TFile.h"
+#include "TLorentzVector.h"
+#include "TVector2.h"
+#include "TH2.h"
+#include "TStyle.h"
+#include "TCanvas.h"
+
+
 #include "TBranch.h" 
 
 int backupreadenergy(){
+  //Particle part;
   TFile* file = new TFile("/home/hep/al3614/neutrinoproject3/newfile3.root");
   TTree* tree = (TTree*)file->Get("newtree");
+  //vector<Particle> *DetectedParticles = part.Threshold(PartVec, 0.5);
  
  
   TH1D* hE = new TH1D("hE", "Energyplot", 400, 0, 10);
@@ -37,12 +52,11 @@ int backupreadenergy(){
         		PartVecAbove.clear();
                         ParticleVec.clear();
 
-			Threshold Thresh;
 			for(unsigned int i=0;i < PartVec[0].size();i++){
 			Particle Part = PartVec[0][i];
 			ParticleVec.push_back(Part);}
 
-        		PartVecAbove=Thresh.ThreshFunc(ParticleVec);
+        		PartVecAbove=liquidMomThresh(ParticleVec);
 		  	for (unsigned int j=0; j<PartVecAbove.size(); ++j){
 				float Energy=PartVecAbove[j].GetEnergy();
 				hE->Fill(Energy);}					  
@@ -50,7 +64,7 @@ int backupreadenergy(){
 				}
   
 
-
+  
 
   TCanvas *c = new TCanvas("c", "Energy Plot");
   hE->Draw();
