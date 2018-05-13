@@ -1,13 +1,7 @@
-//#include "Resolution.h"
 #include "TRandom2.h"
 #include <cmath> 
 #include <random>
-//Resolution::Resolution()
-//{
- 
-//  float res = 0.1;
 
-//}
 
 vector<Particle> ResFunc(vector<Particle> PartVec, float w){
 	TRandom2 *r0 = new TRandom2();
