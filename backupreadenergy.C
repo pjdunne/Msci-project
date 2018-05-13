@@ -6,10 +6,8 @@
 #include "TBranch.h" 
 
 int backupreadenergy(){
-  //Particle part;
   TFile* file = new TFile("/home/hep/al3614/neutrinoproject3/newfile3.root");
   TTree* tree = (TTree*)file->Get("newtree");
-  //vector<Particle> *DetectedParticles = part.Threshold(PartVec, 0.5);
  
  
   TH1D* hE = new TH1D("hE", "Energyplot", 400, 0, 10);
@@ -52,7 +50,7 @@ int backupreadenergy(){
 				}
   
 
-  
+
 
   TCanvas *c = new TCanvas("c", "Energy Plot");
   hE->Draw();
