@@ -32,7 +32,6 @@ vector<Particle> ResFunc(vector<Particle> PartVec, float w){
                         					
 return (PartDet);}
 
-//Resolution::~Resolution(){}
 
 
 
