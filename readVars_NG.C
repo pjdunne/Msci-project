@@ -28,8 +28,8 @@ int readVars_NG(){
   ofstream myfile;
   myfile.open ("summary2.txt");
  for(int b =0; b < 3;b++){
-  TFile* fileNEUT = new TFile("T2K_Ar_numu_fhc_trunk07_Eshita_merge_flat_v4.root"); \\ Choose this to read NEUT file
- // TFile* fileNEUT = new TFile("genie_argon_fnalsmall_Effsftem_proc_flat.root");   \\ Choose this to read GENIE file
+  TFile* fileNEUT = new TFile("T2K_Ar_numu_fhc_trunk07_Eshita_merge_flat_v4.root");// Choose this to read NEUT file
+ // TFile* fileNEUT = new TFile("genie_argon_fnalsmall_Effsftem_proc_flat.root");   // Choose this to read GENIE file
   TTree* tree = (TTree*)fileNEUT->Get("FlatTree_VARS");
   TFile* fileGENIE;
   if(b==0){
